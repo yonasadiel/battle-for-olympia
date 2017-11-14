@@ -17,10 +17,11 @@ typedef struct {
 #define BPlayer(B) (B).Player
 #define BType(B) (B).Type
 
-Building MakeBuilding(Point C, Player O, char T);
+void MakeBuilding(Building* B, Point C, Player O, char T);
 /**
- * Mengembalikan Building yang berada di point
- * C, dimiliki oleh O, dan tipe bangunannya T
+ * I.S. B sembarang
+ * F.S. B terdefinisi di Coordinate C, dimiliki Player O
+ *      dan direpresentasikan huruf T
  */
 
 #endif

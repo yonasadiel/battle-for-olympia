@@ -15,6 +15,6 @@
 /* #define BPlayer(B) (B).Player */
 /* #define BType(B) (B).Type */
 
-Building MakeBuilding(Point C, Player O, char T) {
+void MakeBuilding(Building* B,Point C, Player O, char T) {
   //
 }
