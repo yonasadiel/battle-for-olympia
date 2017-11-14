@@ -15,7 +15,10 @@ typedef struct {
 /* *** Definisi Prototipe Primitif *** */
 /* *** Konstruktor Membentuk Point *** */
 void MakePoint(int X, int Y, Point* P);
-/* Membentuk sebuah Point dari komponen-komponennya */
+/**
+ * I.S. P sembarang
+ * F.S. Terbentuk sebuah Point dari komponen-komponennya
+ */
 
 /* *** Kelompok Interaksi dengan I/O device, *** */
 void BacaPoint(Point* P); 
