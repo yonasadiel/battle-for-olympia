@@ -4,18 +4,23 @@
 #include "../player/player.h"
 #include "../point/point.h"
 
-typedef struct{
-	Point koordinat;
-	int maxHP; //maximum HP
-	int currHP;	//current HP
-	Player owner; //pemilik building
-	int gold;
-	char type; //jenis petak : normal, village, castle, tower
-}Building;
+#define GoldPerTurn 10 /* gold yang diberikan village tiap turn */
 
-void CreateBuilding(Building *B, char type, Player owner);
-/*	Membentuk sebuah building "kosong" yang siap diisi, dengan jenis petak dan pemilik tertentu.
-	I.S. Jenis petak dan pemilik building sudah terdefinisi.
-	F.S. Building B sesuai dengan definisi di atas terbentuk. */
+typedef struct {
+	Point Coordinate; /* koordinat building */
+	Player Owner;     /* pemilik building */
+	char Type;        /* jenis building : [V]illage, [C]astle, [T]ower */
+} Building;
+
+/* *** Selektor Building *** */
+#define BCoordinate(B) (B).Coordinate
+#define BPlayer(B) (B).Player
+#define BType(B) (B).Type
+
+Building MakeBuilding(Point C, Player O, char T);
+/**
+ * Mengembalikan Building yang berada di point
+ * C, dimiliki oleh O, dan tipe bangunannya T
+ */
 
 #endif

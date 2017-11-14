@@ -1,7 +1,7 @@
 /* Definisi type boolean */
 
-#ifndef _BOOLEAN_h
-#define _BOOLEAN_h
+#ifndef BOOLEAN_H
+#define BOOLEAN_H
 
 #define boolean unsigned char
 #define true 1
