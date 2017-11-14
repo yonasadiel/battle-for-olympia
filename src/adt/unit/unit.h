@@ -8,7 +8,6 @@ typedef struct {
 	int MaxHealth;     /* darah unit saat pertama kali direkrut */
 	int Health;        /* darah yang tersisa */
 	int Atk;           /* Besar damage yang diterima unit lain yang diserang */
-	int MaxMovPoint;   /* banyak gerakan maksimum unit dalam 1 turn */
 	int MovPoint;      /* banyak gerakan yang tersisa */
 	char AtkType;      /* 'm' = melee, 'r' = ranged */
 	boolean AtkChance; /* true = unit belum menyerang */
@@ -21,7 +20,6 @@ typedef struct {
 #define MaxHealth(U) (U).MaxHealth
 #define Health(U) (U).Health
 #define Atk(U) (U).Atk
-#define MaxMovPoint(U) (U).MaxMovPoint
 #define MovPoint(U) (U).MovPoint
 #define AtkType(U) (U).AtkType
 #define AtkChance(U) (U).AtkChance
