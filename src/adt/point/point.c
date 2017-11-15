@@ -13,7 +13,9 @@
 /* *** Definisi Prototipe Primitif *** */
 /* *** Konstruktor Membentuk Point *** */
 void MakePoint(int X, int Y, Point* P) {
-  //
+/* Membentuk sebuah Point dari komponen-komponennya */
+  Absis(*P) = X;
+  Ordinat(*P) = Y;
 }
 
 /* *** Kelompok Interaksi dengan I/O device, *** */
