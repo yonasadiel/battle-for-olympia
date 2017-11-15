@@ -16,10 +16,15 @@ typedef struct {
   Stack MoveRecord;
 } GameCoordinator;
 
-void PrintMenu(void);
+void PrintFirstMenu(void);
 /**
  * I.S. Game belum dimulai
- * F.S. menu utama tampil di layar beserta pilihannya
+ * F.S. menu utama tampil di layar beserta pilihannya (tanpa Load Game)
+ */
+void PrintNextMenu(void);
+/**
+ * I.S. Game sudah dimulai
+ * F.S. menu utama tampil di layar beserta pilihannya (beserta Load Game)
  */
 void InitGame(GameCoordinator* GC);
 /**
