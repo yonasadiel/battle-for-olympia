@@ -2,6 +2,7 @@
 #define GAME_COORDINATOR_H
 
 #include "../boolean/boolean.h"
+#include "../listlinier/listlinier.h"
 #include "../listsirkuler/listsirkuler.h"
 #include "../map/map.h"
 #include "../stackpoint/stackpoint.h"

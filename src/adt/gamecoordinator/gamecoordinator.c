@@ -1,5 +1,6 @@
 #include "gamecoordinator.h"
 #include "../boolean/boolean.h"
+#include "../listlinier/listlinier.h"
 #include "../listsirkuler/listsirkuler.h"
 #include "../map/map.h"
 #include "../stackpoint/stackpoint.h"
