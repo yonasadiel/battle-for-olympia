@@ -29,7 +29,7 @@
 
 void MakePlayer(Player* P, Color W, Point Loc) {
   Unit U;
-  Building B;
+  Building T, CN, CW, CE, CS;
 
   Cash(*P) = 50;
   Income(*P) = 0;
@@ -39,6 +39,16 @@ void MakePlayer(Player* P, Color W, Point Loc) {
   Warna(*P) = W;
 
   CreateUnit(&U, 'K', Loc);
-  // TODO : create all unit and building
+  LSInsVFirst(&ListUnit(*P), &U);
 
+  MakeBuilding(&T, Loc, 'T');
+  MakeBuilding(&CN, PlusDelta(Loc, 0, -1), 'C');
+  MakeBuilding(&CS, PlusDelta(Loc, 0,  1), 'C');
+  MakeBuilding(&CE, PlusDelta(Loc,  1, 0), 'C');
+  MakeBuilding(&CW, PlusDelta(Loc, -1, 0), 'C');
+  LLInsVFirst(&ListBuilding(*P), &T);
+  LLInsVFirst(&ListBuilding(*P), &CN);
+  LLInsVFirst(&ListBuilding(*P), &CS);
+  LLInsVFirst(&ListBuilding(*P), &CE);
+  LLInsVFirst(&ListBuilding(*P), &CW);
 }

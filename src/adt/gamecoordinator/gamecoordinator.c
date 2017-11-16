@@ -44,13 +44,23 @@ void PrintMenu(void) {
 }
 
 void InitGame(GameCoordinator* GC) {
-  //MakePlayer(&Pi(*GC, 1));
-  //MakePlayer(&Pi(*GC, 2));
+  Point P1, P2;
+  int NInitBaris = 8;
+  int NInitKolom = 8;
+
+  MakePoint(2, 7, &P1);
+  MakePoint(7, 2, &P1);
+
+  MakePlayer(&Pi(*GC, 1), CRED, P1);
+  MakePlayer(&Pi(*GC, 2), CBLUE, P2);
+
   QCreateEmpty(&QI(*GC));
+  QAdd(&QI(*GC), 1);
+  QAdd(&QI(*GC), 2);
+
   MakeMap(8, 8, &GameMap(*GC));
   SCreateEmpty(&MoveRecord(*GC));
-  // TODO: Current unit jadi top queue player, first unit
-  //CurrentUnit(*GC) = ;
+  CurrentUnit(*GC) = (Unit*) LSFirst(ListUnit(Pi(*GC,QInfoHead(QI(*GC)))));
 }
 
 void LoadGame(GameCoordinator* GC) {
