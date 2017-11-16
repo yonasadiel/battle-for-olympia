@@ -7,6 +7,7 @@
 #include "../player/player.h"
 #include <stdio.h>
 #include <conio.h>
+#include <string.h>
 
 /* #define NMaxPlayer 2 */
 /* typedef struct { */
@@ -43,7 +44,13 @@ void PrintMenu(void) {
 }
 
 void InitGame(GameCoordinator* GC) {
-  //
+  //MakePlayer(&Pi(*GC, 1));
+  //MakePlayer(&Pi(*GC, 2));
+  QCreateEmpty(&QI(*GC));
+  MakeMap(8, 8, &GameMap(*GC));
+  SCreateEmpty(&MoveRecord(*GC));
+  // TODO: Current unit jadi top queue player, first unit
+  //CurrentUnit(*GC) = ;
 }
 
 void LoadGame(GameCoordinator* GC) {
