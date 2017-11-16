@@ -29,7 +29,7 @@ void BacaPoint(Point* P) {
 }
 
 void TulisPoint(Point P) {
-	printf("(%d,%d)",Absis(P),Ordinat(P));
+	printf("(%d,%d)\n",Absis(P),Ordinat(P));
 }
 
 /* *** Kelompok operasi relasional terhadap Point *** */
@@ -43,5 +43,6 @@ boolean NEQPoint(Point P1, Point P2) {
 
 /* *** Kelompok Operasi Lain Terhadap Point *** */
 void Geser (Point *P, int DeltaX, int DeltaY) {
-  //
+	Absis(*P)+=DeltaX;
+	Ordinat(*P)+=DeltaY;
 }
