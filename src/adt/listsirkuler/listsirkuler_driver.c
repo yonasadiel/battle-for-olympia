@@ -1,4 +1,4 @@
-#include "listlinier.h"
+#include "listsirkuler.h"
 #include <stdio.h>
 
 typedef struct {
@@ -22,22 +22,23 @@ int main() {
 	Titik titik2 = createTitik(2, 3);
 	Titik titik3 = createTitik(3, 4);
 
-	List L;
+	ListSirkuler L;
 
-	LLCreateEmpty(&L);
+	LSCreateEmpty(&L);
 
-	LLInsVFirst(&L, &titik1);
-	LLInsVFirst(&L, &titik2);
-	LLInsVFirst(&L, &titik3);
+	LSInsVFirst(&L, &titik1);
+	LSInsVFirst(&L, &titik2);
+	LSInsVFirst(&L, &titik3);
 
-	address p = LLFirst(L);
-	while(p != Nil) {
-		Titik* titikerToTitik = (Titik*) LLInfo(p);
+	address p = LSFirst(L);
+	do {
+		Titik* titikerToTitik = (Titik*) LSInfo(p);
 		Titik isiTitikerTitik = *titikerToTitik; 
 
 		PrintTitik(isiTitikerTitik);
-		p = LLNext(p);
-	}
+		p = LSNext(p);
+	} while(p != LSFirst(L));
+
 
 	return 0;
 }
