@@ -1,5 +1,6 @@
 #include "point.h"
 #include "../boolean/boolean.h"
+#include <stdio.h>
 
 /* typedef struct { */
 /*   int X; /* absis */
@@ -20,11 +21,15 @@ void MakePoint(int X, int Y, Point* P) {
 
 /* *** Kelompok Interaksi dengan I/O device, *** */
 void BacaPoint(Point* P) {
-  //
+	int x,y;
+	printf("Masukkan nilai x dan y:");
+	scanf("%d",&x);
+	scanf(" %d",&y);
+	MakePoint(x,y,P);
 }
 
 void TulisPoint(Point P) {
-  //
+	printf("(%d,%d)",Absis(P),Ordinat(P));
 }
 
 /* *** Kelompok operasi relasional terhadap Point *** */
