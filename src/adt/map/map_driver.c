@@ -5,7 +5,7 @@
 
 int main() {
 	Map M;
-	MakeMap(8,8,&M);
+	MakeMap(13,13,&M);
 	TulisMap(M);
 	return 0;
 }
