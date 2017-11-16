@@ -1,18 +1,18 @@
 #include "listlinier.h"
 #include "stdlib.h"
 
-/* Mengirim true jika list kosong */
-boolean LLIsEmpty (List L) {
+/* Mengirim true jika ListLinier kosong */
+boolean LLIsEmpty (ListLinier L) {
     return (LLFirst(L) == Nil);
 }
 
 /* I.S. sembarang             */
-/* F.S. Terbentuk list kosong */
-void LLCreateEmpty (List *L) {
+/* F.S. Terbentuk ListLinier kosong */
+void LLCreateEmpty (ListLinier *L) {
     LLFirst(*L) = Nil;
 }
 
-/* Mengirimkan address hasil alokasi sebuah elemen */
+/* Mengirimkan address hasil alokasi sebuah elemen *h/
 /* Jika alokasi berhasil, maka address tidak nil, dan misalnya */
 /* menghasilkan P, maka LLInfo(P)=X, LLNext(P)=Nil */
 /* Jika alokasi gagal, mengirimkan Nil */
@@ -34,10 +34,10 @@ void LLDealokasi (address *P) {
     free(*P);
 }
 
-/* Mencari apakah ada elemen list dengan LLInfo(P)= X */
+/* Mencari apakah ada elemen ListLinier dengan LLInfo(P)= X */
 /* Jika ada, mengirimkan address elemen tersebut. */
 /* Jika tidak ada, mengirimkan Nil */
-address LLSearch (List L, infotype X) {
+address LLSearch (ListLinier L, infotype X) {
     address p = LLFirst(L);
     while(p != Nil && LLInfo(p) != X) {
         p = LLNext(p);
@@ -45,9 +45,9 @@ address LLSearch (List L, infotype X) {
     return p;
 }
 
-/* Mencari apakah ada elemen list yang beralamat P */
+/* Mencari apakah ada elemen ListLinier yang beralamat P */
 /* Mengirimkan true jika ada, false jika tidak ada */
-boolean LLFSearch (List L, address P) {
+boolean LLFSearch (ListLinier L, address P) {
 	address p = LLFirst(L);
 	while(p != Nil && p != P) {
 		p = LLNext(p);
@@ -62,7 +62,7 @@ boolean LLFSearch (List L, address P) {
 /* I.S. L mungkin kosong */
 /* F.S. Melakukan alokasi sebuah elemen dan */
 /* menambahkan elemen pertama dengan nilai X jika alokasi berhasil */
-void LLInsVFirst (List *L, infotype X) {
+void LLInsVFirst (ListLinier *L, infotype X) {
     address p = LLAlokasi(X);
     if(p) {
         if(LLIsEmpty(*L)) {
@@ -75,7 +75,7 @@ void LLInsVFirst (List *L, infotype X) {
 }
 
 /* Mengirimkan address elemen sebelum elemen yang nilainya=X */
-address LLSearchPrec (List L, infotype X) {
+address LLSearchPrec (ListLinier L, infotype X) {
 	address c = Nil;
 	address p = LLFirst(L);
 	while(p != Nil && LLInfo(p) != X) {
@@ -91,9 +91,9 @@ address LLSearchPrec (List L, infotype X) {
 
 /* I.S. L mungkin kosong */
 /* F.S. Melakukan alokasi sebuah elemen dan */
-/* menambahkan elemen list di akhir: elemen terakhir yang baru */
+/* menambahkan elemen ListLinier di akhir: elemen terakhir yang baru */
 /* bernilai X jika alokasi berhasil. Jika alokasi gagal: I.S.= F.S. */
-void LLInsVLast (List *L, infotype X) {
+void LLInsVLast (ListLinier *L, infotype X) {
     address p = LLAlokasi(X);
     if(p) {
         if(LLIsEmpty(*L)) {
@@ -108,20 +108,20 @@ void LLInsVLast (List *L, infotype X) {
     }
 }
 
-/* I.S. List L tidak kosong  */
-/* F.S. Elemen pertama list dihapus: nilai info disimpan pada X */
+/* I.S. ListLinier L tidak kosong  */
+/* F.S. Elemen pertama ListLinier dihapus: nilai info disimpan pada X */
 /*      dan alamat elemen pertama di-dealokasi */
-void LLDelVFirst (List *L, infotype *X) {
+void LLDelVFirst (ListLinier *L, infotype *X) {
     address p = LLFirst(*L);
     LLFirst(*L) = LLNext(p);
     *X = LLInfo(p);
     free(p);
 }
 
-/* I.S. list tidak kosong */
-/* F.S. Elemen terakhir list dihapus: nilai info disimpan pada X */
+/* I.S. ListLinier tidak kosong */
+/* F.S. Elemen terakhir ListLinier dihapus: nilai info disimpan pada X */
 /*      dan alamat elemen terakhir di-dealokasi */
-void LLDelVLast (List *L, infotype *X) {
+void LLDelVLast (ListLinier *L, infotype *X) {
     address prev = Nil;
     address p = LLFirst(*L);
     while(LLNext(p) != Nil) {
@@ -140,22 +140,22 @@ void LLDelVLast (List *L, infotype *X) {
 
 /* I.S. Sembarang, P sudah dialokasi  */
 /* F.S. Menambahkan elemen ber-address P sebagai elemen pertama */
-void LLInsFirst (List *L, address P) {
+void LLInsFirst (ListLinier *L, address P) {
     LLNext(P) = LLFirst(*L);
     LLFirst(*L) = P;
 }
 
-/* I.S. Prec pastilah elemen list dan bukan elemen terakhir, */
+/* I.S. Prec pastilah elemen ListLinier dan bukan elemen terakhir, */
 /*      P sudah dialokasi  */
 /* F.S. Insert P sebagai elemen sesudah elemen beralamat Prec */
-void LLInsAfter (List *L, address P, address Prec) {
+void LLInsAfter (ListLinier *L, address P, address Prec) {
     LLNext(P) = LLNext(Prec);
     LLNext(Prec) = P;
 }
 
 /* I.S. Sembarang, P sudah dialokasi  */
 /* F.S. P ditambahkan sebagai elemen terakhir yang baru */
-void LLInsLast (List *L, address P) {
+void LLInsLast (ListLinier *L, address P) {
     if(LLIsEmpty(*L)) {
         LLFirst(*L) = P;
     } else {
@@ -167,21 +167,21 @@ void LLInsLast (List *L, address P) {
     }
 }
 
-/* I.S. List tidak kosong */
-/* F.S. P adalah alamat elemen pertama list sebelum penghapusan */
-/*      Elemen list berkurang satu (mungkin menjadi kosong) */
+/* I.S. ListLinier tidak kosong */
+/* F.S. P adalah alamat elemen pertama ListLinier sebelum penghapusan */
+/*      Elemen ListLinier berkurang satu (mungkin menjadi kosong) */
 /* First element yg baru adalah suksesor elemen pertama yang lama */
-void LLDelFirst (List *L, address *P) {
+void LLDelFirst (ListLinier *L, address *P) {
     *P = LLFirst(*L);
     LLFirst(*L) = LLNext(LLFirst(*L));
 }
 
 /* I.S. Sembarang */
-/* F.S. Jika ada elemen list beraddress P, dengan LLInfo(P)=X  */
-/* Maka P dihapus dari list dan di-dealokasi */
-/* Jika tidak ada elemen list dengan LLInfo(P)=X, maka list tetap */
-/* List mungkin menjadi kosong karena penghapusan */
-void LLDelP (List *L, infotype X) {
+/* F.S. Jika ada elemen ListLinier beraddress P, dengan LLInfo(P)=X  */
+/* Maka P dihapus dari ListLinier dan di-dealokasi */
+/* Jika tidak ada elemen ListLinier dengan LLInfo(P)=X, maka ListLinier tetap */
+/* ListLinier mungkin menjadi kosong karena penghapusan */
+void LLDelP (ListLinier *L, infotype X) {
     if(!LLIsEmpty(*L)) {
         if(LLInfo(LLFirst(*L)) == X) {
             address p = LLFirst(*L);
@@ -203,12 +203,12 @@ void LLDelP (List *L, infotype X) {
     }
 }
 
-/* I.S. List tidak kosong */
-/* F.S. P adalah alamat elemen terakhir list sebelum penghapusan  */
-/*      Elemen list berkurang satu (mungkin menjadi kosong) */
+/* I.S. ListLinier tidak kosong */
+/* F.S. P adalah alamat elemen terakhir ListLinier sebelum penghapusan  */
+/*      Elemen ListLinier berkurang satu (mungkin menjadi kosong) */
 /* Last element baru adalah predesesor elemen pertama yg lama, */
 /* jika ada */
-void LLDelLast (List *L, address *P) {
+void LLDelLast (ListLinier *L, address *P) {
     if(LLNext(LLFirst(*L)) == Nil) {
         *P = LLFirst(*L);
         LLFirst(*L) = Nil;
@@ -222,10 +222,10 @@ void LLDelLast (List *L, address *P) {
     }
 }
 
-/* I.S. List tidak kosong. Prec adalah anggota list  */
+/* I.S. ListLinier tidak kosong. Prec adalah anggota ListLinier  */
 /* F.S. Menghapus LLNext(Prec): */
-/*      Pdel adalah alamat elemen list yang dihapus  */
-void LLDelAfter (List *L, address *Pdel, address Prec) {
+/*      Pdel adalah alamat elemen ListLinier yang dihapus  */
+void LLDelAfter (ListLinier *L, address *Pdel, address Prec) {
     if(LLNext(Prec) != Nil) {
         *Pdel = LLNext(Prec);
         LLNext(Prec) = LLNext(LLNext(Prec));
@@ -234,8 +234,8 @@ void LLDelAfter (List *L, address *Pdel, address Prec) {
     }
 }
 
-/* Mengirimkan banyaknya elemen list; mengirimkan 0 jika list kosong */
-int LLNbElmt (List L) {
+/* Mengirimkan banyaknya elemen ListLinier; mengirimkan 0 jika ListLinier kosong */
+int LLNbElmt (ListLinier L) {
     int counter = 0;
     address p = LLFirst(L);
     while(p != Nil) {
@@ -245,8 +245,8 @@ int LLNbElmt (List L) {
     return counter;
 }
 
-/* Delete semua elemen list dan alamat elemen di-dealokasi */
-void LLDelAll (List *L) {
+/* Delete semua elemen ListLinier dan alamat elemen di-dealokasi */
+void LLDelAll (ListLinier *L) {
 	address p = LLFirst(*L);
 	address c = p;
 	while(c != Nil) {
@@ -258,8 +258,8 @@ void LLDelAll (List *L) {
 }
 
 /* I.S. sembarang. */
-/* F.S. elemen list dibalik : */
-void LLInverse (List *L) {
+/* F.S. elemen ListLinier dibalik : */
+void LLInverse (ListLinier *L) {
 	address pNext;
 	address p = LLFirst(*L);
 	address pPrev = Nil;
@@ -272,9 +272,9 @@ void LLInverse (List *L) {
 	LLFirst(*L) = pPrev;
 }
 
-/* Mengirimkan list baru, hasil invers dari L */
-List LLFInverse (List L) {
-	List inversed;
+/* Mengirimkan ListLinier baru, hasil invers dari L */
+ListLinier LLFInverse (ListLinier L) {
+	ListLinier inversed;
 
 	LLCreateEmpty(&inversed);
 
@@ -310,10 +310,10 @@ List LLFInverse (List L) {
 	return inversed;
 }
 
-/* Mengirimkan list yang merupakan salinan L */
+/* Mengirimkan ListLinier yang merupakan salinan L */
 /* dengan melakukan alokasi. */
-List LLFCopy (List L) {
-	List res;
+ListLinier LLFCopy (ListLinier L) {
+	ListLinier res;
 
 	LLCreateEmpty(&res);
 
@@ -357,8 +357,8 @@ List LLFCopy (List L) {
 /* F.S. Jika semua alokasi berhasil,maka Lout berisi hasil copy Lin */
 /* Jika ada alokasi yang gagal, maka Lout=Nil dan semua elemen yang terlanjur dialokasi, didealokasi */
 /* dengan melakukan alokasi elemen. */
-/* Lout adalah list kosong jika ada alokasi elemen yang gagal */
-void LLCopy (List Lin, List *Lout) {
+/* Lout adalah ListLinier kosong jika ada alokasi elemen yang gagal */
+void LLCopy (ListLinier Lin, ListLinier *Lout) {
 	LLCreateEmpty(Lout);
 
 	address p = LLFirst(Lin);
@@ -395,8 +395,8 @@ void LLCopy (List Lin, List *Lout) {
 
 /* I.S. L1 dan L2 sembarang */
 /* F.S. L1 dan L2 tetap, L3 adalah hasil konkatenasi L1 & L2 */
-void LLKonkat (List L1, List L2, List * L3) {
-	List D1, D2;
+void LLKonkat (ListLinier L1, ListLinier L2, ListLinier * L3) {
+	ListLinier D1, D2;
 
 	address p;
 	address i, iPrev, iStart;
@@ -480,11 +480,11 @@ void LLKonkat (List L1, List L2, List * L3) {
 
 /* I.S. L1 dan L2 sembarang */
 /* F.S. L1 dan L2 kosong, L3 adalah hasil konkatenasi L1 & L2 */
-/* LLKonkatenasi dua buah list : L1 dan L2    */
-/* menghasilkan L3 yang baru (dengan elemen list L1 dan L2) */
-/* dan L1 serta L2 menjadi list kosong.*/
+/* LLKonkatenasi dua buah ListLinier : L1 dan L2    */
+/* menghasilkan L3 yang baru (dengan elemen ListLinier L1 dan L2) */
+/* dan L1 serta L2 menjadi ListLinier kosong.*/
 /* Tidak ada alokasi/dealokasi pada prosedur ini */
-void LLKonkat1 (List *L1, List *L2, List *L3) {
+void LLKonkat1 (ListLinier *L1, ListLinier *L2, ListLinier *L3) {
     if(!LLIsEmpty(*L1)) {
         LLFirst(*L3) = LLFirst(*L1);
         address p = LLFirst(*L1);
@@ -503,8 +503,8 @@ void LLKonkat1 (List *L1, List *L2, List *L3) {
 }
 
 /* I.S. L mungkin kosong */
-/* F.S. Berdasarkan L, dibentuk dua buah list L1 dan L2 */
-void LLPecahList (List *L1, List *L2, List L) {
+/* F.S. Berdasarkan L, dibentuk dua buah ListLinier L1 dan L2 */
+void LLPecahList (ListLinier *L1, ListLinier *L2, ListLinier L) {
 	LLCreateEmpty(L1);
 	LLCreateEmpty(L2);
 

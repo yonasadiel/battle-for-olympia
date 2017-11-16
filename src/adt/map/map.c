@@ -34,13 +34,19 @@
 
 /* *** Konstruktor Membentuk Map *** */
 void MakeMap(int NB, int NK, Map* M) {
-/**
- * Membentuk MAp "kosong" yang siap diisi berukuran NB x NK  di "ujung kiri" memori
- * I.S. M sembarang, NB dan NK valid
- * F.S. Map M sesuai definisi kosong di atas terbentuk
- */
+	int i,j;
+	
   NBrsEffMap(*M) = NB;
   NKolEffMap(*M) = NK;
+  
+  for (i = GetMapFirstIdxBrs(*M); i<=GetMapLastIdxBrs(*M); i++) {
+		for (j = GetMapFirstIdxKol(*M); j<=GetMapLastIdxKol(*M); j++) {
+			Building(*M, i, j) = ' ';
+			Unit(*M, i, j) = ' ';
+			ColorBuilding(*M, i, j) = CRED;
+			ColorUnit(*M, i, j) = CRED;
+		}
+	}
 }
 
 /* *** Selektor *** */
@@ -101,38 +107,39 @@ void TulisMap(Map M) {
 	printf("\n");
 	
   for (i=1; i<=GetMapLastIdxBrs(M); i++) {
-		
-		/* untuk baris 1 */
-		printf ("    *");
-		for (j=1; j<=GetMapLastIdxKol(M); j++) {
-			printf (" C *");
-		}
-		printf("\n");
-		
-		/* untuk baris 2*/
-		printf (" %d *",i-1);
-		for (j = 1; j<GetMapLastIdxKol(M); j++) {
+				
+		/* untuk baris 1*/
+		printf ("   *");
+		for (j = 1; j<=GetMapLastIdxKol(M); j++) {
 			printf (" ");
 			PrintInColor (Building(M,i,j), ColorBuilding(M,i,j));
 			printf (" *");
 		}
-	}
+		printf("\n");
 	
-	/* untuk baris 3 */
-		printf ("   *");
-		for (j = 1; j<GetMapLastIdxKol(M); j++) {
+	/* untuk baris 2 */
+		printf (" %d *",i-1);
+		for (j = 1; j<=GetMapLastIdxKol(M); j++) {
 			printf (" ");
 			PrintInColor(Unit(M,i,j), ColorUnit(M,i,j));
 			printf (" *");
 		}
+		printf("\n");
 		
-	/* untuk baris 4 */
-	printf ("   *");
-	for (j=1; j<=GetMapLastIdxKol(M)*4; j++) {
-		printf ("*");
-	}
-	printf("\n");
+		/* untuk baris 3 */		
+		printf ("   *");
+		for (j=1; j<=GetMapLastIdxKol(M); j++) {
+			printf ("   *");
+		}
+		printf("\n");
 
+		/* untuk baris 4 */		
+		printf ("   *");
+		for (j=1; j<=GetMapLastIdxKol(M)*4; j++) {
+			printf ("*");
+		}
+		printf("\n");
+	}
 }	  
 		
 /* *** Kelompok Operasi Map *** */
