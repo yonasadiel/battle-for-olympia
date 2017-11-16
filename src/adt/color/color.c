@@ -7,6 +7,7 @@
 
 /* typedef int Color; */
 
+#include "color.h"
 #include <stdio.h>
 
 void PrintInColor(char c, Color Warna) {
