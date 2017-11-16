@@ -50,10 +50,16 @@ boolean NEQPoint(Point P1, Point P2);
  */
 
 /* *** Kelompok Operasi Lain Terhadap Point *** */
-void Geser (Point *P, int DeltaX, int DeltaY);
+void Geser(Point *P, int DeltaX, int DeltaY);
 /**
  * I.S. P terdefinisi
  * F.S. P digeser, absisnya sebesar DeltaX dan ordinatnya sebesar DeltaY
+ */
+
+Point PlusDelta(Point P, int DeltaX, int DeltaY);
+/**
+ * Prekondisi: P terdefinisi
+ * Kembalian: P yang digeser absisnya sebesar DeltaX dan ordinatnya sebesar DeltaY
  */
 
 #endif
