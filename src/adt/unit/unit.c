@@ -35,7 +35,7 @@ void CreateUnit (Unit* U, char UnitType, Point P) {
     MaxHealth(*U)   = 29;
     Health(*U)      = 29;
     Atk(*U)         = 10;
-    Heal(*U)		= 0;
+    Heal(*U)        = 0;
     MovPoint(*U)    = 2;
     AtkType(*U)     = 'r';
     AtkChance(*U)   = true;
@@ -44,7 +44,7 @@ void CreateUnit (Unit* U, char UnitType, Point P) {
     MaxHealth(*U)   = 60;
     Health(*U)      = 60;
     Atk(*U)         = 15;
-    Heal(*U)		= 0;
+    Heal(*U)        = 0;
     MovPoint(*U)    = 2;
     AtkType(*U)     = 'm';
     AtkChance(*U)   = true;
@@ -53,7 +53,7 @@ void CreateUnit (Unit* U, char UnitType, Point P) {
     MaxHealth(*U)   = 55;
     Health(*U)      = 55;
     Atk(*U)         = 16;
-    Heal(*U)		= 0;
+    Heal(*U)        = 0;
     MovPoint(*U)    = 2;
     AtkType(*U)     = 'm';
     AtkChance(*U)   = true;
@@ -61,7 +61,7 @@ void CreateUnit (Unit* U, char UnitType, Point P) {
   } else if (UnitType == 'W') {
     MaxHealth(*U)   = 35;
     Health(*U)      = 35;
-    Heal(*U)		= 8;
+    Heal(*U)        = 8;
     Atk(*U)         = 12;
     MovPoint(*U)    = 2;
     AtkType(*U)     = 'm';
