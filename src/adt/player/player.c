@@ -23,7 +23,6 @@
 /* #define UpKeep(P) (P).UpKeep */
 /* #define ListUnit(P) (P).ListUnit */
 /* #define ListBuilding(P) (P).ListBuilding */
-/* #define MovPoint(P) (P).MovPoint */
 /* #define Warna(P) (P).Warna */
 
 void MakePlayer(Player* P, Color W) {
@@ -36,8 +35,7 @@ void MakePlayer(Player* P, Color W) {
   Cash(*P) = 50;
   Income(*P) = 0;
   UpKeep(*P) = 0;
-  CreateEmpty(&ListUnit(*P));
-  CreateEmpty(&ListBuilding(*P));
-  MovPoint(*P) = 0;
+  LSCreateEmpty(&ListUnit(*P));
+  LLCreateEmpty(&ListBuilding(*P));
   Warna(*P) = W;
 }

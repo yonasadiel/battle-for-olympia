@@ -62,11 +62,28 @@ void SaveGame(GameCoordinator GC) {
 }
 
 void RunGame(GameCoordinator* GC) {
-  system("cls");
+  char* cmd;
+  boolean IsRunning;
 
-  printPlayerInfo(Pi(*GC,QInfoHead(QI(*GC))));
-  printCurrentUnitInfo(*CurrentUnit(*GC));
+  IsRunning = true;
+  while (IsRunning) {
+    printPlayerInfo(Pi(*GC,QInfoHead(QI(*GC))));
+    printCurrentUnitInfo(*CurrentUnit(*GC));
+    printf("Your input: "); scanf("%s", cmd);
 
+    if (!strcmp(cmd, "MAP" )) {
+      system("cls");
+      TulisMap(GameMap(*GC));
+    } else if (!strcmp(cmd, "EXIT")) {
+      IsRunning = false;
+    } else {
+      system("cls");
+      printf("Command is Not Recognized\n\n\n");
+    }
+
+    
+  }
+  printf("Thanks for playing! See You!\n");
 }
 
 void printPlayerInfo(Player P) {
