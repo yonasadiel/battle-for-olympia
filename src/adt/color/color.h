@@ -10,4 +10,10 @@
 
 typedef int Color;
 
+void PrintInColor(char* str, Color Warna);
+/**
+ * I.S. c adalah karakter untuk diprint
+ * F.S. c tmapil di layar sesuai Warna
+ */
+
 #endif

@@ -14,9 +14,21 @@ typedef struct {
   Queue QI;
   Map GameMap;
   Stack MoveRecord;
+  Unit* CurrentUnit;
 } GameCoordinator;
 
+<<<<<<< HEAD
+/* *** Selektor *** */
+#define Pi(GC,i) (GC).P[(i)]
+#define QI(GC) (GC).QI
+#define GameMap(GC) (GC).GameMap
+#define MoveRecord(GC) (GC).MoveRecord
+#define CurrentUnit(GC) (GC).CurrentUnit
+
+void PrintMenu(void);
+=======
 void PrintFirstMenu(void);
+>>>>>>> a0ceeed8c7ebf6c9c7e9235b2f190b8533db8f86
 /**
  * I.S. Game belum dimulai
  * F.S. menu utama tampil di layar beserta pilihannya (tanpa Load Game)
@@ -45,6 +57,18 @@ void RunGame(GameCoordinator* GC);
 /**
  * I.S. GC terdefinisi.
  * F.S. Game selesai.
+ */
+
+void printPlayerInfo(Player P);
+/**
+ * I.S. P terdefinisi
+ * F.S. Info mengenai player P muncul di layar
+ */
+
+void printCurrentUnitInfo(Unit U);
+/**
+ * I.S. U terdefinisi
+ * F.S. Info mengenai unit U muncul di layar
  */
 
 #endif
