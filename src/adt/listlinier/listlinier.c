@@ -4,20 +4,20 @@
  * #define Nil NULL
  *
  * typedef void* infotype;
- * typedef struct tElmtListLinier *address;
+ * typedef struct tElmtListLinier *LLAddress;
  * typedef struct tElmtListLinier {
  *	 infotype info;
- *	 address next;
+ *	 LLAddress next;
  * } ElmtList;
  * typedef struct {
- * 	 address First;
+ * 	 LLAddress First;
  * } ListLinier;
 
 /**
  * Definisi list :
  * ListLinier kosong : First(L) = Nil
- * Setiap elemen dengan address P dapat diacu Info(P), Next(P)
- * Elemen terakhir list : jika addressnya Last, maka Next(Last)=Nil 
+ * Setiap elemen dengan LLAddress P dapat diacu Info(P), Next(P)
+ * Elemen terakhir list : jika LLAddressnya Last, maka Next(Last)=Nil 
  
  * #define LLInfo(P) (P)->info
  * #define LLNext(P) (P)->next
@@ -32,8 +32,8 @@ void LLCreateEmpty (ListLinier *L) {
     LLFirst(*L) = Nil;
 }
 
-address LLAlokasi (infotype X) {
-    address p = (address) malloc(sizeof(address));
+LLAddress LLAlokasi (infotype X) {
+    LLAddress p = (LLAddress) malloc(sizeof(LLAddress));
     if(p) {
         LLInfo(p) = X;
         LLNext(p) = Nil;
@@ -43,20 +43,20 @@ address LLAlokasi (infotype X) {
     return Nil;
 }
 
-void LLDealokasi (address *P) {
+void LLDealokasi (LLAddress *P) {
     free(*P);
 }
 
-address LLSearch (ListLinier L, infotype X) {
-    address p = LLFirst(L);
+LLAddress LLSearch (ListLinier L, infotype X) {
+    LLAddress p = LLFirst(L);
     while(p != Nil && LLInfo(p) != X) {
         p = LLNext(p);
     }
     return p;
 }
 
-boolean LLFSearch (ListLinier L, address P) {
-	address p = LLFirst(L);
+boolean LLFSearch (ListLinier L, LLAddress P) {
+	LLAddress p = LLFirst(L);
 	while(p != Nil && p != P) {
 		p = LLNext(p);
 	}
@@ -68,7 +68,7 @@ boolean LLFSearch (ListLinier L, address P) {
 }
 
 void LLInsVFirst (ListLinier *L, infotype X) {
-    address p = LLAlokasi(X);
+    LLAddress p = LLAlokasi(X);
     if(p) {
         if(LLIsEmpty(*L)) {
             LLFirst(*L) = p;
@@ -79,9 +79,9 @@ void LLInsVFirst (ListLinier *L, infotype X) {
     }
 }
 
-address LLSearchPrec (ListLinier L, infotype X) {
-	address c = Nil;
-	address p = LLFirst(L);
+LLAddress LLSearchPrec (ListLinier L, infotype X) {
+	LLAddress c = Nil;
+	LLAddress p = LLFirst(L);
 	while(p != Nil && LLInfo(p) != X) {
 		c = p;
 		p = LLNext(p);
@@ -94,12 +94,12 @@ address LLSearchPrec (ListLinier L, infotype X) {
 }
 
 void LLInsVLast (ListLinier *L, infotype X) {
-    address p = LLAlokasi(X);
+    LLAddress p = LLAlokasi(X);
     if(p) {
         if(LLIsEmpty(*L)) {
             LLFirst(*L) = p;
         } else {
-            address c = LLFirst(*L);
+            LLAddress c = LLFirst(*L);
             while(LLNext(c) != Nil) {
                 c = LLNext(c);
             }
@@ -109,15 +109,15 @@ void LLInsVLast (ListLinier *L, infotype X) {
 }
 
 void LLDelVFirst (ListLinier *L, infotype *X) {
-    address p = LLFirst(*L);
+    LLAddress p = LLFirst(*L);
     LLFirst(*L) = LLNext(p);
     *X = LLInfo(p);
     free(p);
 }
 
 void LLDelVLast (ListLinier *L, infotype *X) {
-    address prev = Nil;
-    address p = LLFirst(*L);
+    LLAddress prev = Nil;
+    LLAddress p = LLFirst(*L);
     while(LLNext(p) != Nil) {
         prev = p;
         p = LLNext(p);
@@ -132,21 +132,21 @@ void LLDelVLast (ListLinier *L, infotype *X) {
     LLDealokasi(&p);
 }
 
-void LLInsFirst (ListLinier *L, address P) {
+void LLInsFirst (ListLinier *L, LLAddress P) {
     LLNext(P) = LLFirst(*L);
     LLFirst(*L) = P;
 }
 
-void LLInsAfter (ListLinier *L, address P, address Prec) {
+void LLInsAfter (ListLinier *L, LLAddress P, LLAddress Prec) {
     LLNext(P) = LLNext(Prec);
     LLNext(Prec) = P;
 }
 
-void LLInsLast (ListLinier *L, address P) {
+void LLInsLast (ListLinier *L, LLAddress P) {
     if(LLIsEmpty(*L)) {
         LLFirst(*L) = P;
     } else {
-        address c = LLFirst(*L);
+        LLAddress c = LLFirst(*L);
         while(LLNext(c) != Nil) {
             c = LLNext(c);
         }
@@ -154,7 +154,7 @@ void LLInsLast (ListLinier *L, address P) {
     }
 }
 
-void LLDelFirst (ListLinier *L, address *P) {
+void LLDelFirst (ListLinier *L, LLAddress *P) {
     *P = LLFirst(*L);
     LLFirst(*L) = LLNext(LLFirst(*L));
 }
@@ -162,18 +162,18 @@ void LLDelFirst (ListLinier *L, address *P) {
 void LLDelP (ListLinier *L, infotype X) {
     if(!LLIsEmpty(*L)) {
         if(LLInfo(LLFirst(*L)) == X) {
-            address p = LLFirst(*L);
+            LLAddress p = LLFirst(*L);
             LLFirst(*L) = LLNext(LLFirst(*L));
             LLDealokasi(&p);
         } else {
-            address prec = Nil;
-            address p = LLFirst(*L);
+            LLAddress prec = Nil;
+            LLAddress p = LLFirst(*L);
             while(LLNext(p) != Nil && LLInfo(LLNext(p)) != X) {
                 prec = p;
                 p = LLNext(p);
             }
             if(p != Nil && LLNext(p) != Nil) {
-                address c = LLNext(p);
+                LLAddress c = LLNext(p);
                 LLNext(p) = LLNext(c);
                 LLDealokasi(&c);
             }
@@ -181,12 +181,12 @@ void LLDelP (ListLinier *L, infotype X) {
     }
 }
 
-void LLDelLast (ListLinier *L, address *P) {
+void LLDelLast (ListLinier *L, LLAddress *P) {
     if(LLNext(LLFirst(*L)) == Nil) {
         *P = LLFirst(*L);
         LLFirst(*L) = Nil;
     } else {
-        address c = LLFirst(*L);
+        LLAddress c = LLFirst(*L);
         while(LLNext(LLNext(c)) != Nil) {
             c = LLNext(c);
         }
@@ -195,7 +195,7 @@ void LLDelLast (ListLinier *L, address *P) {
     }
 }
 
-void LLDelAfter (ListLinier *L, address *Pdel, address Prec) {
+void LLDelAfter (ListLinier *L, LLAddress *Pdel, LLAddress Prec) {
     if(LLNext(Prec) != Nil) {
         *Pdel = LLNext(Prec);
         LLNext(Prec) = LLNext(LLNext(Prec));
@@ -206,7 +206,7 @@ void LLDelAfter (ListLinier *L, address *Pdel, address Prec) {
 
 int LLNbElmt (ListLinier L) {
     int counter = 0;
-    address p = LLFirst(L);
+    LLAddress p = LLFirst(L);
     while(p != Nil) {
         counter++;
         p = LLNext(p);
@@ -215,8 +215,8 @@ int LLNbElmt (ListLinier L) {
 }
 
 void LLDelAll (ListLinier *L) {
-	address p = LLFirst(*L);
-	address c = p;
+	LLAddress p = LLFirst(*L);
+	LLAddress c = p;
 	while(c != Nil) {
 		p = LLNext(p);
 		LLDealokasi(&c);
@@ -226,9 +226,9 @@ void LLDelAll (ListLinier *L) {
 }
 
 void LLInverse (ListLinier *L) {
-	address pNext;
-	address p = LLFirst(*L);
-	address pPrev = Nil;
+	LLAddress pNext;
+	LLAddress p = LLFirst(*L);
+	LLAddress pPrev = Nil;
 	while(p != Nil) {
 		pNext = LLNext(p);
 		LLNext(p) = pPrev;
@@ -243,10 +243,10 @@ ListLinier LLFInverse (ListLinier L) {
 
 	LLCreateEmpty(&inversed);
 
-	address p = LLFirst(L);
-	address pPrev = Nil;
-	address i;
-	address iPrev = Nil;
+	LLAddress p = LLFirst(L);
+	LLAddress pPrev = Nil;
+	LLAddress i;
+	LLAddress iPrev = Nil;
 	boolean fail = false;
 
 	while(p != Nil && !fail) {
@@ -280,8 +280,8 @@ ListLinier LLFCopy (ListLinier L) {
 
 	LLCreateEmpty(&res);
 
-	address p = LLFirst(L);
-	address i, iPrev, iStart;
+	LLAddress p = LLFirst(L);
+	LLAddress i, iPrev, iStart;
 	boolean fail;
 
 	if(p == Nil) {
@@ -319,8 +319,8 @@ ListLinier LLFCopy (ListLinier L) {
 void LLCopy (ListLinier Lin, ListLinier *Lout) {
 	LLCreateEmpty(Lout);
 
-	address p = LLFirst(Lin);
-	address i, iPrev, iStart;
+	LLAddress p = LLFirst(Lin);
+	LLAddress i, iPrev, iStart;
 	boolean fail;
 
 	if(p != Nil) {
@@ -354,8 +354,8 @@ void LLCopy (ListLinier Lin, ListLinier *Lout) {
 void LLKonkat (ListLinier L1, ListLinier L2, ListLinier * L3) {
 	ListLinier D1, D2;
 
-	address p;
-	address i, iPrev, iStart;
+	LLAddress p;
+	LLAddress i, iPrev, iStart;
 	boolean fail, e1, e2;
 
 	LLCreateEmpty(L3);
@@ -437,7 +437,7 @@ void LLKonkat (ListLinier L1, ListLinier L2, ListLinier * L3) {
 void LLKonkat1 (ListLinier *L1, ListLinier *L2, ListLinier *L3) {
     if(!LLIsEmpty(*L1)) {
         LLFirst(*L3) = LLFirst(*L1);
-        address p = LLFirst(*L1);
+        LLAddress p = LLFirst(*L1);
         while(LLNext(p) != Nil) {
             p = LLNext(p);
         }
@@ -457,8 +457,8 @@ void LLPecahListLinier (ListLinier *L1, ListLinier *L2, ListLinier L) {
 	LLCreateEmpty(L2);
 
 	if(!LLIsEmpty(L)) {
-		address p = LLFirst(L);
-		address i, iPrev;
+		LLAddress p = LLFirst(L);
+		LLAddress i, iPrev;
 		int sizeOne = LLNbElmt(L) / 2;
 		int count = 1;
 

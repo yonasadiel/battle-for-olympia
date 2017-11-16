@@ -4,20 +4,20 @@
  * #define Nil NULL
 
  * typedef void* infotype;
- * typedef struct tElmtListSirkuler *address;
+ * typedef struct tElmtListSirkuler *LSAddress;
  * typedef struct tElmtListSirkuler {
  *   infotype info;
- *   address next;
+ *   LSAddress next;
  * } ElmtListSirkuler;
  * typedef struct {
- *   address LSFirst;
+ *   LSAddress LSFirst;
  * } ListSirkuler;
 
 /** 
  * Definisi list :
  * ListSirkuler kosong : LSFirst(L) = Nil 
- * Setiap elemen dengan address P dapat diacu LSInfo(P), LSNext(P) 
- * Elemen terakhir list: jika addressnya Last, maka LSNext(Last)=LSFirst(L)
+ * Setiap elemen dengan LSAddress P dapat diacu LSInfo(P), LSNext(P) 
+ * Elemen terakhir list: jika LSAddressnya Last, maka LSNext(Last)=LSFirst(L)
  */
 
 /**
@@ -35,18 +35,18 @@ void LSCreateEmpty (ListSirkuler *L) {
     LSFirst(*L) = Nil;
 }
 
-address LSAlokasi (infotype X) {
-    address p = (address) malloc(sizeof(address));
+LSAddress LSAlokasi (infotype X) {
+    LSAddress p = (LSAddress) malloc(sizeof(LSAddress));
     LSInfo(p) = X;
     LSNext(p) = Nil;
 }
 
-void LSDealokasi (address P) {
+void LSDealokasi (LSAddress P) {
     free(P);
 }
 
-address LSSearch (ListSirkuler L, infotype X) {
-    address p = LSFirst(L);
+LSAddress LSSearch (ListSirkuler L, infotype X) {
+    LSAddress p = LSFirst(L);
     if(LSInfo(p) == X) {
         return p;
     } else {
@@ -64,15 +64,15 @@ address LSSearch (ListSirkuler L, infotype X) {
 
 void LSInsVFirst (ListSirkuler *L, infotype X) {
     if(LSIsEmpty(*L)) {
-        address p = LSAlokasi(X);
+        LSAddress p = LSAlokasi(X);
         LSNext(p) = p;
         LSFirst(*L) = p;
     } else {
-        address p = LSNext(LSFirst(*L));
+        LSAddress p = LSNext(LSFirst(*L));
         while(LSNext(p) != LSFirst(*L)) {
             p = LSNext(p);
         }
-        address c = LSAlokasi(X);
+        LSAddress c = LSAlokasi(X);
         LSNext(c) = LSFirst(*L);
         LSNext(p) = c;
         LSFirst(*L) = c;
@@ -81,15 +81,15 @@ void LSInsVFirst (ListSirkuler *L, infotype X) {
 
 void LSInsVLast (ListSirkuler *L, infotype X) {
     if(LSIsEmpty(*L)) {
-        address p = LSAlokasi(X);
+        LSAddress p = LSAlokasi(X);
         LSNext(p) = p;
         LSFirst(*L) = p;
     } else {
-        address p = LSNext(LSFirst(*L));
+        LSAddress p = LSNext(LSFirst(*L));
         while(LSNext(p) != LSFirst(*L)) {
             p = LSNext(p);
         }
-        address c = LSAlokasi(X);
+        LSAddress c = LSAlokasi(X);
         LSNext(c) = LSFirst(*L);
         LSNext(p) = c;
     }
@@ -101,7 +101,7 @@ void LSDelVFirst (ListSirkuler *L, infotype * X) {
         LSDealokasi(LSFirst(*L));
         LSFirst(*L) = Nil;
     } else {
-        address last = LSFirst(*L);
+        LSAddress last = LSFirst(*L);
         while(LSNext(last) != LSFirst(*L)) {
             last = LSNext(last);
         }
@@ -117,8 +117,8 @@ void LSDelVLast (ListSirkuler *L, infotype * X) {
         LSDealokasi(LSFirst(*L));
         LSFirst(*L) = Nil;
     } else {
-        address p = LSNext(LSFirst(*L));
-        address c = LSFirst(*L);
+        LSAddress p = LSNext(LSFirst(*L));
+        LSAddress c = LSFirst(*L);
         while(LSNext(p) != LSFirst(*L)) {
             c = p;
             p = LSNext(p);
@@ -129,12 +129,12 @@ void LSDelVLast (ListSirkuler *L, infotype * X) {
     }
 }
 
-void LSInsFirst (ListSirkuler *L, address P) {
+void LSInsFirst (ListSirkuler *L, LSAddress P) {
     if(LSIsEmpty(*L)) {
         LSFirst(*L) = P;
         LSNext(P) = P;
     } else {
-        address p = LSNext(LSFirst(*L));
+        LSAddress p = LSNext(LSFirst(*L));
         while(LSNext(p) != LSFirst(*L)) {
             p = LSNext(p);
         }
@@ -144,12 +144,12 @@ void LSInsFirst (ListSirkuler *L, address P) {
     }
 }
 
-void LSInsLast (ListSirkuler *L, address P) {
+void LSInsLast (ListSirkuler *L, LSAddress P) {
     if(LSIsEmpty(*L)) {
         LSFirst(*L) = P;
         LSNext(P) = P;
     } else {
-        address p = LSNext(LSFirst(*L));
+        LSAddress p = LSNext(LSFirst(*L));
         while(LSNext(p) != LSFirst(*L)) {
             p = LSNext(p);
         }
@@ -158,17 +158,17 @@ void LSInsLast (ListSirkuler *L, address P) {
     }
 }
 
-void LSInsAfter (ListSirkuler *L, address P, address Prec) {
+void LSInsAfter (ListSirkuler *L, LSAddress P, LSAddress Prec) {
     LSNext(P) = LSNext(Prec);
     LSNext(Prec) = P;
 }
 
-void LSDelFirst (ListSirkuler *L, address *P) {
+void LSDelFirst (ListSirkuler *L, LSAddress *P) {
     *P = LSFirst(*L);
     if(LSNext(LSFirst(*L)) == LSFirst(*L)) {
         LSFirst(*L) = Nil;
     } else {
-        address last = LSFirst(*L);
+        LSAddress last = LSFirst(*L);
         while(LSNext(last) != LSFirst(*L)) {
             last = LSNext(last);
         }
@@ -177,13 +177,13 @@ void LSDelFirst (ListSirkuler *L, address *P) {
     }
 }
 
-void LSDelLast (ListSirkuler *L, address *P) {
+void LSDelLast (ListSirkuler *L, LSAddress *P) {
     if(LSNext(LSFirst(*L)) == LSFirst(*L)) {
         *P = LSFirst(*L);
         LSFirst(*L) = Nil;
     } else {
-        address p = LSNext(LSFirst(*L));
-        address c = LSFirst(*L);
+        LSAddress p = LSNext(LSFirst(*L));
+        LSAddress c = LSFirst(*L);
         while(LSNext(p) != LSFirst(*L)) {
             c = p;
             p = LSNext(p);
@@ -193,12 +193,12 @@ void LSDelLast (ListSirkuler *L, address *P) {
     }
 }
 
-void LSDelAfter (ListSirkuler *L, address *Pdel, address Prec) {
+void LSDelAfter (ListSirkuler *L, LSAddress *Pdel, LSAddress Prec) {
     if(LSNext(LSFirst(*L)) == LSFirst(*L)) {
         *Pdel = LSFirst(*L);
         LSFirst(*L) = Nil;
     } else {
-        address p = LSFirst(*L);
+        LSAddress p = LSFirst(*L);
         while(p != Prec) {
             p = LSNext(p);
         }
@@ -216,8 +216,8 @@ void LSDelP (ListSirkuler *L, infotype X) {
             infotype x;
             LSDelVFirst(L, &x);
         } else {
-            address p = LSNext(LSFirst(*L));
-            address c = LSFirst(*L);
+            LSAddress p = LSNext(LSFirst(*L));
+            LSAddress c = LSFirst(*L);
             while(p != LSFirst(*L) && LSInfo(p) != X) {
                 c = p;
                 p = LSNext(p);
