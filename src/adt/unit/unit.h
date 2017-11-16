@@ -36,6 +36,12 @@ void CreateUnit (Unit* U, char UnitType, Point P);
  *      mengatur semua kondisi properti dari unit saat pertama kali direkrut
  */
 
+void PrintUnitName(Unit U);
+/**
+ * I.S. U terdefinisi
+ * F.S. tercetak nama U: "King", "Archer", "Swordsman", atau "White Mage"
+ */
+
 #endif
 
 

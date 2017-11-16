@@ -1,6 +1,7 @@
 #include "unit.h"
 #include "../boolean/boolean.h"
 #include "../point/point.h"
+#include <stdio.h>
 
 /* typedef struct { */
 /*   int MaxHealth;     /* darah unit saat pertama kali direkrut */
@@ -63,4 +64,11 @@ void CreateUnit (Unit* U, char UnitType, Point P) {
   }
   Location(*U)    = P;
   Type(*U) = UnitType;
+}
+
+void PrintUnitName(Unit U) {
+    if      (Type(U) == 'A') { printf("Archer");     }
+    else if (Type(U) == 'K') { printf("King");       }
+    else if (Type(U) == 'S') { printf("Swordsman");  }
+    else if (Type(U) == 'W') { printf("White Mage"); }
 }
