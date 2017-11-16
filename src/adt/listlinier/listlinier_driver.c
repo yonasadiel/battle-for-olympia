@@ -4,38 +4,38 @@
 typedef struct {
 	int x;
 	int y;
-} Point;
+} Titik;
 
-Point createPoint(int x, int y) {
-	Point point;
-	point.x = x;
-	point.y = y;
-	return point;
+Titik createTitik(int x, int y) {
+	Titik titik;
+	titik.x = x;
+	titik.y = y;
+	return titik;
 }
 
-void PrintPoint(Point point) {
-	printf("<%d %d>", point.x, point.y);
+void PrintTitik(Titik titik) {
+	printf("<%d %d>", titik.x, titik.y);
 }
 
 int main() {
-	Point point1 = createPoint(1, 2);
-	Point point2 = createPoint(2, 3);
-	Point point3 = createPoint(3, 4);
+	Titik titik1 = createTitik(1, 2);
+	Titik titik2 = createTitik(2, 3);
+	Titik titik3 = createTitik(3, 4);
 
 	List L;
 
 	LLCreateEmpty(&L);
 
-	LLInsVFirst(&L, &point1);
-	LLInsVFirst(&L, &point2);
-	LLInsVFirst(&L, &point3);
+	LLInsVFirst(&L, &titik1);
+	LLInsVFirst(&L, &titik2);
+	LLInsVFirst(&L, &titik3);
 
 	address p = LLFirst(L);
 	while(p != Nil) {
-		Point* pointerToPoint = (Point*) LLInfo(p);
-		Point isiPointerPoint = *pointerToPoint; 
+		Titik* titikerToTitik = (Titik*) LLInfo(p);
+		Titik isiTitikerTitik = *titikerToTitik; 
 
-		PrintPoint(isiPointerPoint);
+		PrintTitik(isiTitikerTitik);
 		p = LLNext(p);
 	}
 
