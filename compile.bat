@@ -7,6 +7,7 @@ gcc^
     "src\adt\listsirkuler\listsirkuler.c"^
     "src\adt\map\map.c"^
     "src\adt\pcolor\pcolor.c"^
+    "src\adt\color\color.c"^
     "src\adt\player\player.c"^
     "src\adt\point\point.c"^
     "src\adt\queueint\queueint.c"^
