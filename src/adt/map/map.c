@@ -34,13 +34,19 @@
 
 /* *** Konstruktor Membentuk Map *** */
 void MakeMap(int NB, int NK, Map* M) {
-/**
- * Membentuk MAp "kosong" yang siap diisi berukuran NB x NK  di "ujung kiri" memori
- * I.S. M sembarang, NB dan NK valid
- * F.S. Map M sesuai definisi kosong di atas terbentuk
- */
+	int i,j;
+	
   NBrsEffMap(*M) = NB;
   NKolEffMap(*M) = NK;
+  
+  for (i = GetMapFirstIdxBrs(*M); i<=GetMapLastIdxBrs(*M); i++) {
+		for (j = GetMapFirstIdxKol(*M); j<=GetMapLastIdxKol(*M); j++) {
+			Building(*M, i, j) = 'C';
+			Unit(*M, i, j) = 'A';
+			ColorBuilding(*M, i, j) = CGREEN;
+			ColorUnit(*M, i, j) = CRED;
+		}
+	}
 }
 
 /* *** Selektor *** */
@@ -84,8 +90,8 @@ boolean IsIdxMapEff(Map M, IdxMap i, IdxMap j) {
 void TulisMap(Map M) {
   IdxMap i,j;
   
-  printf ("     ");
-  for (i=1; i<=GetMapLastIdxBrs(M); i++) {
+  printf ("      ");
+  for (i=1; i<=GetMapLastIdxKol(M); i++) {
 		printf ("%d",i-1);
 		if (i<10) {
 			printf ("   ");
@@ -94,33 +100,49 @@ void TulisMap(Map M) {
 		}
   }
   
-  printf ("    ");
-  for (i=1; i<=GetMapLastIdxBrs(M); i++) {
+  printf ("\n    ");
+  for (j=1; j<=GetMapLastIdxKol(M)*4+1; j++) {
 		printf ("*");
 	}
+	printf("\n");
 	
-  for (i=1; i<=GetMapLastIdxBrs(M)*4; i++) {
-		/* untuk baris 1 */
+  for (i=1; i<=GetMapLastIdxBrs(M); i++) {
+				
+		/* untuk baris 1*/
 		printf ("    *");
-		for (j=1; j<=GetMapLastIdxKol(M)*4; i++) {
-			printf ("*");
-		}
-		
-		/* untuk baris 2 */
-		printf ("  %d *",i-1);
-		for (j = 1; j<GetMapLastIdxKol(M); i++) {
-			printf (" ");
-			PrintInColor (Unit(M,i,j), ColorUnit(M,i,j));
-			printf (" *");
-		}
-		
-		/* untuk baris 3*/
-		printf ("    *");
-		for (j = 1; j<GetMapLastIdxKol(M); i++) {
+		for (j = 1; j<=GetMapLastIdxKol(M); j++) {
 			printf (" ");
 			PrintInColor (Building(M,i,j), ColorBuilding(M,i,j));
 			printf (" *");
 		}
+		printf("\n");
+	
+	/* untuk baris 2 */
+		if (i>=11) {
+			printf (" %d *",i-1);
+		} else {
+			printf ("  %d *",i-1);
+		}
+		for (j = 1; j<=GetMapLastIdxKol(M); j++) {
+			printf (" ");
+			PrintInColor(Unit(M,i,j), ColorUnit(M,i,j));
+			printf (" *");
+		}
+		printf("\n");
+		
+		/* untuk baris 3 */		
+		printf ("    *");
+		for (j=1; j<=GetMapLastIdxKol(M); j++) {
+			printf ("   *");
+		}
+		printf("\n");
+
+		/* untuk baris 4 */		
+		printf ("    *");
+		for (j=1; j<=GetMapLastIdxKol(M)*4; j++) {
+			printf ("*");
+		}
+		printf("\n");
 	}
 }	  
 		
@@ -129,9 +151,3 @@ void InitMap(Map* M) {
   //
 }
 
-int main() {
-	Map M;
-	MakeMap(8,8,&M);
-	TulisMap(M);
-	return 0;
-}

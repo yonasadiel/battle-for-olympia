@@ -14,6 +14,7 @@ typedef struct tElmtlist {
 } ElmtListLinear;
 typedef struct {
 	address First;
+<<<<<<< HEAD
 } ListLinear;
 
 /**

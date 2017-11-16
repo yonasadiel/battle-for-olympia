@@ -486,10 +486,3 @@ void LLPecahListLinear (ListLinear *L1, ListLinear *L2, ListLinear L) {
 		}
 	}
 }
-
-
-
-
-
-
-
