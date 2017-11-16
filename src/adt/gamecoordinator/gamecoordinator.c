@@ -61,7 +61,7 @@ void InitGame(GameCoordinator* GC) {
 
   MakeMap(8, 8, &GameMap(*GC));
   SCreateEmpty(&MoveRecord(*GC));
-  CurrentUnit(*GC) = (Unit*) LSFirst(ListUnit(Pi(*GC,QInfoHead(QI(*GC)))));
+  CurrentUnit(*GC) = (Unit*) LSInfo(LSFirst(ListUnit(Pi(*GC,QInfoHead(QI(*GC))))));
 }
 
 void LoadGame(GameCoordinator* GC) {
@@ -73,11 +73,13 @@ void SaveGame(GameCoordinator GC) {
 }
 
 void RunGame(GameCoordinator* GC) {
-  char* cmd;
+  system("cls");
+  char cmd[100];
   boolean IsRunning;
 
   IsRunning = true;
   while (IsRunning) {
+    printf("Player %d's Turn\n", QInfoHead(QI(*GC)));
     printPlayerInfo(Pi(*GC,QInfoHead(QI(*GC))));
     printCurrentUnitInfo(*CurrentUnit(*GC));
     printf("Your input: "); scanf("%s", cmd);
@@ -98,7 +100,6 @@ void RunGame(GameCoordinator* GC) {
 }
 
 void printPlayerInfo(Player P) {
-  printf("Player %d's Turn\n");
   printf("Cash: %dG | Income: %dG | Upkeep: %dG\n", Cash(P), Income(P), UpKeep(P));
 }
 
