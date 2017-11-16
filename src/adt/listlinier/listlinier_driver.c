@@ -1,4 +1,5 @@
-#include "listliniear.h"
+#include "listlinier.h"
+#include <stdio.h>
 
 typedef struct {
 	int x;
@@ -12,9 +13,31 @@ Point createPoint(int x, int y) {
 	return point;
 }
 
+void PrintPoint(Point point) {
+	printf("<%d %d>", point.x, point.y);
+}
+
 int main() {
-	Point point = createPoint(1, 2);
-	List L = CreateEmptyLLinier
+	Point point1 = createPoint(1, 2);
+	Point point2 = createPoint(2, 3);
+	Point point3 = createPoint(3, 4);
+
+	List L;
+
+	LLCreateEmpty(&L);
+
+	LLInsVFirst(&L, &point1);
+	LLInsVFirst(&L, &point2);
+	LLInsVFirst(&L, &point3);
+
+	address p = LLFirst(L);
+	while(p != Nil) {
+		Point* pointerToPoint = (Point*) LLInfo(p);
+		Point isiPointerPoint = *pointerToPoint; 
+
+		PrintPoint(isiPointerPoint);
+		p = LLNext(p);
+	}
 
 	return 0;
 }

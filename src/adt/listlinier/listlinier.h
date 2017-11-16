@@ -6,7 +6,8 @@
 #ifndef listlinier_H
 #define listlinier_H
 
-#include "../boolean/boolean.h"
+#include "boolean.h"
+#include "stdlib.h"
 
 #define Nil NULL
 
@@ -24,9 +25,9 @@ typedef struct {
 /* List kosong : First(L) = Nil */
 /* Setiap elemen dengan address P dapat diacu Info(P), Next(P) */
 /* Elemen terakhir list : jika addressnya Last, maka Next(Last)=Nil */
-#define Info(P) (P)->info
-#define Next(P) (P)->next
-#define First(L) ((L).First)
+#define LLInfo(P) (P)->info
+#define LLNext(P) (P)->next
+#define LLFirst(L) ((L).First)
 
 /* PROTOTYPE */
 /****************** TEST LIST KOSONG ******************/
@@ -67,6 +68,27 @@ address LLSearchPrec (List L, infotype X);
 /* traversal ulang jika setelah Search akan dilakukan operasi lain */
 
 /****************** PRIMITIF BERDASARKAN ALAMAT ******************/
+/*** PENAMBAHAN ELEMEN ***/
+void LLInsVFirst (List *L, infotype X);
+/* I.S. L mungkin kosong */
+/* F.S. Melakukan alokasi sebuah elemen dan */
+/* menambahkan elemen pertama dengan nilai X jika alokasi berhasil */
+void LLInsVLast (List *L, infotype X);
+/* I.S. L mungkin kosong */
+/* F.S. Melakukan alokasi sebuah elemen dan */
+/* menambahkan elemen list di akhir: elemen terakhir yang baru */
+/* bernilai X jika alokasi berhasil. Jika alokasi gagal: I.S.= F.S. */
+
+/*** PENGHAPUSAN ELEMEN ***/
+void LLDelVFirst (List *L, infotype *X);
+/* I.S. List L tidak kosong  */
+/* F.S. Elemen pertama list dihapus: nilai info disimpan pada X */
+/*      dan alamat elemen pertama di-dealokasi */
+void LLDelVLast (List *L, infotype *X);
+/* I.S. list tidak kosong */
+/* F.S. Elemen terakhir list dihapus: nilai info disimpan pada X */
+/*      dan alamat elemen terakhir di-dealokasi */
+
 /*** PENAMBAHAN ELEMEN BERDASARKAN ALAMAT ***/
 void LLInsFirst (List *L, address P);
 /* I.S. Sembarang, P sudah dialokasi  */
@@ -75,7 +97,7 @@ void LLInsAfter (List *L, address P, address Prec);
 /* I.S. Prec pastilah elemen list dan bukan elemen terakhir, */
 /*      P sudah dialokasi  */
 /* F.S. Insert P sebagai elemen sesudah elemen beralamat Prec */
-void InsLastLLinier (List *L, address P);
+void LLInsLast (List *L, address P);
 /* I.S. Sembarang, P sudah dialokasi  */
 /* F.S. P ditambahkan sebagai elemen terakhir yang baru */
 
