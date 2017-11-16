@@ -2,6 +2,8 @@
 #include "../color/color.h"
 #include "../point/point.h"
 #include "../boolean/boolean.h"
+#include "../building/building.h"
+#include <stdio.h>
 
 /* Ukuran minimum dan maksimum baris dan kolom */
 /* #define MapBrsMin 1 */
@@ -15,11 +17,11 @@
 /*   char Unit; */
 /*   Color ColorUnit; */
 /* } Sel; */
-/* typedef int IdxMap; /* indeks baris, kolom */
+/* typedef int IdxMap;  indeks baris, kolom */
 /* typedef struct { */
 /*   Sel Mem[MapBrsMax+1][MapKolMax+1]; */
-/*   int NBrsEff; /* banyaknya/ukuran baris yg terdefinisi */
-/*   int NKolEff; /* banyaknya/ukuran kolom yg terdefinisi */
+/*   int NBrsEff;  banyaknya/ukuran baris yg terdefinisi */
+/*   int NKolEff;  banyaknya/ukuran kolom yg terdefinisi */
 /* } Map; */
 
 /**
@@ -59,31 +61,77 @@ boolean IsIdxValid(IdxMap i, IdxMap j) {
 
 /* *** Selektor: Untuk sebuah Map M yang terdefinisi: *** */
 IdxMap GetMapFirstIdxBrs(Map M) {
-  //
+  return 1;
 }
 
 IdxMap GetMapFirstIdxKol(Map M) {
-  //
+  return 1;
 }
 
 IdxMap GetMapLastIdxBrs(Map M) {
-  //
+  return NBrsEffMap(M);
 }
 
 IdxMap GetMapLastIdxKol(Map M) {
-  //
+  return NKolEffMap(M);
 }
 
 boolean IsIdxMapEff(Map M, IdxMap i, IdxMap j) {
-  //
+  return (i>=1) && (i<=GetMapLastIdxBrs(M)) && (j>=1) && (j<=GetMapLastIdxKol(M));
 }
 
 /* *** Kelompok Baca/Tulis *** */
 void TulisMap(Map M) {
-  //
-}
-
+  IdxMap i,j;
+  
+  printf ("     ");
+  for (i=1; i<=GetMapLastIdxBrs(M); i++) {
+		printf ("%d",i-1);
+		if (i<10) {
+			printf ("   ");
+		} else {
+			printf ("  ");
+		}
+  }
+  
+  printf ("    ");
+  for (i=1; i<=GetMapLastIdxBrs(M); i++) {
+		printf ("*");
+	}
+	
+  for (i=1; i<=GetMapLastIdxBrs(M)*4; i++) {
+		/* untuk baris 1 */
+		printf ("    *");
+		for (j=1; j<=GetMapLastIdxKol(M)*4; i++) {
+			printf ("*");
+		}
+		
+		/* untuk baris 2 */
+		printf ("  %d *",i-1);
+		for (j = 1; j<GetMapLastIdxKol(M); i++) {
+			printf (" ");
+			PrintInColor (Unit(M,i,j), ColorUnit(M,i,j));
+			printf (" *");
+		}
+		
+		/* untuk baris 3*/
+		printf ("    *");
+		for (j = 1; j<GetMapLastIdxKol(M); i++) {
+			printf (" ");
+			PrintInColor (Building(M,i,j), ColorBuilding(M,i,j));
+			printf (" *");
+		}
+	}
+}	  
+		
 /* *** Kelompok Operasi Map *** */
 void InitMap(Map* M) {
   //
+}
+
+int main() {
+	Map M;
+	MakeMap(8,8,&M);
+	TulisMap(M);
+	return 0;
 }

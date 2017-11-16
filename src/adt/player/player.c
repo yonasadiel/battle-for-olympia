@@ -2,8 +2,10 @@
 #include "../boolean/boolean.h"
 #include "../color/color.h"
 #include "../unit/unit.h"
+#include "../building/building.h"
 #include "../listlinier/listlinier.h"
 #include "../listsirkuler/listsirkuler.h"
+#include "../point/point.h"
 
 /* #define Nil NULL */
 
@@ -25,17 +27,18 @@
 /* #define ListBuilding(P) (P).ListBuilding */
 /* #define Warna(P) (P).Warna */
 
-void MakePlayer(Player* P, Color W) {
-/**
- * I.S. P sembarang, W valid
- * F.S. P terdefinisi dengan cash 50, income 0, upkeep 0, 
- *      ListUnit kosong, ListBuilding kosong, MovPoint 0,
- *      dan Warna sesuai W.
- */
+void MakePlayer(Player* P, Color W, Point Loc) {
+  Unit U;
+  Building B;
+
   Cash(*P) = 50;
   Income(*P) = 0;
   UpKeep(*P) = 0;
   LSCreateEmpty(&ListUnit(*P));
   LLCreateEmpty(&ListBuilding(*P));
   Warna(*P) = W;
+
+  CreateUnit(&U, 'K', Loc);
+  // TODO : create all unit and building
+
 }
