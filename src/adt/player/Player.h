@@ -4,8 +4,10 @@
 #include "../boolean/boolean.h"
 #include "../color/color.h"
 #include "../unit/unit.h"
+#include "../building/building.h"
 #include "../listlinier/listlinier.h"
 #include "../listsirkuler/listsirkuler.h"
+#include "../point/point.h"
 
 #define Nil NULL
 
@@ -26,12 +28,13 @@ typedef struct {
 #define ListBuilding(P) (P).ListBuilding
 #define Warna(P) (P).Warna
 
-void MakePlayer(Player* P, Color W);
+void MakePlayer(Player* P, Color W, Point Loc);
 /**
  * I.S. P sembarang, W valid
  * F.S. P terdefinisi dengan cash 50, income 0, upkeep 0, 
  *      ListUnit kosong, ListBuilding kosong, MovPoint 0,
  *      dan Warna sesuai W.
+ *      Basecamp P ada di Loc
  */
 
 #endif
