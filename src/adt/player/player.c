@@ -34,7 +34,7 @@ void MakePlayer(Player* P, Color W, Point Loc) {
   Cash(*P) = 50;
   Income(*P) = 0;
   UpKeep(*P) = 0;
-  LSCreateEmpty(&ListUnit(*P));
+  //LSCreateEmpty(&ListUnit(*P));
   LLCreateEmpty(&ListBuilding(*P));
   Warna(*P) = W;
 
