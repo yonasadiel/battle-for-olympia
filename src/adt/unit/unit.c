@@ -7,6 +7,7 @@
 /*   int MaxHealth;     /* darah unit saat pertama kali direkrut */
 /*   int Health;        /* darah yang tersisa */
 /*   int Atk;           /* Besar damage yang diterima unit lain yang diserang */
+/*   int Heal		    /* Besar pertambahan darah yang diberikan kepada pemain sekutu (kemampuan khusus White Mage) */
 /*   int MovPoint;      /* banyak gerakan yang tersisa */
 /*   char AtkType;      /* 'm' = melee, 'r' = ranged */
 /*   boolean AtkChance; /* true = unit belum menyerang */
@@ -19,6 +20,7 @@
 /* #define MaxHealth(U) (U).MaxHealth */
 /* #define Health(U) (U).Health */
 /* #define Atk(U) (U).Atk */
+/* #define Heal(U) (U).Heal */
 /* #define MovPoint(U) (U).MovPoint */
 /* #define AtkType(U) (U).AtkType */
 /* #define AtkChance(U) (U).AtkChance */
@@ -33,6 +35,7 @@ void CreateUnit (Unit* U, char UnitType, Point P) {
     MaxHealth(*U)   = 29;
     Health(*U)      = 29;
     Atk(*U)         = 10;
+    Heal(*U)		= 0;
     MovPoint(*U)    = 2;
     AtkType(*U)     = 'r';
     AtkChance(*U)   = true;
@@ -41,6 +44,7 @@ void CreateUnit (Unit* U, char UnitType, Point P) {
     MaxHealth(*U)   = 60;
     Health(*U)      = 60;
     Atk(*U)         = 15;
+    Heal(*U)		= 0;
     MovPoint(*U)    = 2;
     AtkType(*U)     = 'm';
     AtkChance(*U)   = true;
@@ -49,6 +53,7 @@ void CreateUnit (Unit* U, char UnitType, Point P) {
     MaxHealth(*U)   = 55;
     Health(*U)      = 55;
     Atk(*U)         = 16;
+    Heal(*U)		= 0;
     MovPoint(*U)    = 2;
     AtkType(*U)     = 'm';
     AtkChance(*U)   = true;
@@ -56,6 +61,7 @@ void CreateUnit (Unit* U, char UnitType, Point P) {
   } else if (UnitType == 'W') {
     MaxHealth(*U)   = 35;
     Health(*U)      = 35;
+    Heal(*U)		= 8;
     Atk(*U)         = 12;
     MovPoint(*U)    = 2;
     AtkType(*U)     = 'm';

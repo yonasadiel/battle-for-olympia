@@ -41,9 +41,9 @@ void MakeMap(int NB, int NK, Map* M) {
   
   for (i = GetMapFirstIdxBrs(*M); i<=GetMapLastIdxBrs(*M); i++) {
 		for (j = GetMapFirstIdxKol(*M); j<=GetMapLastIdxKol(*M); j++) {
-			Building(*M, i, j) = 'C';
-			Unit(*M, i, j) = 'A';
-			ColorBuilding(*M, i, j) = CGREEN;
+			Building(*M, i, j) = ' ';
+			Unit(*M, i, j) = ' ';
+			ColorBuilding(*M, i, j) = CRED;
 			ColorUnit(*M, i, j) = CRED;
 		}
 	}
@@ -148,6 +148,24 @@ void TulisMap(Map M) {
 		
 /* *** Kelompok Operasi Map *** */
 void InitMap(Map* M) {
-  //
+	/* Init player1 building, Default Color = RED*/
+  Building(*M,GetMapLastIdxBrs(*M)-2,2) = 'C';
+  Building(*M,GetMapLastIdxBrs(*M)-1,1) = 'C';
+  Building(*M,GetMapLastIdxBrs(*M)-1,3) = 'C';
+  Building(*M,GetMapLastIdxBrs(*M),2) = 'C';
+  Building(*M,GetMapLastIdxBrs(*M)-1,2) = 'T';
+  
+  /* Init player2 building, Set Color = BLUE */
+  Building(*M,1,GetMapLastIdxKol(*M)-1) = 'C';
+  Building(*M,2,GetMapLastIdxKol(*M)-2) = 'C';
+  Building(*M,2,GetMapLastIdxKol(*M)) = 'C';
+  Building(*M,3,GetMapLastIdxKol(*M)-1) = 'C';
+  Building(*M,2,GetMapLastIdxKol(*M)-1) = 'T';
+  ColorBuilding(*M,1,GetMapLastIdxKol(*M)-1) = CGREEN;
+  ColorBuilding(*M,2,GetMapLastIdxKol(*M)-2) = CGREEN;
+  ColorBuilding(*M,2,GetMapLastIdxKol(*M)) = CGREEN;
+  ColorBuilding(*M,3,GetMapLastIdxKol(*M)-1) = CGREEN;
+  ColorBuilding(*M,2,GetMapLastIdxKol(*M)-1) = CGREEN;
+  
 }
 
