@@ -17,6 +17,7 @@ typedef struct {
   Unit* CurrentUnit;
 } GameCoordinator;
 
+<<<<<<< HEAD
 /* *** Selektor *** */
 #define Pi(GC,i) (GC).P[(i)]
 #define QI(GC) (GC).QI
@@ -25,9 +26,17 @@ typedef struct {
 #define CurrentUnit(GC) (GC).CurrentUnit
 
 void PrintMenu(void);
+=======
+void PrintFirstMenu(void);
+>>>>>>> a0ceeed8c7ebf6c9c7e9235b2f190b8533db8f86
 /**
  * I.S. Game belum dimulai
- * F.S. menu utama tampil di layar beserta pilihannya
+ * F.S. menu utama tampil di layar beserta pilihannya (tanpa Load Game)
+ */
+void PrintNextMenu(void);
+/**
+ * I.S. Game sudah dimulai
+ * F.S. menu utama tampil di layar beserta pilihannya (beserta Load Game)
  */
 void InitGame(GameCoordinator* GC);
 /**

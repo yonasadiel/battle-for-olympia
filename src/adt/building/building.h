@@ -14,7 +14,7 @@ typedef struct {
 
 /* *** Selektor Building *** */
 #define BCoordinate(B) (B).Coordinate
-#define BPlayer(B) (B).Player
+#define BPlayer(B) (B).Owner
 #define BType(B) (B).Type
 
 void MakeBuilding(Building* B, Point C, Player O, char T);

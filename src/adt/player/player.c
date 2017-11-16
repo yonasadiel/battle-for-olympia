@@ -27,5 +27,17 @@
 /* #define Warna(P) (P).Warna */
 
 void MakePlayer(Player* P, Color W) {
-  //
+/**
+ * I.S. P sembarang, W valid
+ * F.S. P terdefinisi dengan cash 50, income 0, upkeep 0, 
+ *      ListUnit kosong, ListBuilding kosong, MovPoint 0,
+ *      dan Warna sesuai W.
+ */
+  Cash(*P) = 50;
+  Income(*P) = 0;
+  UpKeep(*P) = 0;
+  CreateEmpty(&ListUnit(*P));
+  CreateEmpty(&ListBuilding(*P));
+  MovPoint(*P) = 0;
+  Warna(*P) = W;
 }

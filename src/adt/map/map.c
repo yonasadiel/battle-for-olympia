@@ -32,7 +32,13 @@
 
 /* *** Konstruktor Membentuk Map *** */
 void MakeMap(int NB, int NK, Map* M) {
-  //
+/**
+ * Membentuk MAp "kosong" yang siap diisi berukuran NB x NK  di "ujung kiri" memori
+ * I.S. M sembarang, NB dan NK valid
+ * F.S. Map M sesuai definisi kosong di atas terbentuk
+ */
+  NBrsEffMap(*M) = NB;
+  NKolEffMap(*M) = NK;
 }
 
 /* *** Selektor *** */
@@ -45,7 +51,10 @@ void MakeMap(int NB, int NK, Map* M) {
 
 /* *** Selektor "Dunia Map" *** */
 boolean IsIdxValid(IdxMap i, IdxMap j) {
-  //
+/**
+ * Mengembalikan true jika i, j adalah indeks yang valid untuk Map apapun
+ */
+  return ((i >= MapBrsMin && i <= MapBrsMax) && (j >= MapKolMin && j <= MapKolMax));
 }
 
 /* *** Selektor: Untuk sebuah Map M yang terdefinisi: *** */
