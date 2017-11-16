@@ -1,12 +1,12 @@
 #include "unit.h"
 #include "../boolean/boolean.h"
 #include "../point/point.h"
+#include <stdio.h>
 
 /* typedef struct { */
 /*   int MaxHealth;     /* darah unit saat pertama kali direkrut */
 /*   int Health;        /* darah yang tersisa */
 /*   int Atk;           /* Besar damage yang diterima unit lain yang diserang */
-/*   int MaxMovPoint;   /* banyak gerakan maksimum unit dalam 1 turn */
 /*   int MovPoint;      /* banyak gerakan yang tersisa */
 /*   char AtkType;      /* 'm' = melee, 'r' = ranged */
 /*   boolean AtkChance; /* true = unit belum menyerang */
@@ -19,7 +19,6 @@
 /* #define MaxHealth(U) (U).MaxHealth */
 /* #define Health(U) (U).Health */
 /* #define Atk(U) (U).Atk */
-/* #define MaxMovPoint(U) (U).MaxMovPoint */
 /* #define MovPoint(U) (U).MovPoint */
 /* #define AtkType(U) (U).AtkType */
 /* #define AtkChance(U) (U).AtkChance */
@@ -34,7 +33,6 @@ void CreateUnit (Unit* U, char UnitType, Point P) {
     MaxHealth(*U)   = 29;
     Health(*U)      = 29;
     Atk(*U)         = 10;
-    MaxMovPoint(*U) = 2;
     MovPoint(*U)    = 2;
     AtkType(*U)     = 'r';
     AtkChance(*U)   = true;
@@ -43,7 +41,6 @@ void CreateUnit (Unit* U, char UnitType, Point P) {
     MaxHealth(*U)   = 60;
     Health(*U)      = 60;
     Atk(*U)         = 15;
-    MaxMovPoint(*U) = 2;
     MovPoint(*U)    = 2;
     AtkType(*U)     = 'm';
     AtkChance(*U)   = true;
@@ -52,7 +49,6 @@ void CreateUnit (Unit* U, char UnitType, Point P) {
     MaxHealth(*U)   = 55;
     Health(*U)      = 55;
     Atk(*U)         = 16;
-    MaxMovPoint(*U) = 2;
     MovPoint(*U)    = 2;
     AtkType(*U)     = 'm';
     AtkChance(*U)   = true;
@@ -61,7 +57,6 @@ void CreateUnit (Unit* U, char UnitType, Point P) {
     MaxHealth(*U)   = 35;
     Health(*U)      = 35;
     Atk(*U)         = 12;
-    MaxMovPoint(*U) = 2;
     MovPoint(*U)    = 2;
     AtkType(*U)     = 'm';
     AtkChance(*U)   = true;
@@ -69,4 +64,11 @@ void CreateUnit (Unit* U, char UnitType, Point P) {
   }
   Location(*U)    = P;
   Type(*U) = UnitType;
+}
+
+void PrintUnitName(Unit U) {
+    if      (Type(U) == 'A') { printf("Archer");     }
+    else if (Type(U) == 'K') { printf("King");       }
+    else if (Type(U) == 'S') { printf("Swordsman");  }
+    else if (Type(U) == 'W') { printf("White Mage"); }
 }
