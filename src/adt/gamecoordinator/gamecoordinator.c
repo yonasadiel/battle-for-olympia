@@ -25,7 +25,7 @@
 /* #define MoveRecord(GC) (GC).MoveRecord */
 /* #define CurrentUnit(GC) (GC).CurrentUnit */
 
-void PrintFirstMenu(void) {
+void PrintMenu(void) {
 	printf ("_____________________________________________________T ___H ___E ______________________________________________________________\n");
 	printf ("___________####### ___________# ____ # ___# ____________________####### __# ___________________________________________________\n");
 	printf ("____________##   ## __________## ____## __## __________________##     ## _##__________________________________## ______________\n");
@@ -38,16 +38,9 @@ void PrintFirstMenu(void) {
 	printf ("\n==== MAIN MENU ====\n");
 	printf ("1. New Game\n");
 	printf ("2. Load Game\n");
+	printf ("3. Save Game\n");
 	printf ("3. Quit\n");
 	
-}
-
-void PrintNextMenu (void) {
-	printf ("\n==== MAIN MENU ====\n");
-	printf ("1. New Game\n");
-	printf ("2. Load Game\n");
-	printf ("3. Save Game\n");
-	printf ("4. Quit\n");
 }
 
 void InitGame(GameCoordinator* GC) {

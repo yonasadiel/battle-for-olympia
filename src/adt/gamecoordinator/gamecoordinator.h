@@ -24,16 +24,12 @@ typedef struct {
 #define MoveRecord(GC) (GC).MoveRecord
 #define CurrentUnit(GC) (GC).CurrentUnit
 
-void PrintFirstMenu(void);
+void PrintMenu(void);
 /**
  * I.S. Game belum dimulai
- * F.S. menu utama tampil di layar beserta pilihannya (tanpa Load Game)
+ * F.S. menu utama tampil di layar beserta pilihannya 
  */
-void PrintNextMenu(void);
-/**
- * I.S. Game sudah dimulai
- * F.S. menu utama tampil di layar beserta pilihannya (beserta Load Game)
- */
+
 void InitGame(GameCoordinator* GC);
 /**
  * I.S. GC tidak terdefinisi.
