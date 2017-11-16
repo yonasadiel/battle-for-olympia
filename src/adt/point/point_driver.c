@@ -18,4 +18,12 @@ void main() {
 	Geser(&P2,dx,dy);
 	TulisPoint(P1);
 	TulisPoint(P2);
+	if (EQPoint(P1,P2))
+		{
+			printf("Pointnya sama cuy\n");
+		}
+	if (NEQPoint(P1,P2))
+		{
+			printf("Pointnya beda cuy\n");
+		}
 }

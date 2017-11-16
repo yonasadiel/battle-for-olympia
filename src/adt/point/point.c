@@ -34,11 +34,11 @@ void TulisPoint(Point P) {
 
 /* *** Kelompok operasi relasional terhadap Point *** */
 boolean EQPoint(Point P1, Point P2) {
-  //
+  return ((Absis(P1)==Absis(P2))&&(Ordinat(P1)==Ordinat(P2)));
 }
 
 boolean NEQPoint(Point P1, Point P2) {
-  //
+  return ((Absis(P1)!=Absis(P2))||(Ordinat(P1)!=Ordinat(P2)));
 }
 
 /* *** Kelompok Operasi Lain Terhadap Point *** */
