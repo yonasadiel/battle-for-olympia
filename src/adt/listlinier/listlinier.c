@@ -4,18 +4,18 @@
  * #define Nil NULL
  *
  * typedef void* infotype;
- * typedef struct tElmtlist *address;
- * typedef struct tElmtlist {
+ * typedef struct tElmtListLinier *address;
+ * typedef struct tElmtListLinier {
  *	 infotype info;
  *	 address next;
  * } ElmtList;
  * typedef struct {
  * 	 address First;
- * } List;
+ * } ListLinier;
 
 /**
  * Definisi list :
- * ListLinear kosong : First(L) = Nil
+ * ListLinier kosong : First(L) = Nil
  * Setiap elemen dengan address P dapat diacu Info(P), Next(P)
  * Elemen terakhir list : jika addressnya Last, maka Next(Last)=Nil 
  
@@ -24,11 +24,11 @@
  * #define LLFirst(L) ((L).First)
  */
 
-boolean LLIsEmpty (ListLinear L) {
+boolean LLIsEmpty (ListLinier L) {
     return (LLFirst(L) == Nil);
 }
 
-void LLCreateEmpty (ListLinear *L) {
+void LLCreateEmpty (ListLinier *L) {
     LLFirst(*L) = Nil;
 }
 
@@ -47,7 +47,7 @@ void LLDealokasi (address *P) {
     free(*P);
 }
 
-address LLSearch (ListLinear L, infotype X) {
+address LLSearch (ListLinier L, infotype X) {
     address p = LLFirst(L);
     while(p != Nil && LLInfo(p) != X) {
         p = LLNext(p);
@@ -55,7 +55,7 @@ address LLSearch (ListLinear L, infotype X) {
     return p;
 }
 
-boolean LLFSearch (ListLinear L, address P) {
+boolean LLFSearch (ListLinier L, address P) {
 	address p = LLFirst(L);
 	while(p != Nil && p != P) {
 		p = LLNext(p);
@@ -67,7 +67,7 @@ boolean LLFSearch (ListLinear L, address P) {
 	}
 }
 
-void LLInsVFirst (ListLinear *L, infotype X) {
+void LLInsVFirst (ListLinier *L, infotype X) {
     address p = LLAlokasi(X);
     if(p) {
         if(LLIsEmpty(*L)) {
@@ -79,7 +79,7 @@ void LLInsVFirst (ListLinear *L, infotype X) {
     }
 }
 
-address LLSearchPrec (ListLinear L, infotype X) {
+address LLSearchPrec (ListLinier L, infotype X) {
 	address c = Nil;
 	address p = LLFirst(L);
 	while(p != Nil && LLInfo(p) != X) {
@@ -93,7 +93,7 @@ address LLSearchPrec (ListLinear L, infotype X) {
 	}
 }
 
-void LLInsVLast (ListLinear *L, infotype X) {
+void LLInsVLast (ListLinier *L, infotype X) {
     address p = LLAlokasi(X);
     if(p) {
         if(LLIsEmpty(*L)) {
@@ -108,14 +108,14 @@ void LLInsVLast (ListLinear *L, infotype X) {
     }
 }
 
-void LLDelVFirst (ListLinear *L, infotype *X) {
+void LLDelVFirst (ListLinier *L, infotype *X) {
     address p = LLFirst(*L);
     LLFirst(*L) = LLNext(p);
     *X = LLInfo(p);
     free(p);
 }
 
-void LLDelVLast (ListLinear *L, infotype *X) {
+void LLDelVLast (ListLinier *L, infotype *X) {
     address prev = Nil;
     address p = LLFirst(*L);
     while(LLNext(p) != Nil) {
@@ -132,17 +132,17 @@ void LLDelVLast (ListLinear *L, infotype *X) {
     LLDealokasi(&p);
 }
 
-void LLInsFirst (ListLinear *L, address P) {
+void LLInsFirst (ListLinier *L, address P) {
     LLNext(P) = LLFirst(*L);
     LLFirst(*L) = P;
 }
 
-void LLInsAfter (ListLinear *L, address P, address Prec) {
+void LLInsAfter (ListLinier *L, address P, address Prec) {
     LLNext(P) = LLNext(Prec);
     LLNext(Prec) = P;
 }
 
-void LLInsLast (ListLinear *L, address P) {
+void LLInsLast (ListLinier *L, address P) {
     if(LLIsEmpty(*L)) {
         LLFirst(*L) = P;
     } else {
@@ -154,12 +154,12 @@ void LLInsLast (ListLinear *L, address P) {
     }
 }
 
-void LLDelFirst (ListLinear *L, address *P) {
+void LLDelFirst (ListLinier *L, address *P) {
     *P = LLFirst(*L);
     LLFirst(*L) = LLNext(LLFirst(*L));
 }
 
-void LLDelP (ListLinear *L, infotype X) {
+void LLDelP (ListLinier *L, infotype X) {
     if(!LLIsEmpty(*L)) {
         if(LLInfo(LLFirst(*L)) == X) {
             address p = LLFirst(*L);
@@ -181,7 +181,7 @@ void LLDelP (ListLinear *L, infotype X) {
     }
 }
 
-void LLDelLast (ListLinear *L, address *P) {
+void LLDelLast (ListLinier *L, address *P) {
     if(LLNext(LLFirst(*L)) == Nil) {
         *P = LLFirst(*L);
         LLFirst(*L) = Nil;
@@ -195,7 +195,7 @@ void LLDelLast (ListLinear *L, address *P) {
     }
 }
 
-void LLDelAfter (ListLinear *L, address *Pdel, address Prec) {
+void LLDelAfter (ListLinier *L, address *Pdel, address Prec) {
     if(LLNext(Prec) != Nil) {
         *Pdel = LLNext(Prec);
         LLNext(Prec) = LLNext(LLNext(Prec));
@@ -204,7 +204,7 @@ void LLDelAfter (ListLinear *L, address *Pdel, address Prec) {
     }
 }
 
-int LLNbElmt (ListLinear L) {
+int LLNbElmt (ListLinier L) {
     int counter = 0;
     address p = LLFirst(L);
     while(p != Nil) {
@@ -214,7 +214,7 @@ int LLNbElmt (ListLinear L) {
     return counter;
 }
 
-void LLDelAll (ListLinear *L) {
+void LLDelAll (ListLinier *L) {
 	address p = LLFirst(*L);
 	address c = p;
 	while(c != Nil) {
@@ -225,7 +225,7 @@ void LLDelAll (ListLinear *L) {
 	LLCreateEmpty(L);
 }
 
-void LLInverse (ListLinear *L) {
+void LLInverse (ListLinier *L) {
 	address pNext;
 	address p = LLFirst(*L);
 	address pPrev = Nil;
@@ -238,8 +238,8 @@ void LLInverse (ListLinear *L) {
 	LLFirst(*L) = pPrev;
 }
 
-ListLinear LLFInverse (ListLinear L) {
-	ListLinear inversed;
+ListLinier LLFInverse (ListLinier L) {
+	ListLinier inversed;
 
 	LLCreateEmpty(&inversed);
 
@@ -275,8 +275,8 @@ ListLinear LLFInverse (ListLinear L) {
 	return inversed;
 }
 
-ListLinear LLFCopy (ListLinear L) {
-	ListLinear res;
+ListLinier LLFCopy (ListLinier L) {
+	ListLinier res;
 
 	LLCreateEmpty(&res);
 
@@ -316,7 +316,7 @@ ListLinear LLFCopy (ListLinear L) {
 	return res;
 }
 
-void LLCopy (ListLinear Lin, ListLinear *Lout) {
+void LLCopy (ListLinier Lin, ListLinier *Lout) {
 	LLCreateEmpty(Lout);
 
 	address p = LLFirst(Lin);
@@ -351,8 +351,8 @@ void LLCopy (ListLinear Lin, ListLinear *Lout) {
 	}
 }
 
-void LLKonkat (ListLinear L1, ListLinear L2, ListLinear * L3) {
-	ListLinear D1, D2;
+void LLKonkat (ListLinier L1, ListLinier L2, ListLinier * L3) {
+	ListLinier D1, D2;
 
 	address p;
 	address i, iPrev, iStart;
@@ -434,7 +434,7 @@ void LLKonkat (ListLinear L1, ListLinear L2, ListLinear * L3) {
 	}
 }
 
-void LLKonkat1 (ListLinear *L1, ListLinear *L2, ListLinear *L3) {
+void LLKonkat1 (ListLinier *L1, ListLinier *L2, ListLinier *L3) {
     if(!LLIsEmpty(*L1)) {
         LLFirst(*L3) = LLFirst(*L1);
         address p = LLFirst(*L1);
@@ -452,7 +452,7 @@ void LLKonkat1 (ListLinear *L1, ListLinear *L2, ListLinear *L3) {
 	LLCreateEmpty(L2);
 }
 
-void LLPecahListLinear (ListLinear *L1, ListLinear *L2, ListLinear L) {
+void LLPecahListLinier (ListLinier *L1, ListLinier *L2, ListLinier L) {
 	LLCreateEmpty(L1);
 	LLCreateEmpty(L2);
 

@@ -1,5 +1,5 @@
-#ifndef listlinier_H
-#define listlinier_H
+#ifndef LIST_SIRKULER_H
+#define LIST_SIRKULER_H
 
 #include "../boolean/boolean.h"
 #include <stdlib.h>
@@ -7,20 +7,20 @@
 #define Nil NULL
 
 typedef void* infotype;
-typedef struct tElmtlist *address;
-typedef struct tElmtlist {
+typedef struct tElmtListSirkuler *LSAddress;
+typedef struct tElmtListSirkuler {
 	infotype info;
-	address next;
+	LSAddress next;
 } ElmtListSirkuler;
 typedef struct {
-	address LSFirst;
+	LSAddress LSFirst;
 } ListSirkuler;
 
 /** 
  * Definisi list :
  * ListSirkuler kosong : LSFirst(L) = Nil 
- * Setiap elemen dengan address P dapat diacu LSInfo(P), LSNext(P) 
- * Elemen terakhir list: jika addressnya Last, maka LSNext(Last)=LSFirst(L)
+ * Setiap elemen dengan LSAddress P dapat diacu LSInfo(P), LSNext(P) 
+ * Elemen terakhir list: jika LSAddressnya Last, maka LSNext(Last)=LSFirst(L)
  */
 
 /* *** Notasi Akses *** */
@@ -43,25 +43,25 @@ void LSCreateEmpty (ListSirkuler *L);
  */
 
 /****************** Manajemen Memori ******************/
-address LSAlokasi (infotype X);
+LSAddress LSAlokasi (infotype X);
 /** 
- * Mengirimkan address hasil alokasi sebuah elemen
- * Jika alokasi berhasil, maka address tidak nil, dan misalnya
+ * Mengirimkan LSAddress hasil alokasi sebuah elemen
+ * Jika alokasi berhasil, maka LSAddress tidak nil, dan misalnya
  * menghasilkan P, maka LSInfo(P)=X, LSNext(P)=Nil
  * Jika alokasi gagal, mengirimkan Nil 
  */
-void LSDealokasi (address P);
+void LSDealokasi (LSAddress P);
 /** 
  * I.S. P terdefinisi
  * F.S. P dikembalikan ke sistem
- * Melakukan dealokasi/pengembalian address P 
+ * Melakukan dealokasi/pengembalian LSAddress P 
  */
 
 /* *** PENCARIAN SEBUAH ELEMEN LIST *** */
-address LSSearch (ListSirkuler L, infotype X);
+LSAddress LSSearch (ListSirkuler L, infotype X);
 /** 
  * Mencari apakah ada elemen list dengan LSInfo(P)= X
- * Jika ada, mengirimkan address elemen tersebut.
+ * Jika ada, mengirimkan LSAddress elemen tersebut.
  * Jika tidak ada, mengirimkan Nil 
  */
 
@@ -96,19 +96,19 @@ void LSDelVLast (ListSirkuler *L, infotype * X);
  */
 
 /* *** PENAMBAHAN ELEMEN BERDASARKAN ALAMAT *** */
-void LSInsFirst (ListSirkuler *L, address P);
+void LSInsFirst (ListSirkuler *L, LSAddress P);
 /**
  * I.S. Sembarang, P sudah dialokasi
- * F.S. Menambahkan elemen ber-address P sebagai elemen pertama 
+ * F.S. Menambahkan elemen ber-LSAddress P sebagai elemen pertama 
  */
 
-void LSInsLast (ListSirkuler *L, address P);
+void LSInsLast (ListSirkuler *L, LSAddress P);
 /** 
  * I.S. Sembarang, P sudah dialokasi 
  * F.S. P ditambahkan sebagai elemen terakhir yang baru 
  */
 
-void LSInsAfter (ListSirkuler *L, address P, address Prec);
+void LSInsAfter (ListSirkuler *L, LSAddress P, LSAddress Prec);
 /** 
  * I.S. Prec pastilah elemen list dan bukan elemen terakhir,
  *      P sudah dialokasi 
@@ -116,7 +116,7 @@ void LSInsAfter (ListSirkuler *L, address P, address Prec);
  */
 
 /* *** PENGHAPUSAN SEBUAH ELEMEN *** */
-void LSDelFirst (ListSirkuler *L, address *P);
+void LSDelFirst (ListSirkuler *L, LSAddress *P);
 /** 
  * I.S. ListSirkuler tidak kosong
  * F.S. P adalah alamat elemen pertama list sebelum penghapusan 
@@ -124,7 +124,7 @@ void LSDelFirst (ListSirkuler *L, address *P);
  * LSFirst element yg baru adalah suksesor elemen pertama yang lama 
  */
 
-void LSDelLast (ListSirkuler *L, address *P);
+void LSDelLast (ListSirkuler *L, LSAddress *P);
 /** 
  * I.S. ListSirkuler tidak kosong
  * F.S. P adalah alamat elemen terakhir list sebelum penghapusan
@@ -133,7 +133,7 @@ void LSDelLast (ListSirkuler *L, address *P);
  * jika ada
  */
 
-void LSDelAfter (ListSirkuler *L, address *Pdel, address Prec);
+void LSDelAfter (ListSirkuler *L, LSAddress *Pdel, LSAddress Prec);
 /** 
  * I.S. ListSirkuler tidak kosong. Prec adalah anggota list
  * F.S. Menghapus LSNext(Prec):
@@ -143,7 +143,7 @@ void LSDelAfter (ListSirkuler *L, address *Pdel, address Prec);
 void LSDelP (ListSirkuler *L, infotype X);
 /** 
  * I.S. Sembarang
- * F.S. Jika ada elemen list beraddress P, dengan LSInfo(P)=X
+ * F.S. Jika ada elemen list berLSAddress P, dengan LSInfo(P)=X
  * Maka P dihapus dari list dan di-dealokasi
  * Jika tidak ada elemen list dengan LSInfo(P)=X, maka list tetap
  * ListSirkuler mungkin menjadi kosong karena penghapusan 

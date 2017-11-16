@@ -4,8 +4,8 @@
  * #define Nil NULL
 
  * typedef void* infotype;
- * typedef struct tElmtlist *address;
- * typedef struct tElmtlist {
+ * typedef struct tElmtListSirkuler *address;
+ * typedef struct tElmtListSirkuler {
  *   infotype info;
  *   address next;
  * } ElmtListSirkuler;
