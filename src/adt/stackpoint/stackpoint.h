@@ -71,4 +71,11 @@ void SPop(Stack* S, SInfoType* X);
  * Pada dasarnya adalah operasi DeleteFirst pada list linier
  */
 
+Stack SReverse(Stack S);
+/**
+  * S mungkin kosong
+  * Mengembalikan Stack yang urutannya berkebalikan dengan S
+  * Seluruh elemen di alokasi
+  */
+
 #endif

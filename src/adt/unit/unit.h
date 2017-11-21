@@ -8,6 +8,7 @@ typedef struct {
 	int MaxHealth;     /* darah unit saat pertama kali direkrut */
 	int Health;        /* darah yang tersisa */
 	int Atk;           /* Besar damage yang diterima unit lain yang diserang */
+	int Heal		   /* Besar pertambahan darah yang diberikan kepada pemain sekutu (kemampuan khusus White Mage) */
 	int MovPoint;      /* banyak gerakan yang tersisa */
 	char AtkType;      /* 'm' = melee, 'r' = ranged */
 	boolean AtkChance; /* true = unit belum menyerang */
@@ -20,6 +21,7 @@ typedef struct {
 #define MaxHealth(U) (U).MaxHealth
 #define Health(U) (U).Health
 #define Atk(U) (U).Atk
+#define Heal(U) (U).Heal
 #define MovPoint(U) (U).MovPoint
 #define AtkType(U) (U).AtkType
 #define AtkChance(U) (U).AtkChance

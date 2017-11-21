@@ -69,3 +69,17 @@ void SPop(Stack* S, SInfoType* X) {
 	STop(*S)=SNext(P);
 	SDealokasi(P);
 }
+
+Stack SReverse(Stack S) {
+  Stack R;
+  SCreateEmpty(&R);
+  SAddress addr;
+
+  addr = STop(S);
+  while(addr != Nil) {
+  	SPush(&R, SInfo(addr));
+  	addr = SNext(addr);
+  }
+
+  return R;
+}

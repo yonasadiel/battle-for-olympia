@@ -7,7 +7,10 @@
 
 /* typedef int Color; */
 
+#include "color.h"
 #include <stdio.h>
+#include "color.h"
+#include "../pcolor/pcolor.h"
 
 void PrintInColor(char c, Color Warna) {
   if      (Warna == CRED)     { print_red(c);     }

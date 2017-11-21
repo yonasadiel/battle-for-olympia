@@ -2,8 +2,10 @@
 #include "../boolean/boolean.h"
 #include "../color/color.h"
 #include "../unit/unit.h"
+#include "../building/building.h"
 #include "../listlinier/listlinier.h"
 #include "../listsirkuler/listsirkuler.h"
+#include "../point/point.h"
 
 /* #define Nil NULL */
 
@@ -25,17 +27,37 @@
 /* #define ListBuilding(P) (P).ListBuilding */
 /* #define Warna(P) (P).Warna */
 
-void MakePlayer(Player* P, Color W) {
-/**
- * I.S. P sembarang, W valid
- * F.S. P terdefinisi dengan cash 50, income 0, upkeep 0, 
- *      ListUnit kosong, ListBuilding kosong, MovPoint 0,
- *      dan Warna sesuai W.
- */
+void InitPlayer(Player* P, int cash, int income, int upkeep, ListSirkuler units, ListLinier buildings, Color warna) {
+  Cash(*P) = income;
+  Income(*P) = income;
+  UpKeep(*P) = upkeep;
+  ListUnit(*P) = units;
+  ListBuilding(*P) = buildings;
+  Warna(*P) = warna;
+}
+
+void MakePlayer(Player* P, Color W, Point Loc) {
+  Unit U;
+  Building T, CN, CW, CE, CS;
+
   Cash(*P) = 50;
   Income(*P) = 0;
   UpKeep(*P) = 0;
-  LSCreateEmpty(&ListUnit(*P));
+  //LSCreateEmpty(&ListUnit(*P));
   LLCreateEmpty(&ListBuilding(*P));
   Warna(*P) = W;
+
+  CreateUnit(&U, 'K', Loc);
+  LSInsVFirst(&ListUnit(*P), &U);
+
+  MakeBuilding(&T, Loc, 'T');
+  MakeBuilding(&CN, PlusDelta(Loc, 0, -1), 'C');
+  MakeBuilding(&CS, PlusDelta(Loc, 0,  1), 'C');
+  MakeBuilding(&CE, PlusDelta(Loc,  1, 0), 'C');
+  MakeBuilding(&CW, PlusDelta(Loc, -1, 0), 'C');
+  LLInsVFirst(&ListBuilding(*P), &T);
+  LLInsVFirst(&ListBuilding(*P), &CN);
+  LLInsVFirst(&ListBuilding(*P), &CS);
+  LLInsVFirst(&ListBuilding(*P), &CE);
+  LLInsVFirst(&ListBuilding(*P), &CW);
 }

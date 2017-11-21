@@ -63,7 +63,7 @@ void QAdd(Queue* Q, QInfoType X);
  *         dari Q jika alokasi berhasil; jika alokasi gagaL
  *         Q tetap. Pada dasarnya adalah proses InsertLast
  */
-void QDel(Queue* Q, QInfoType X);
+void QDel(Queue* Q, QInfoType* X);
 /**
  * I.S. Q tidak mungkin kosong
  * F.S. X = Nilai elemen Head pada I.S., Head "mundur"

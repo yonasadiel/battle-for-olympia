@@ -2,6 +2,8 @@
 #include "../color/color.h"
 #include "../point/point.h"
 #include "../boolean/boolean.h"
+#include "../building/building.h"
+#include <stdio.h>
 
 /* Ukuran minimum dan maksimum baris dan kolom */
 /* #define MapBrsMin 1 */
@@ -15,11 +17,11 @@
 /*   char Unit; */
 /*   Color ColorUnit; */
 /* } Sel; */
-/* typedef int IdxMap; /* indeks baris, kolom */
+/* typedef int IdxMap;  indeks baris, kolom */
 /* typedef struct { */
 /*   Sel Mem[MapBrsMax+1][MapKolMax+1]; */
-/*   int NBrsEff; /* banyaknya/ukuran baris yg terdefinisi */
-/*   int NKolEff; /* banyaknya/ukuran kolom yg terdefinisi */
+/*   int NBrsEff;  banyaknya/ukuran baris yg terdefinisi */
+/*   int NKolEff;  banyaknya/ukuran kolom yg terdefinisi */
 /* } Map; */
 
 /**
@@ -32,13 +34,19 @@
 
 /* *** Konstruktor Membentuk Map *** */
 void MakeMap(int NB, int NK, Map* M) {
-/**
- * Membentuk MAp "kosong" yang siap diisi berukuran NB x NK  di "ujung kiri" memori
- * I.S. M sembarang, NB dan NK valid
- * F.S. Map M sesuai definisi kosong di atas terbentuk
- */
+	int i,j;
+	
   NBrsEffMap(*M) = NB;
   NKolEffMap(*M) = NK;
+  
+  for (i = GetMapFirstIdxBrs(*M); i<=GetMapLastIdxBrs(*M); i++) {
+		for (j = GetMapFirstIdxKol(*M); j<=GetMapLastIdxKol(*M); j++) {
+			Building(*M, i, j) = ' ';
+			Unit(*M, i, j) = ' ';
+			ColorBuilding(*M, i, j) = CRED;
+			ColorUnit(*M, i, j) = CRED;
+		}
+	}
 }
 
 /* *** Selektor *** */
@@ -59,31 +67,105 @@ boolean IsIdxValid(IdxMap i, IdxMap j) {
 
 /* *** Selektor: Untuk sebuah Map M yang terdefinisi: *** */
 IdxMap GetMapFirstIdxBrs(Map M) {
-  //
+  return 1;
 }
 
 IdxMap GetMapFirstIdxKol(Map M) {
-  //
+  return 1;
 }
 
 IdxMap GetMapLastIdxBrs(Map M) {
-  //
+  return NBrsEffMap(M);
 }
 
 IdxMap GetMapLastIdxKol(Map M) {
-  //
+  return NKolEffMap(M);
 }
 
 boolean IsIdxMapEff(Map M, IdxMap i, IdxMap j) {
-  //
+  return (i>=1) && (i<=GetMapLastIdxBrs(M)) && (j>=1) && (j<=GetMapLastIdxKol(M));
 }
 
 /* *** Kelompok Baca/Tulis *** */
 void TulisMap(Map M) {
-  //
-}
+  IdxMap i,j;
+  
+  printf ("      ");
+  for (i=1; i<=GetMapLastIdxKol(M); i++) {
+		printf ("%d",i-1);
+		if (i<10) {
+			printf ("   ");
+		} else {
+			printf ("  ");
+		}
+  }
+  
+  printf ("\n    ");
+  for (j=1; j<=GetMapLastIdxKol(M)*4+1; j++) {
+		printf ("*");
+	}
+	printf("\n");
+	
+  for (i=1; i<=GetMapLastIdxBrs(M); i++) {
+				
+		/* untuk baris 1*/
+		printf ("    *");
+		for (j = 1; j<=GetMapLastIdxKol(M); j++) {
+			printf (" ");
+			PrintInColor (Building(M,i,j), ColorBuilding(M,i,j));
+			printf (" *");
+		}
+		printf("\n");
+	
+	/* untuk baris 2 */
+		if (i>=11) {
+			printf (" %d *",i-1);
+		} else {
+			printf ("  %d *",i-1);
+		}
+		for (j = 1; j<=GetMapLastIdxKol(M); j++) {
+			printf (" ");
+			PrintInColor(Unit(M,i,j), ColorUnit(M,i,j));
+			printf (" *");
+		}
+		printf("\n");
+		
+		/* untuk baris 3 */		
+		printf ("    *");
+		for (j=1; j<=GetMapLastIdxKol(M); j++) {
+			printf ("   *");
+		}
+		printf("\n");
 
+		/* untuk baris 4 */		
+		printf ("    *");
+		for (j=1; j<=GetMapLastIdxKol(M)*4; j++) {
+			printf ("*");
+		}
+		printf("\n");
+	}
+}	  
+		
 /* *** Kelompok Operasi Map *** */
 void InitMap(Map* M) {
-  //
+	/* Init player1 building, Default Color = RED*/
+  Building(*M,GetMapLastIdxBrs(*M)-2,2) = 'C';
+  Building(*M,GetMapLastIdxBrs(*M)-1,1) = 'C';
+  Building(*M,GetMapLastIdxBrs(*M)-1,3) = 'C';
+  Building(*M,GetMapLastIdxBrs(*M),2) = 'C';
+  Building(*M,GetMapLastIdxBrs(*M)-1,2) = 'T';
+  
+  /* Init player2 building, Set Color = BLUE */
+  Building(*M,1,GetMapLastIdxKol(*M)-1) = 'C';
+  Building(*M,2,GetMapLastIdxKol(*M)-2) = 'C';
+  Building(*M,2,GetMapLastIdxKol(*M)) = 'C';
+  Building(*M,3,GetMapLastIdxKol(*M)-1) = 'C';
+  Building(*M,2,GetMapLastIdxKol(*M)-1) = 'T';
+  ColorBuilding(*M,1,GetMapLastIdxKol(*M)-1) = CGREEN;
+  ColorBuilding(*M,2,GetMapLastIdxKol(*M)-2) = CGREEN;
+  ColorBuilding(*M,2,GetMapLastIdxKol(*M)) = CGREEN;
+  ColorBuilding(*M,3,GetMapLastIdxKol(*M)-1) = CGREEN;
+  ColorBuilding(*M,2,GetMapLastIdxKol(*M)-1) = CGREEN;
+  
 }
+

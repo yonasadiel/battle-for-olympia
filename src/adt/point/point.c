@@ -46,3 +46,12 @@ void Geser (Point *P, int DeltaX, int DeltaY) {
 	Absis(*P)+=DeltaX;
 	Ordinat(*P)+=DeltaY;
 }
+
+Point PlusDelta(Point P, int DeltaX, int DeltaY) {
+  Point P1;
+
+  MakePoint(Absis(P), Ordinat(P), &P1);
+  Geser(&P1, DeltaX, DeltaY);
+  
+  return P1;
+}
