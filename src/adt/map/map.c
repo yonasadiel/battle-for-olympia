@@ -3,6 +3,7 @@
 #include "../point/point.h"
 #include "../boolean/boolean.h"
 #include "../building/building.h"
+#include "../unit/unit.h"
 #include <stdio.h>
 
 /* Ukuran minimum dan maksimum baris dan kolom */
@@ -41,9 +42,9 @@ void MakeMap(int NB, int NK, Map* M) {
   
   for (i = GetMapFirstIdxBrs(*M); i<=GetMapLastIdxBrs(*M); i++) {
 		for (j = GetMapFirstIdxKol(*M); j<=GetMapLastIdxKol(*M); j++) {
-			Building(*M, i, j) = 'C';
-			Unit(*M, i, j) = 'A';
-			ColorBuilding(*M, i, j) = CGREEN;
+			Building(*M, i, j) = ' ';
+			Unit(*M, i, j) = ' ';
+			ColorBuilding(*M, i, j) = CRED;
 			ColorUnit(*M, i, j) = CRED;
 		}
 	}
@@ -130,7 +131,7 @@ void TulisMap(Map M) {
 		}
 		printf("\n");
 		
-		/* untuk baris 3 */		
+		/* untuk baris 3 */
 		printf ("    *");
 		for (j=1; j<=GetMapLastIdxKol(M); j++) {
 			printf ("   *");
@@ -151,3 +152,12 @@ void InitMap(Map* M) {
   //
 }
 
+void MapPutUnit(Map* M, Unit U, Color Warna) {
+  Unit(*M, Absis(Location(U)), Ordinat(Location(U))) = Type(U);
+  ColorUnit(*M, Absis(Location(U)), Ordinat(Location(U))) = Warna;
+}
+
+void MapPutBuilding(Map* M, Building B, Color Warna) {
+  Building(*M, Absis(BCoordinate(B)), Ordinat(BCoordinate(B))) = BType(B);
+  ColorBuilding(*M, Absis(BCoordinate(B)), Ordinat(BCoordinate(B))) = Warna;
+}

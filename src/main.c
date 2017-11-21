@@ -5,6 +5,7 @@
 int main() {
   boolean isUp;
   int pilmenu;
+  int MapBrs, MapKol;
   GameCoordinator GC;
 
   isUp = true;
@@ -16,10 +17,17 @@ int main() {
     scanf("%d", &pilmenu);
     if (pilmenu == 1) {
       /* memulai game */
+      MapBrs = 0; MapKol = 0;
+      while (!IsMapSizeValid(MapBrs, MapKol)) {
+        printf("Input jumlah baris di map: "); scanf("%d", &MapBrs);
+        printf("Input jumlah kolom di map: "); scanf("%d", &MapKol);
+      }
+      InitGame(&GC);
       RunGame(&GC);
     } else if (pilmenu == 2) {
       /* load game */
       LoadGame(&GC);
+      RunGame(&GC);
     } else if (pilmenu == 3) {
       /* save game */
       SaveGame(GC);
@@ -32,7 +40,7 @@ int main() {
       PrintMenu();
     }
   }
-  printf("Game diakhiri, terima kasih sudah bermain!");
+  printf("Game diakhiri, terima kasih sudah bermain!\n");
 
   return 0;
 }

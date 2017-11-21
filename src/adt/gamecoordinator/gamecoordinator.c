@@ -40,7 +40,7 @@ void PrintMenu(void) {
 	printf ("1. New Game\n");
 	printf ("2. Load Game\n");
 	printf ("3. Save Game\n");
-	printf ("3. Quit\n");
+	printf ("4. Quit\n");
 	
 }
 
@@ -49,17 +49,19 @@ void InitGame(GameCoordinator* GC) {
   int NInitBaris = 8;
   int NInitKolom = 8;
 
-  MakePoint(2, 7, &P1);
-  MakePoint(7, 2, &P1);
+  system("cls");
 
-  MakePlayer(&Pi(*GC, 1), CRED, P1);
-  MakePlayer(&Pi(*GC, 2), CBLUE, P2);
+  MakeMap(8, 8, &GameMap(*GC));
+  MakePoint(7, 2, &P1);
+  MakePoint(2, 7, &P2);
+
+  MakePlayer(&Pi(*GC, 1), CRED, P1, &GameMap(*GC));
+  MakePlayer(&Pi(*GC, 2), CBLUE, P2, &GameMap(*GC));
 
   QCreateEmpty(&QI(*GC));
   QAdd(&QI(*GC), 1);
   QAdd(&QI(*GC), 2);
 
-  MakeMap(8, 8, &GameMap(*GC));
   SCreateEmpty(&MoveRecord(*GC));
   CurrentUnit(*GC) = (Unit*) LSInfo(LSFirst(ListUnit(Pi(*GC,QInfoHead(QI(*GC))))));
 }
@@ -76,6 +78,7 @@ void RunGame(GameCoordinator* GC) {
   system("cls");
   char cmd[100];
   boolean IsRunning;
+  int MapBrs, MapKol;
 
   IsRunning = true;
   while (IsRunning) {
@@ -84,7 +87,7 @@ void RunGame(GameCoordinator* GC) {
     printCurrentUnitInfo(*CurrentUnit(*GC));
     printf("Your input: "); scanf("%s", cmd);
 
-    if (!strcmp(cmd, "MAP" )) {
+    if (!strcmp(cmd, "MAP")) {
       system("cls");
       TulisMap(GameMap(*GC));
     } else if (!strcmp(cmd, "EXIT")) {
@@ -92,10 +95,9 @@ void RunGame(GameCoordinator* GC) {
     } else {
       system("cls");
       printf("Command is Not Recognized\n\n\n");
-    }
-
-    
+    } 
   }
+  system("cls");
   printf("Thanks for playing! See You!\n");
 }
 

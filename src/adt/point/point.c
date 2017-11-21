@@ -29,7 +29,7 @@ void BacaPoint(Point* P) {
 }
 
 void TulisPoint(Point P) {
-	printf("(%d,%d)\n",Absis(P),Ordinat(P));
+	printf("(%d,%d)",Absis(P),Ordinat(P));
 }
 
 /* *** Kelompok operasi relasional terhadap Point *** */

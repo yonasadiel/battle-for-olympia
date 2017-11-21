@@ -6,6 +6,7 @@
 #include "../listlinier/listlinier.h"
 #include "../listsirkuler/listsirkuler.h"
 #include "../point/point.h"
+#include "../map/map.h"
 
 /* #define Nil NULL */
 
@@ -27,28 +28,43 @@
 /* #define ListBuilding(P) (P).ListBuilding */
 /* #define Warna(P) (P).Warna */
 
-void MakePlayer(Player* P, Color W, Point Loc) {
-  Unit U;
-  Building T, CN, CW, CE, CS;
+void MakePlayer(Player* P, Color W, Point Loc, Map* M) {
+  Unit* U;
+  Building *T, *CN, *CW, *CE, *CS;
 
   Cash(*P) = 50;
   Income(*P) = 0;
   UpKeep(*P) = 0;
-  //LSCreateEmpty(&ListUnit(*P));
+  LSCreateEmpty(&ListUnit(*P));
   LLCreateEmpty(&ListBuilding(*P));
   Warna(*P) = W;
 
-  CreateUnit(&U, 'K', Loc);
-  LSInsVFirst(&ListUnit(*P), &U);
+  U = (Unit*) malloc(1* sizeof(Unit));
+  T = (Building*) malloc(1 * sizeof(Building));
+  CN = (Building*) malloc(1 * sizeof(Building));
+  CW = (Building*) malloc(1 * sizeof(Building));
+  CE = (Building*) malloc(1 * sizeof(Building));
+  CS = (Building*) malloc(1 * sizeof(Building));
 
-  MakeBuilding(&T, Loc, 'T');
-  MakeBuilding(&CN, PlusDelta(Loc, 0, -1), 'C');
-  MakeBuilding(&CS, PlusDelta(Loc, 0,  1), 'C');
-  MakeBuilding(&CE, PlusDelta(Loc,  1, 0), 'C');
-  MakeBuilding(&CW, PlusDelta(Loc, -1, 0), 'C');
-  LLInsVFirst(&ListBuilding(*P), &T);
-  LLInsVFirst(&ListBuilding(*P), &CN);
-  LLInsVFirst(&ListBuilding(*P), &CS);
-  LLInsVFirst(&ListBuilding(*P), &CE);
-  LLInsVFirst(&ListBuilding(*P), &CW);
+  CreateUnit(U, 'K', Loc);
+
+  MakeBuilding(T, Loc, 'T');
+  MakeBuilding(CN, PlusDelta(Loc, 0, -1), 'C');
+  MakeBuilding(CS, PlusDelta(Loc, 0,  1), 'C');
+  MakeBuilding(CE, PlusDelta(Loc,  1, 0), 'C');
+  MakeBuilding(CW, PlusDelta(Loc, -1, 0), 'C');
+
+  LSInsVFirst(&ListUnit(*P), U);
+  LLInsVFirst(&ListBuilding(*P), T);
+  LLInsVFirst(&ListBuilding(*P), CN);
+  LLInsVFirst(&ListBuilding(*P), CS);
+  LLInsVFirst(&ListBuilding(*P), CE);
+  LLInsVFirst(&ListBuilding(*P), CW);
+
+  MapPutUnit(M, *U, W);
+  MapPutBuilding(M, *T, W);
+  MapPutBuilding(M, *CN, W);
+  MapPutBuilding(M, *CS, W);
+  MapPutBuilding(M, *CE, W);
+  MapPutBuilding(M, *CW, W);
 }

@@ -8,6 +8,7 @@
 #include "../listlinier/listlinier.h"
 #include "../listsirkuler/listsirkuler.h"
 #include "../point/point.h"
+#include "../map/map.h"
 
 #define Nil NULL
 
@@ -28,7 +29,7 @@ typedef struct {
 #define ListBuilding(P) (P).ListBuilding
 #define Warna(P) (P).Warna
 
-void MakePlayer(Player* P, Color W, Point Loc);
+void MakePlayer(Player* P, Color W, Point Loc, Map* M);
 /**
  * I.S. P sembarang, W valid
  * F.S. P terdefinisi dengan cash 50, income 0, upkeep 0, 
