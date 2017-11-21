@@ -52,3 +52,17 @@ void SPush(Stack* S, SInfoType X) {
 void SPop(Stack* S, SInfoType X) {
   //
 }
+
+Stack SReverse(Stack S) {
+  Stack R;
+  SCreateEmpty(&R);
+  SAddress addr;
+
+  addr = STop(S);
+  while(addr != Nil) {
+  	SPush(&R, SInfo(addr));
+  	addr = SNext(addr);
+  }
+
+  return R;
+}

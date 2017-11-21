@@ -28,6 +28,15 @@
 /* #define ListBuilding(P) (P).ListBuilding */
 /* #define Warna(P) (P).Warna */
 
+void InitPlayer(Player* P, int cash, int income, int upkeep, ListSirkuler units, ListLinier buildings, Color warna) {
+  Cash(*P) = income;
+  Income(*P) = income;
+  UpKeep(*P) = upkeep;
+  ListUnit(*P) = units;
+  ListBuilding(*P) = buildings;
+  Warna(*P) = warna;
+}
+
 void MakePlayer(Player* P, Color W, Point Loc, Map* M) {
   Unit* U;
   Building *T, *CN, *CW, *CE, *CS;
