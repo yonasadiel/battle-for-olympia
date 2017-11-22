@@ -67,7 +67,13 @@ void printCurrentUnitInfo(Unit U);
 void EndTurn(GameCoordinator* GC);
 /**
  * I.S. GC terdefinisi
- * F.S. Current Player berganti beserta Current Unit
+ * F.S. Current Player berganti beserta Current Unit dan Cash dikurangi upkeep
+ */
+
+void ReduceCash(Player* P);
+/**
+ * I.S. P terdefinisi
+ * F.S. Cash P berkurang sesuai upkeep
  */
 
 #endif

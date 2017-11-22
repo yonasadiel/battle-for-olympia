@@ -232,3 +232,19 @@ void LSDelP (ListSirkuler *L, infotype X) {
         }
     }
 }
+
+int LSNbElmt (ListSirkuler L) {
+    LSAddress p = LSFirst(L);
+    int count = 0;
+
+    if (LSIsEmpty(L)) {
+        return 0;
+    } else {
+        do {
+            count++;
+            p = LSNext(p);
+        } while (p != LSFirst(L));
+        
+        return count;
+    }
+}

@@ -15,7 +15,6 @@
 typedef struct {
 	int Cash;                 /* jumlah uang yang dimiliki pemain */
 	int Income;               /* jumlah pendapatan pemain tiap turn */
-	int UpKeep;               /* jumlah pengeluaran pemain tiap turn */
 	ListSirkuler ListUnit;    /* list unit yang dimiliki pemain */
 	ListLinier ListBuilding;  /* list building yang dimiliki pemain */
 	Color Warna;              /* warna dari player */
@@ -24,10 +23,17 @@ typedef struct {
 /* *** Selektor Player *** */
 #define Cash(P) (P).Cash
 #define Income(P) (P).Income
-#define UpKeep(P) (P).UpKeep
+#define UpKeep(P) LSNbElmt(ListUnit(P)) 
 #define ListUnit(P) (P).ListUnit
 #define ListBuilding(P) (P).ListBuilding
 #define Warna(P) (P).Warna
+
+void InitPlayer(Player* P, int cash, int income, ListSirkuler units, ListLinier buildings, Color warna);
+/**
+ * TODO
+ * ada orang tidak bertanggung jawab bikin fungsi ini tanpa header
+ * ada sukarelawan?
+ */
 
 void MakePlayer(Player* P, Color W, Point Loc, Map* M);
 /**

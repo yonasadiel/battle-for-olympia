@@ -282,10 +282,13 @@ void RunGame(GameCoordinator* GC) {
   int MapBrs, MapKol;
 
   IsRunning = true;
+  ReduceCash(&Pi(*GC,QInfoHead(QI(*GC))));
   while (IsRunning) {
     printf("Player %d's Turn\n", QInfoHead(QI(*GC)));
     printPlayerInfo(Pi(*GC,QInfoHead(QI(*GC))));
     printCurrentUnitInfo(*CurrentUnit(*GC));
+    printf("Command List: | MOVE | UNDO | CHANGE_UNIT | RECRUIT | ATTACK |\n");
+    printf("              | MAP  | INFO | END_TURN    | SAVE    | EXIT   |\n");
     printf("Your input: "); scanf("%s", cmd);
 
     if (strcmp(cmd, "MOVE") && strcmp(cmd, "MAP") && strcmp(cmd, "INFO")) {
@@ -311,7 +314,7 @@ void RunGame(GameCoordinator* GC) {
 }
 
 void printPlayerInfo(Player P) {
-  printf("Cash: %dG | Income: %dG | Upkeep: %dG\n", Cash(P), Income(P), UpKeep(P));
+  printf("Cash: %dG | Income: %dG | UpKeep: %dG\n", Cash(P), Income(P), UpKeep(P));
 }
 
 void printCurrentUnitInfo(Unit U) {
@@ -333,4 +336,11 @@ void EndTurn(GameCoordinator* GC) {
   QDel(&QI(*GC), &X);
 
   CurrentUnit(*GC) = (Unit*) LSInfo(LSFirst(ListUnit(Pi(*GC,QInfoHead(QI(*GC))))));
+
+  ReduceCash(&Pi(*GC,QInfoHead(QI(*GC))));
+}
+
+void ReduceCash(Player* P) {
+  Cash(*P) -= UpKeep(*P);
+  if (Cash(*P) < 0) Cash(*P) = 0;
 }
