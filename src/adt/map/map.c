@@ -65,6 +65,12 @@ boolean IsIdxValid(IdxMap i, IdxMap j) {
  */
   return ((i >= MapBrsMin && i <= MapBrsMax) && (j >= MapKolMin && j <= MapKolMax));
 }
+boolean IsMapSizeValid(int Brs, int Kol) {
+/**
+ * Mengembalikan true jika i, j adalah indeks yang valid untuk Map apapun
+ */
+  return (Brs <= MapBrsMax - MapBrsMin && Kol <= MapKolMax - MapKolMin && Brs >= 8 && Kol >= 8);
+}
 
 /* *** Selektor: Untuk sebuah Map M yang terdefinisi: *** */
 IdxMap GetMapFirstIdxBrs(Map M) {

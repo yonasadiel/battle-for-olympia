@@ -9,7 +9,7 @@ int main() {
   GameCoordinator GC;
 
   isUp = true;
-  InitGame(&GC);
+  InitGame(&GC, 8, 8);
   while (isUp) {
     PrintMenu();
 
@@ -18,11 +18,16 @@ int main() {
     if (pilmenu == 1) {
       /* memulai game */
       MapBrs = 0; MapKol = 0;
-      while (!IsMapSizeValid(MapBrs, MapKol)) {
+      for (;;) {
         printf("Input jumlah baris di map: "); scanf("%d", &MapBrs);
         printf("Input jumlah kolom di map: "); scanf("%d", &MapKol);
+        if (!IsMapSizeValid(MapBrs, MapKol)) {
+          printf("Ukuran map tidak valid\n");
+        } else {
+          break;
+        }
       }
-      InitGame(&GC);
+      InitGame(&GC, MapBrs, MapKol);
       RunGame(&GC);
     } else if (pilmenu == 2) {
       /* load game */

@@ -55,6 +55,10 @@ boolean IsIdxValid(IdxMap i, IdxMap j);
 /**
  * Mengembalikan true jika i, j adalah indeks yang valid untuk Map apapun
  */
+boolean IsMapSizeValid(int Brs, int Kol);
+/**
+ * Mengembalikan true jika i, j adalah indeks yang valid untuk Map apapun
+ */
 
 /* *** Selektor: Untuk sebuah Map M yang terdefinisi: *** */
 IdxMap GetMapFirstIdxBrs(Map M);
