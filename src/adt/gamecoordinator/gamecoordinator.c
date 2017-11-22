@@ -288,6 +288,10 @@ void RunGame(GameCoordinator* GC) {
     printCurrentUnitInfo(*CurrentUnit(*GC));
     printf("Your input: "); scanf("%s", cmd);
 
+    if (strcmp(cmd, "MOVE") && strcmp(cmd, "MAP") && strcmp(cmd, "INFO")) {
+      PopAll(&MoveRecord(*GC));
+    }
+
     if (!strcmp(cmd, "MAP")) {
       system("cls");
       TulisMap(GameMap(*GC));

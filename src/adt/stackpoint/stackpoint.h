@@ -79,4 +79,10 @@ Stack SReverse(Stack S);
   * Seluruh elemen di alokasi
   */
 
+void PopAll(Stack* S);
+/**
+ * I.S. S terdefinisi, mungkin kosong
+ * F.S. S kosong
+ */
+
 #endif
