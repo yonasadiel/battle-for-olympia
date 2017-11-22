@@ -289,7 +289,7 @@ void RunGame(GameCoordinator* GC) {
     printf("Your input: "); scanf("%s", cmd);
 
     if (strcmp(cmd, "MOVE") && strcmp(cmd, "MAP") && strcmp(cmd, "INFO")) {
-      PopAll(&MoveRecord(*GC));
+      SPopAll(&MoveRecord(*GC));
     }
 
     if (!strcmp(cmd, "MAP")) {

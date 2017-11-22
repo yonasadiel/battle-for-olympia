@@ -67,7 +67,7 @@ Stack SReverse(Stack S) {
   return R;
 }
 
-void PopAll(Stack* S) {
+void SPopAll(Stack* S) {
   SInfoType X;
 
   while (!SIsEmpty(*S)) {
