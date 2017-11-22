@@ -209,12 +209,12 @@ void SaveGame(GameCoordinator GC) {
         Player player;
         int playerQueue;
         ListSirkuler units;
-        ListBuilding buildings;
+        ListLinier buildings;
         LSAddress addrUnit;
         LLAddress addrBuilding;
         int count;
         Stack moves;
-        Unit curretUnit;
+        Unit currentUnit;
 
         // Getting Player Queue
         queue = QI(GC);
@@ -231,7 +231,7 @@ void SaveGame(GameCoordinator GC) {
 
           // Saving every player's units
           units = ListUnit(player);
-          if(!LSEmpty(units)) {
+          if(!LSIsEmpty(units)) {
             addrUnit = LSFirst(units);
             do {
               Unit unit = (*(Unit*) LSInfo(addrUnit));
@@ -239,7 +239,7 @@ void SaveGame(GameCoordinator GC) {
                 MaxHealth(unit), Health(unit), Atk(unit), Heal(unit), MovPoint(unit), 
                 AtkType(unit), AtkChance(unit), Absis(Location(unit)), Ordinat(Location(unit)),
                 RecCost(unit), Type(unit));
-              addrUnit = Next(units);
+              addrUnit = LSNext(addrUnit);
             } while(addrUnit != LSFirst(units));
           }
           fprintf(file, "#\n");
@@ -248,9 +248,9 @@ void SaveGame(GameCoordinator GC) {
           buildings = ListBuilding(player);
           addrBuilding = LLFirst(buildings);
           while(addrBuilding != Nil) {
-            Building building = (*(Building*)) LLInfo(addrBuilding);
+            Building building = (*(Building*) LLInfo(addrBuilding));
             fprintf(file, "%d %d %d\n", Absis(BCoordinate(building)), Ordinat(BCoordinate(building)), BType(building));
-            addrBuilding = Next(buildings); 
+            addrBuilding = LLNext(addrBuilding); 
           }
           fprintf(stderr, "#\n");
 
@@ -267,7 +267,7 @@ void SaveGame(GameCoordinator GC) {
         }
 
         // Saving Current Unit
-        currentUnit = CurretUnit(GC);
+        currentUnit = *CurrentUnit(GC);
         fprintf(file, "%d %d %d %d %d %d %d %d %d %d %d\n", 
           MaxHealth(currentUnit), Health(currentUnit), Atk(currentUnit), Heal(currentUnit), MovPoint(currentUnit), 
           AtkType(currentUnit), AtkChance(currentUnit), Absis(Location(currentUnit)), Ordinat(Location(currentUnit)),

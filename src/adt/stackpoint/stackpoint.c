@@ -49,7 +49,7 @@ void SPush(Stack* S, SInfoType X) {
   //
 }
 
-void SPop(Stack* S, SInfoType X) {
+void SPop(Stack* S, SInfoType* X) {
   //
 }
 
