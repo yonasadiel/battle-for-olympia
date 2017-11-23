@@ -44,4 +44,10 @@ void MakePlayer(Player* P, Color W, Point Loc, Map* M);
  *      Basecamp P ada di Loc
  */
 
+void ResetMovPointAllUnit(Player* P);
+/**
+ * I.S. P terdefinisi
+ * F.S. Semua Unit di P punya movement point 2
+ */
+
 #endif
