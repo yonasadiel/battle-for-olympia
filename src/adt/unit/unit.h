@@ -44,6 +44,12 @@ void PrintUnitName(Unit U);
  * F.S. tercetak nama U: "King", "Archer", "Swordsman", atau "White Mage"
  */
 
+void printInfoUnit(Unit U);
+/**
+ * I.S. U terdefinisi
+ * F.S. tercetak semua info U: Nama Unit, Maximum Health, Health, ..., Recruit Cost.
+ */
+ 
 #endif
 
 

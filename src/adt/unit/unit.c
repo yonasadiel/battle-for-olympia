@@ -72,3 +72,24 @@ void PrintUnitName(Unit U) {
   else if (Type(U) == 'S') { printf("Swordsman");  }
   else if (Type(U) == 'W') { printf("White Mage"); }
 }
+
+void printInfoUnit(Unit U) {
+	printf("Unit : ");
+	PrintUnitName(U);
+	printf(", ");
+	printf("Maximum Health : %d, ",MaxHealth(U));
+	printf("Health : %d, ",Health(U));
+	printf("Heal : %d, ",Heal(U));
+	printf("Attack : %d, ",Atk(U));
+	printf("Attack Type : %d, ",Atk(U));
+	printf("Attack Chance: ");
+	if (AtkChance(U)){
+		printf("true, ");
+	}else{
+		printf("false, ");
+	}
+	printf("Location : ");
+	TulisPoint(Location(U));
+	printf(", ");
+	printf("Recruit Cost : %d, ",RecCost(U));	
+}
