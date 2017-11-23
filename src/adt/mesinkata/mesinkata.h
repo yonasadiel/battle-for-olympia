@@ -24,7 +24,8 @@ void IgnoreBlank();
    I.S. : CC sembarang 
    F.S. : CC ≠ BLANK atau CC = MARK */
 
-void STARTKATA();
+boolean STARTKATA(char* filename);
+/* Mengembalikan true jika file berhasil dibuka, false jika gagal */
 /* I.S. : CC sembarang 
    F.S. : EndKata = true, dan CC = MARK; 
           atau EndKata = false, CKata adalah kata yang sudah diakuisisi,
@@ -44,5 +45,15 @@ void SalinKata();
           CC = BLANK atau CC = MARK; 
           CC adalah karakter sesudah karakter terakhir yang diakuisisi.
           Jika panjang kata melebihi NMax, maka sisa kata "dipotong" */
+
+void ToInteger(int* X, boolean* err);
+/**
+  I.S. : CKata terdefinisi
+  F.S. : Mengubah CKata ke integer dan disimpan pada X
+         Bila CKata mengandung karakter bukan angka,
+         err = true, jika tidak err = false */
+
+void CLOSEKATA();
+/* Mengakhiri pembacaan file */
 
 #endif
