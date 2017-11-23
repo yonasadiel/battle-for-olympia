@@ -123,39 +123,39 @@ char* getLoadedFileName() {
 }
 
 void PrintMenu(void) {
-	printf ("_____________________________________________________T ___H ___E ______________________________________________________________\n");
-	printf ("___________####### ___________# ____ # ___# ____________________####### __# ___________________________________________________\n");
-	printf ("____________##   ## __________## ____## __## __________________##     ## _##__________________________________## ______________\n");
-	printf ("____________##   ## _##### _###### ###### ## ___#### __________##     ## _## __## __## ## ### ### __####### _______##### ______\n");
-	printf ("____________###### _# ___## __## ____## __## __##  ## __F O R _##     ## _## __## __## _## _## _## __##   ## _## _# ___## _____\n");
-	printf ("____________##   ## _###### __## ____## __## __###### _________##     ## _## __## __## _## _## _## __##   ## _## __###### _____\n");
-	printf ("____________##   ## ##   ## __## ____## __## __## _____________##     ## _## ___###### _## _## _## __###### __## _##   ## _____\n");
-	printf ("___________####### _###### ___## ____## ___### _##### __________####### ___### ____ ## _## _## _### _## ______## _###### ______\n");
-	printf ("_______________________________### ___### ______________________________________###### ______________## _______________________\n");
-	printf ("\n==== MAIN MENU ====\n");
-	printf ("1. New Game\n");
-	printf ("2. Load Game\n");
-	printf ("3. Save Game\n");
-	printf ("3. Quit\n");
-	
+  printf ("_____________________________________________________T ___H ___E ______________________________________________________________\n");
+  printf ("___________####### ___________# ____ # ___# ____________________####### __# ___________________________________________________\n");
+  printf ("____________##   ## __________## ____## __## __________________##     ## _##__________________________________## ______________\n");
+  printf ("____________##   ## _##### _###### ###### ## ___#### __________##     ## _## __## __## ## ### ### __####### _______##### ______\n");
+  printf ("____________###### _# ___## __## ____## __## __##  ## __F O R _##     ## _## __## __## _## _## _## __##   ## _## _# ___## _____\n");
+  printf ("____________##   ## _###### __## ____## __## __###### _________##     ## _## __## __## _## _## _## __##   ## _## __###### _____\n");
+  printf ("____________##   ## ##   ## __## ____## __## __## _____________##     ## _## ___###### _## _## _## __###### __## _##   ## _____\n");
+  printf ("___________####### _###### ___## ____## ___### _##### __________####### ___### ____ ## _## _## _### _## ______## _###### ______\n");
+  printf ("_______________________________### ___### ______________________________________###### ______________## _______________________\n");
+  printf ("\n==== MAIN MENU ====\n");
+  printf ("1. New Game\n");
+  printf ("2. Load Game\n");
+  printf ("3. Save Game\n");
+  printf ("4. Quit\n");
+  
 }
 
-void InitGame(GameCoordinator* GC) {
+void InitGame(GameCoordinator* GC, int NInitBaris, int NInitKolom) {
   Point P1, P2;
-  int NInitBaris = 8;
-  int NInitKolom = 8;
 
-  MakePoint(2, 7, &P1);
-  MakePoint(7, 2, &P1);
+  system("cls");
 
-  MakePlayer(&Pi(*GC, 1), CRED, P1);
-  MakePlayer(&Pi(*GC, 2), CBLUE, P2);
+  MakeMap(NInitBaris,NInitKolom, &GameMap(*GC));
+  MakePoint(NInitBaris-1, 2, &P1);
+  MakePoint(2, NInitKolom-1, &P2);
+
+  MakePlayer(&Pi(*GC, 1), CRED, P1, &GameMap(*GC));
+  MakePlayer(&Pi(*GC, 2), CBLUE, P2, &GameMap(*GC));
 
   QCreateEmpty(&QI(*GC));
   QAdd(&QI(*GC), 1);
   QAdd(&QI(*GC), 2);
 
-  MakeMap(8, 8, &GameMap(*GC));
   SCreateEmpty(&MoveRecord(*GC));
   CurrentUnit(*GC) = (Unit*) LSInfo(LSFirst(ListUnit(Pi(*GC,QInfoHead(QI(*GC))))));
 }
@@ -207,12 +207,12 @@ void SaveGame(GameCoordinator GC) {
         Player player;
         int playerQueue;
         ListSirkuler units;
-        ListBuilding buildings;
+        ListLinier buildings;
         LSAddress addrUnit;
         LLAddress addrBuilding;
         int count;
         Stack moves;
-        Unit curretUnit;
+        Unit currentUnit;
 
         // Getting Player Queue
         queue = QI(GC);
@@ -229,7 +229,7 @@ void SaveGame(GameCoordinator GC) {
 
           // Saving every player's units
           units = ListUnit(player);
-          if(!LSEmpty(units)) {
+          if(!LSIsEmpty(units)) {
             addrUnit = LSFirst(units);
             do {
               Unit unit = (*(Unit*) LSInfo(addrUnit));
@@ -237,7 +237,7 @@ void SaveGame(GameCoordinator GC) {
                 MaxHealth(unit), Health(unit), Atk(unit), Heal(unit), MovPoint(unit), 
                 AtkType(unit), AtkChance(unit), Absis(Location(unit)), Ordinat(Location(unit)),
                 RecCost(unit), Type(unit));
-              addrUnit = Next(units);
+              addrUnit = LSNext(addrUnit);
             } while(addrUnit != LSFirst(units));
           }
           fprintf(file, "#\n");
@@ -246,9 +246,9 @@ void SaveGame(GameCoordinator GC) {
           buildings = ListBuilding(player);
           addrBuilding = LLFirst(buildings);
           while(addrBuilding != Nil) {
-            Building building = (*(Building*)) LLInfo(addrBuilding);
+            Building building = (*(Building*) LLInfo(addrBuilding));
             fprintf(file, "%d %d %d\n", Absis(BCoordinate(building)), Ordinat(BCoordinate(building)), BType(building));
-            addrBuilding = Next(buildings); 
+            addrBuilding = LLNext(addrBuilding); 
           }
           fprintf(stderr, "#\n");
 
@@ -265,7 +265,7 @@ void SaveGame(GameCoordinator GC) {
         }
 
         // Saving Current Unit
-        currentUnit = CurretUnit(GC);
+        currentUnit = *CurrentUnit(GC);
         fprintf(file, "%d %d %d %d %d %d %d %d %d %d %d\n", 
           MaxHealth(currentUnit), Health(currentUnit), Atk(currentUnit), Heal(currentUnit), MovPoint(currentUnit), 
           AtkType(currentUnit), AtkChance(currentUnit), Absis(Location(currentUnit)), Ordinat(Location(currentUnit)),
@@ -279,31 +279,42 @@ void RunGame(GameCoordinator* GC) {
   system("cls");
   char cmd[100];
   boolean IsRunning;
+  int MapBrs, MapKol;
 
   IsRunning = true;
+  ReduceCash(&Pi(*GC,QInfoHead(QI(*GC))));
   while (IsRunning) {
     printf("Player %d's Turn\n", QInfoHead(QI(*GC)));
     printPlayerInfo(Pi(*GC,QInfoHead(QI(*GC))));
     printCurrentUnitInfo(*CurrentUnit(*GC));
+    printf("Command List: | MOVE | UNDO | CHANGE_UNIT | RECRUIT | ATTACK |\n");
+    printf("              | MAP  | INFO | END_TURN    | SAVE    | EXIT   |\n");
     printf("Your input: "); scanf("%s", cmd);
 
-    if (!strcmp(cmd, "MAP" )) {
+    if (strcmp(cmd, "MOVE") && strcmp(cmd, "MAP") && strcmp(cmd, "INFO")) {
+      SPopAll(&MoveRecord(*GC));
+    }
+
+    if (!strcmp(cmd, "MAP")) {
       system("cls");
       TulisMap(GameMap(*GC));
     } else if (!strcmp(cmd, "EXIT")) {
       IsRunning = false;
+    } else if (!strcmp(cmd, "END_TURN")) {
+      system("cls");
+      EndTurn(GC);
+      printf("Player %d's turn!\n", QInfoHead(QI(*GC)));
     } else {
       system("cls");
       printf("Command is Not Recognized\n\n\n");
-    }
-
-    
+    } 
   }
+  system("cls");
   printf("Thanks for playing! See You!\n");
 }
 
 void printPlayerInfo(Player P) {
-  printf("Cash: %dG | Income: %dG | Upkeep: %dG\n", Cash(P), Income(P), UpKeep(P));
+  printf("Cash: %dG | Income: %dG | UpKeep: %dG\n", Cash(P), Income(P), UpKeep(P));
 }
 
 void printCurrentUnitInfo(Unit U) {
@@ -316,4 +327,20 @@ void printCurrentUnitInfo(Unit U) {
   } else {
     printf("No\n");
   }
+}
+
+void EndTurn(GameCoordinator* GC) {
+  QInfoType X;
+
+  QAdd(&QI(*GC), QInfoHead(QI(*GC)));
+  QDel(&QI(*GC), &X);
+
+  CurrentUnit(*GC) = (Unit*) LSInfo(LSFirst(ListUnit(Pi(*GC,QInfoHead(QI(*GC))))));
+
+  ReduceCash(&Pi(*GC,QInfoHead(QI(*GC))));
+}
+
+void ReduceCash(Player* P) {
+  Cash(*P) -= UpKeep(*P);
+  if (Cash(*P) < 0) Cash(*P) = 0;
 }

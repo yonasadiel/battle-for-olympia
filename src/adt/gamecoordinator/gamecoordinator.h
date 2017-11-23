@@ -31,10 +31,10 @@ void PrintMenu(void);
  * F.S. menu utama tampil di layar beserta pilihannya 
  */
 
-void InitGame(GameCoordinator* GC);
+void InitGame(GameCoordinator* GC, int NInitBaris, int NInitKolom);
 /**
  * I.S. GC tidak terdefinisi.
- * F.S. GC terdefinisi default.
+ * F.S. GC terdefinisi default berukuran NInitBaris x NInitKolom.
  */
 void LoadGame(GameCoordinator* GC);
 /**
@@ -62,6 +62,18 @@ void printCurrentUnitInfo(Unit U);
 /**
  * I.S. U terdefinisi
  * F.S. Info mengenai unit U muncul di layar
+ */
+
+void EndTurn(GameCoordinator* GC);
+/**
+ * I.S. GC terdefinisi
+ * F.S. Current Player berganti beserta Current Unit dan Cash dikurangi upkeep
+ */
+
+void ReduceCash(Player* P);
+/**
+ * I.S. P terdefinisi
+ * F.S. Cash P berkurang sesuai upkeep
  */
 
 #endif

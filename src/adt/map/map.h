@@ -4,6 +4,8 @@
 #include "../color/color.h"
 #include "../point/point.h"
 #include "../boolean/boolean.h"
+#include "../building/building.h"
+#include "../unit/unit.h"
 
 /* Ukuran minimum dan maksimum baris dan kolom */
 #define MapBrsMin 1
@@ -53,6 +55,10 @@ boolean IsIdxValid(IdxMap i, IdxMap j);
 /**
  * Mengembalikan true jika i, j adalah indeks yang valid untuk Map apapun
  */
+boolean IsMapSizeValid(int Brs, int Kol);
+/**
+ * Mengembalikan true jika i, j adalah indeks yang valid untuk Map apapun
+ */
 
 /* *** Selektor: Untuk sebuah Map M yang terdefinisi: *** */
 IdxMap GetMapFirstIdxBrs(Map M);
@@ -79,6 +85,18 @@ void InitMap(Map* M);
  * Menyiapkan Map untuk memulai permainan
  * I.S. M kosong
  * F.S. Tower, Castle, Village dan King terassign di Map beserta warnanya
+ */
+
+void MapPutUnit(Map* M, Unit U, Color Warna);
+/**
+ * I.S. M, U, dan Warna terdefinisi
+ * F.S. Tertulis unit U di Map dengan warna Warna
+ */
+
+void MapPutBuilding(Map* M, Building B, Color Warna);
+/**
+ * I.S. M, B, dan Warna terdefinisi
+ * F.S. Tertulis building B di Map dengan warna Warna
  */
 
 #endif

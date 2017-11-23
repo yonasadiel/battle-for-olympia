@@ -149,4 +149,10 @@ void LSDelP (ListSirkuler *L, infotype X);
  * ListSirkuler mungkin menjadi kosong karena penghapusan 
  */
 
+int LSNbElmt (ListSirkuler L);
+/**
+ * Prekondisi: L terdefinisi
+ * Kembalian : banyaknya elemen di L
+ */
+
 #endif
