@@ -49,7 +49,7 @@ void PrintMenu(void) {
 	printf ("1. New Game\n");
 	printf ("2. Load Game\n");
 	printf ("3. Save Game\n");
-	printf ("3. Quit\n");
+	printf ("4. Quit\n");
 	
 }
 
@@ -609,6 +609,10 @@ void RunGame(GameCoordinator* GC) {
       TulisMap(GameMap(*GC), Location(*CurrentUnit(*GC)));
     } else if (!strcmp(cmd, "UNDO")) {
       UndoMovement(GC);
+    } else if (!strcmp(cmd, "CHANGE_UNIT")) {
+      ChangeUnit(GC);
+    } else if (!strcmp(cmd, "NEXT_UNIT")) {
+      NextUnit(GC);
     } else if (!strcmp(cmd, "END_TURN")) {
       EndTurn(GC);
       printf("Player %d's turn!\n", QInfoHead(QI(*GC)));
@@ -682,4 +686,73 @@ void MoveUnit(Map* M, Unit* U, Point Source, Point Dest) {
   Unit(*M, Absis(Source), Ordinat(Source)) = ' ';
   Unit(*M, Absis(Dest), Ordinat(Dest)) = temp;
   ColorUnit(*M, Absis(Dest), Ordinat(Dest)) = ColorUnit(*M, Absis(Source), Ordinat(Source));
+}
+
+void ChangeUnit(GameCoordinator* GC) {
+  int NUnit;
+  int pil;
+
+  NUnit = LSNbElmt(ListUnit(Pi(*GC,QInfoHead(QI(*GC)))));
+  PrintAllUnitInfo(ListUnit(Pi(*GC,QInfoHead(QI(*GC)))));
+
+  for (;;) {
+    printf("Please enter the no. of unit you want to select: ");
+    scanf("%d",&pil);
+    if (pil > NUnit || pil < 1) {
+      printf("Wrong input, please choose between 1 to %d\n", NUnit);
+    } else {
+      break;
+    }
+  }
+
+  if (CurrentUnit(*GC) == LSInfo(LSNthAddress(ListUnit(Pi(*GC,QInfoHead(QI(*GC)))), pil))) {
+    printf("Selected unit is current unit, canceling\n");
+  } else {
+    CurrentUnit(*GC) = LSInfo(LSNthAddress(ListUnit(Pi(*GC,QInfoHead(QI(*GC)))), pil));
+  }
+  printf("\n");
+
+}
+
+void NextUnit(GameCoordinator* GC) {
+  int NUnit;
+  LSAddress AddrCurUnit;
+
+  NUnit = LSNbElmt(ListUnit(Pi(*GC,QInfoHead(QI(*GC)))));
+  if (NUnit == 0) {
+    printf("You dont have any unit, canceling...\n");
+  } else if (NUnit == 1) {
+    printf("You only have one unit, canceling...\n");
+  } else {
+    AddrCurUnit = LSSearch(ListUnit(Pi(*GC,QInfoHead(QI(*GC)))), CurrentUnit(*GC));
+    if (AddrCurUnit == Nil) printf("erroooor\n");
+    CurrentUnit(*GC) = LSInfo(LSNext(AddrCurUnit));
+  }
+  printf("\n");
+
+}
+
+void PrintAllUnitInfo(ListSirkuler LU) {
+  LSAddress P;
+  Unit* U;
+  int i;
+
+  printf("== List of Units ==\n");
+  if (LSIsEmpty(LU)) {
+    printf("No Unit\n");
+  } else {
+    P = LSFirst(LU);
+    i = 1;
+    do {
+      U = (Unit*) LSInfo(P);
+
+      printf("%d. ", i++);
+      PrintUnitName(*U);
+      printf(" ");
+      TulisPoint(Location(*U));
+      printf(" | Health %d\n", Health(*U));
+
+      P = LSNext(P);
+    } while(P != LSFirst(LU));
+  }
 }

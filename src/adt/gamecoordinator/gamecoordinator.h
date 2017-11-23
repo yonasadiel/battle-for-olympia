@@ -90,4 +90,23 @@ void MoveUnit(Map* M, Unit* U, Point Source, Point Dest);
  *      mengganti karakter di peta, dan mengganti warna di peta
  */
 
+void ChangeUnit(GameCoordinator* GC);
+/**
+ * I.S. GC terdefinisi
+ * F.S. Menampilkan daftar unit player dan meminta input nomor
+ *      Mengganti Current Unit dnegan unit pilihan player
+ */
+
+void NextUnit(GameCoordinator* GC);
+/**
+ * I.S. GC terdefinisi
+ * F.S. Mengganti Current Unit dengan unit sesudahnya di list unit
+ */
+
+void PrintAllUnitInfo(ListSirkuler LU);
+/**
+ * I.S. LU terdefinisi
+ * F.S. menuliskan semua unit yang ada di LU
+ */
+
 #endif
