@@ -155,4 +155,10 @@ int LSNbElmt (ListSirkuler L);
  * Kembalian : banyaknya elemen di L
  */
 
+LSAddress LSNthAddress (ListSirkuler L, int N);
+/**
+ * Prekondisi: L terdefinisi dengan panjang <= N
+ * Kembalian : Address dari elemen ke N di L
+ */
+
 #endif

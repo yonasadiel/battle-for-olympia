@@ -245,3 +245,13 @@ int LSNbElmt (ListSirkuler L) {
     }
     return count;
 }
+
+LSAddress LSNthAddress (ListSirkuler L, int N) {
+  int counter = 1;
+  LSAddress p = LSFirst(L);
+  while(counter < N) {
+      counter++;
+      p = LSNext(p);
+  }
+  return p;
+}

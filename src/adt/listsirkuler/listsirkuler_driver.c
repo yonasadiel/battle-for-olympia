@@ -18,6 +18,7 @@ void PrintTitik(Titik titik) {
 }
 
 int main() {
+	Titik* Ttemp;
 	Titik titik1 = createTitik(1, 2);
 	Titik titik2 = createTitik(2, 3);
 	Titik titik3 = createTitik(3, 4);
@@ -30,7 +31,11 @@ int main() {
 	LSInsVFirst(&L, &titik2);
 	LSInsVFirst(&L, &titik3);
 
-	address p = LSFirst(L);
+	Ttemp = (Titik*) LSInfo(LSNthAddress(L, 1)); PrintTitik(*Ttemp);
+	Ttemp = (Titik*) LSInfo(LSNthAddress(L, 2)); PrintTitik(*Ttemp);
+	Ttemp = (Titik*) LSInfo(LSNthAddress(L, 3)); PrintTitik(*Ttemp);
+
+	LSAddress p = LSFirst(L);
 	do {
 		Titik* titikerToTitik = (Titik*) LSInfo(p);
 		Titik isiTitikerTitik = *titikerToTitik; 

@@ -242,4 +242,10 @@ void LLPecahList (ListLinier *L1, ListLinier *L2, ListLinier L);
  * Jika elemen L ganjil, maka separuh adalah LLNbElmt(L) div 2
  */
 
+LLAddress LLNthAddress (ListLinier L, int N);
+/**
+ * Prekondisi: L terdefinisi dengan panjang <= N
+ * Kembalian : Address dari elemen ke N di L
+ */
+
 #endif

@@ -76,4 +76,18 @@ void ReduceCash(Player* P);
  * F.S. Cash P berkurang sesuai upkeep
  */
 
+void UndoMovement(GameCoordinator* GC);
+/**
+ * I.S. GC terdefinisi
+ * F.S. Jika stack MoveRecord tidak kosong, kembalikan unit ke top stack
+ *      Jika kosong, tampilkan pesan kesalahan
+ */
+
+void MoveUnit(Map* M, Unit* U, Point Source, Point Dest);
+/**
+ * I.S. Semua terdefinisi dan valid, Source mungkin sama dengan Dest
+ * F.S. Memindahkan unit U dari Source ke Dest dengan mengganti Location,
+ *      mengganti karakter di peta, dan mengganti warna di peta
+ */
+
 #endif

@@ -487,3 +487,13 @@ void LLPecahListLinier (ListLinier *L1, ListLinier *L2, ListLinier L) {
 		}
 	}
 }
+
+LLAddress LLNthAddress (ListLinier L, int N) {
+  int counter = 1;
+  LLAddress p = LLFirst(L);
+  while(counter < N) {
+      counter++;
+      p = LLNext(p);
+  }
+  return p;
+}
