@@ -10,9 +10,15 @@ boolean EOP;
 static FILE * pita;
 static int retval;
 
-void START(char* filename) {
+boolean START(char* filename) {
   pita = fopen(filename,"r");
+  printf("Attempt to open file %s\n", filename);
   ADV();
+  if(pita) {
+  	return true;
+  } else {
+  	return false; 
+  }
 }
 
 void ADV() {
@@ -21,4 +27,8 @@ void ADV() {
    if (EOP) {
        fclose(pita);
   }
+}
+
+void CLOSE() {
+	fclose(pita);
 }

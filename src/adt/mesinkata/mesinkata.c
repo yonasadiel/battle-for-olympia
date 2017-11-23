@@ -27,8 +27,9 @@ void IgnoreBlank() {
   }
 }
 
-void STARTKATA(char* filename) {
-  START(filename);
+boolean STARTKATA(char* filename) {
+  boolean success = START(filename);
+
   IgnoreBlank();
   if (CC == MARK) {
     EndKata = true;
@@ -36,11 +37,13 @@ void STARTKATA(char* filename) {
     EndKata = false;
     SalinKata();
   }
+
+  return success;
 }
 
 void ADVKATA() {
   IgnoreBlank();
-  if (CC == MARK) {
+  if (EOP) {
     EndKata = true;
   } else /* CC != MARK */ {
     EndKata = false;
@@ -91,4 +94,8 @@ void ToInteger(int* X, boolean* err) {
   if(negative) {
     *X = *X * -1;
   }
+}
+
+void CLOSEKATA() {
+  CLOSE();
 }

@@ -53,22 +53,22 @@ void PrintMenu(void) {
 	
 }
 
-void InitGame(GameCoordinator* GC) {
+void InitGame(GameCoordinator* GC, int NInitBaris, int NInitKolom) {
   Point P1, P2;
-  int NInitBaris = 8;
-  int NInitKolom = 8;
 
-  MakePoint(2, 7, &P1);
-  MakePoint(7, 2, &P1);
+  system("cls");
 
-  MakePlayer(&Pi(*GC, 1), CRED, P1);
-  MakePlayer(&Pi(*GC, 2), CBLUE, P2);
+  MakeMap(NInitBaris,NInitKolom, &GameMap(*GC));
+  MakePoint(NInitBaris-1, 2, &P1);
+  MakePoint(2, NInitKolom-1, &P2);
+
+  MakePlayer(&Pi(*GC, 1), CRED, P1, &GameMap(*GC));
+  MakePlayer(&Pi(*GC, 2), CBLUE, P2, &GameMap(*GC));
 
   QCreateEmpty(&QI(*GC));
   QAdd(&QI(*GC), 1);
   QAdd(&QI(*GC), 2);
 
-  MakeMap(8, 8, &GameMap(*GC));
   SCreateEmpty(&MoveRecord(*GC));
   CurrentUnit(*GC) = (Unit*) LSInfo(LSFirst(ListUnit(Pi(*GC,QInfoHead(QI(*GC))))));
 }
@@ -129,13 +129,13 @@ char* GetSavedFileName() {
   do {
     scanf("%c", &c);
     if(c != 10 && c != 0) {
-      valid = IsValidInput(c) && (len < 31);
+      valid = valid && IsValidInput(c) && (len < 31);
       if(valid) {
         filename[len] = c;
         len++; 
       }
     }
-  } while(valid);
+  } while(c != 10 && c != 0);
 
   if(valid) {
     filename[len] = 0;
@@ -184,6 +184,7 @@ char* GetLoadedFileName() {
       ADVKATA();
       count++;
     }
+    CLOSEKATA();
 
     printf("Choose file to load.\n");
     printf("File number: ");
@@ -212,114 +213,111 @@ void LoadGame(GameCoordinator* GC) {
   int count, i;
 
   printf("Load file %s\n", filename);
-  if(filename != 0) {
-    STARTKATA(filename);
-    
-    // Init GameCoordinator
-    QCreateEmpty(&QI(*GC));
+  // Start to read file
+  if(!STARTKATA(filename)) {
+    goto ERROR_READ;
+  }
 
-    // Load Map 
-    FormattedPrint("Loading Map Data.", '.', 50, 0);
-    ADV_INT(NBrsMap, err, ERROR_READ);
-    ADV_INT(NKolMap, err, ERROR_READ);
-    MakeMap(NBrsMap, NKolMap, &GameMap(*GC));
+  // Init GameCoordinator
+  QCreateEmpty(&QI(*GC));
+
+  // Load Map 
+  FormattedPrint("Loading Map Data.", '.', 50, 0);
+  ADV_INT(NBrsMap, err, ERROR_READ);
+  ADV_INT(NKolMap, err, ERROR_READ);
+  MakeMap(NBrsMap, NKolMap, &GameMap(*GC));
+  printf("Success\n");
+
+  // Load Players
+  count = 1;
+  while(count <= 2) {
+    count++;
+    FormattedPrint(0, '=', 57, 0); endl;
+
+    Player* player;
+    int playerNumber;
+    int playerCash;
+    int playerIncome;
+    Color playerWarna;
+    int unitCount;
+    int buildingCount;
+    ListSirkuler* playerUnits;
+    ListLinier* playerBuildings;
+
+    // Init Player
+    playerUnits = (ListSirkuler*) malloc(sizeof(ListSirkuler));
+    playerBuildings = (ListLinier*) malloc(sizeof(ListLinier));
+    player = (Player*) malloc(sizeof(Player));
+    LSCreateEmpty(playerUnits);
+    LLCreateEmpty(playerBuildings);
+    ADV_INT(playerNumber, err, ERROR_READ);
+    Pi(*GC, playerNumber) = *player;
+    QAdd(&QI(*GC), playerNumber);
+
+    // Load Player Basic Properties
+    arg[0] = playerNumber;
+    FormattedPrint("Loading Player %d Properties", '.', 50, arg);
+    ADV_INT(playerCash, err, ERROR_READ);
+    ADV_INT(playerIncome, err, ERROR_READ);
+    ADV_INT(playerWarna, err, ERROR_READ);
+    Cash(*player) = playerCash;
+    Income(*player) = playerIncome;
+    ListUnit(*player) = *playerUnits;
+    ListBuilding(*player) = *playerBuildings;
+    Warna(*player) = playerWarna;
     printf("Success\n");
 
-    // Load Players
-    count = 1;
-    while(count <= 2) {
-      count++;
-      FormattedPrint(0, '=', 57, 0); endl;
+    // Load Player's Units
+    ADV_INT(unitCount, err, ERROR_READ);
+    printf("Loading %d Player's Units.\n", unitCount);
+    i = 0;
+    while(i < unitCount) {
+      i++;
+      arg[0] = i; 
+      FormattedPrint("Loading Unit %d", '.', 50, arg);
 
-      Player* player;
-      int playerNumber;
-      int playerCash;
-      int playerIncome;
-      int playerUpkeep;
-      Color playerWarna;
-      int unitCount;
-      int buildingCount;
-      ListSirkuler* playerUnits;
-      ListLinier* playerBuildings;
+      Unit* unit;
+      int unitMaxHealth;
+      int unitHealth;
+      int unitAtk;
+      int unitHeal;
+      int unitMovPoint;
+      int unitAtkType;
+      int unitAtkChance;
+      int unitAbsis;
+      int unitOrdinat;
+      int unitRecCost;
+      int unitType;
+      Point* unitPoint;
+     // Init Units
+      unitPoint = (Point*) malloc(sizeof(Point));
+      unit = (Unit*) malloc(sizeof(Unit));
 
-      // Init Player
-      playerUnits = (ListSirkuler*) malloc(sizeof(ListSirkuler));
-      playerBuildings = (ListLinier*) malloc(sizeof(ListLinier));
-      player = (Player*) malloc(sizeof(Player));
-      LSCreateEmpty(playerUnits);
-      LLCreateEmpty(playerBuildings);
-      ADV_INT(playerNumber, err, ERROR_READ);
-      Pi(*GC, playerNumber) = *player;
-      QAdd(&QI(*GC), playerNumber);
-
-      // Load Player Basic Properties
-      arg[0] = playerNumber;
-      FormattedPrint("Loading Player %d Properties", '.', 50, arg);
-      ADV_INT(playerCash, err, ERROR_READ);
-      ADV_INT(playerIncome, err, ERROR_READ);
-      ADV_INT(playerUpkeep, err, ERROR_READ);
-      ADV_INT(playerWarna, err, ERROR_READ);
-      Cash(*player) = playerCash;
-      Income(*player) = playerIncome;
-      UpKeep(*player) = playerUpkeep;
-      ListUnit(*player) = *playerUnits;
-      ListBuilding(*player) = *playerBuildings;
-      Warna(*player) = playerWarna;
-      printf("Success\n");
+      ADV_INT(unitMaxHealth, err, ERROR_READ);
+      ADV_INT(unitHeal, err, ERROR_READ);
+      ADV_INT(unitAtk, err, ERROR_READ);
+      ADV_INT(unitHeal, err, ERROR_READ);
+      ADV_INT(unitMovPoint, err, ERROR_READ);
+      ADV_INT(unitAtkType, err, ERROR_READ);
+      ADV_INT(unitAtkChance, err, ERROR_READ);
+      ADV_INT(unitAbsis, err, ERROR_READ);
+      ADV_INT(unitOrdinat, err, ERROR_READ);
+      ADV_INT(unitRecCost, err, ERROR_READ);
+      ADV_INT(unitType, err, ERROR_READ);
       
-      // Load Player's Units
-      ADV_INT(unitCount, err, ERROR_READ);
-      printf("Loading %d Player's Units.\n", unitCount);
-      i = 0;
-      while(i < unitCount) {
-        i++;
-        arg[0] = i; 
-        FormattedPrint("Loading Unit %d", '.', 50, arg);
+      MakePoint(unitAbsis, unitOrdinat, unitPoint);
+      CreateUnit(unit, unitType, *unitPoint);
+      MaxHealth(*unit) = unitMaxHealth;
+      Health(*unit) = unitHealth;
+      Atk(*unit) = unitAtk;
+      Heal(*unit) = unitHeal;
+      MovPoint(*unit) = unitMovPoint;
+      AtkType(*unit) = unitAtkType;
+      AtkChance(*unit) = unitAtkChance;
+      RecCost(*unit) = unitRecCost;
 
-        Unit* unit;
-        int unitMaxHealth;
-        int unitHealth;
-        int unitAtk;
-        int unitHeal;
-        int unitMovPoint;
-        int unitAtkType;
-        int unitAtkChance;
-        int unitAbsis;
-        int unitOrdinat;
-        int unitRecCost;
-        int unitType;
-        Point* unitPoint;
-
-        // Init Units
-        unitPoint = (Point*) malloc(sizeof(Point));
-        unit = (Unit*) malloc(sizeof(Unit));
-
-        ADV_INT(unitMaxHealth, err, ERROR_READ);
-        ADV_INT(unitHeal, err, ERROR_READ);
-        ADV_INT(unitAtk, err, ERROR_READ);
-        ADV_INT(unitHeal, err, ERROR_READ);
-        ADV_INT(unitMovPoint, err, ERROR_READ);
-        ADV_INT(unitAtkType, err, ERROR_READ);
-        ADV_INT(unitAtkChance, err, ERROR_READ);
-        ADV_INT(unitAbsis, err, ERROR_READ);
-        ADV_INT(unitOrdinat, err, ERROR_READ);
-        ADV_INT(unitRecCost, err, ERROR_READ);
-        ADV_INT(unitType, err, ERROR_READ);
-        
-        MakePoint(unitAbsis, unitOrdinat, unitPoint);
-        CreateUnit(unit, unitType, *unitPoint);
-        MaxHealth(*unit) = unitMaxHealth;
-        Health(*unit) = unitHealth;
-        Atk(*unit) = unitAtk;
-        Heal(*unit) = unitHeal;
-        MovPoint(*unit) = unitMovPoint;
-        AtkType(*unit) = unitAtkType;
-        AtkChance(*unit) = unitAtkChance;
-        RecCost(*unit) = unitRecCost;
-
-        LSInsVFirst(playerUnits, unit);
-        printf("Success\n");
-      }
+      LSInsVFirst(playerUnits, unit);
+      printf("Success\n");
 
       // Load Player's Buldings
       printf("Loading %d Player's Building.\n", buildingCount);
@@ -351,87 +349,87 @@ void LoadGame(GameCoordinator* GC) {
         printf("Success\n");
       }
     }
+  }
 
-    // Load MoveRecord
-    FormattedPrint(0, '=', 57, 0); endl;
-    FormattedPrint("Loading Move Records", '.', 50, 0);
-    ADV_INT(count, err, ERROR_READ);
-    while(count > 0) {
-      int moveAbsis;
-      int moveOrdinat;
-      Point* movePoint;
+  // Load MoveRecord
+  FormattedPrint(0, '=', 57, 0); endl;
+  FormattedPrint("Loading Move Records", '.', 50, 0);
+  ADV_INT(count, err, ERROR_READ);
+  while(count > 0) {
+    int moveAbsis;
+    int moveOrdinat;
+    Point* movePoint;
 
-      // Init Point
-      movePoint = (Point*) malloc(sizeof(Point));
+    // Init Point
+    movePoint = (Point*) malloc(sizeof(Point));
 
-      ADV_INT(moveAbsis, err, ERROR_READ);
-      ADV_INT(moveOrdinat, err, ERROR_READ);
+    ADV_INT(moveAbsis, err, ERROR_READ);
+    ADV_INT(moveOrdinat, err, ERROR_READ);
 
-      MakePoint(moveAbsis, moveOrdinat, movePoint);
-      SPush(&MoveRecord(*GC), *movePoint);
+    MakePoint(moveAbsis, moveOrdinat, movePoint);
+    SPush(&MoveRecord(*GC), *movePoint);
 
-      count--;
-    }
-    printf("Success\n");
+    count--;
+  }
+  printf("Success\n");
 
-    // Load Current Unit
-    Unit* cUnit;
-    int cUnitMaxHealth;
-    int cUnitHealth;
-    int cUnitAtk;
-    int cUnitHeal;
-    int cUnitMovPoint;
-    int cUnitAtkType;
-    int cUnitAtkChance;
-    int cUnitAbsis;
-    int cUnitOrdinat;
-    int cUnitRecCost;
-    int cUnitType;
-    Point* cUnitPoint;
+  // Load Current Unit
+  Unit* cUnit;
+  int cUnitMaxHealth;
+  int cUnitHealth;
+  int cUnitAtk;
+  int cUnitHeal;
+  int cUnitMovPoint;
+  int cUnitAtkType;
+  int cUnitAtkChance;
+  int cUnitAbsis;
+  int cUnitOrdinat;
+  int cUnitRecCost;
+  int cUnitType;
+  Point* cUnitPoint;
 
-    ADV_INT(cUnitMaxHealth, err, ERROR_READ);
-    ADV_INT(cUnitHeal, err, ERROR_READ);
-    ADV_INT(cUnitAtk, err, ERROR_READ);
-    ADV_INT(cUnitHeal, err, ERROR_READ);
-    ADV_INT(cUnitMovPoint, err, ERROR_READ);
-    ADV_INT(cUnitAtkType, err, ERROR_READ);
-    ADV_INT(cUnitAtkChance, err, ERROR_READ);
-    ADV_INT(cUnitAbsis, err, ERROR_READ);
-    ADV_INT(cUnitOrdinat, err, ERROR_READ);
-    ADV_INT(cUnitRecCost, err, ERROR_READ);
-    ADV_INT(cUnitType, err, ERROR_READ);
+  ADV_INT(cUnitMaxHealth, err, ERROR_READ);
+  ADV_INT(cUnitHeal, err, ERROR_READ);
+  ADV_INT(cUnitAtk, err, ERROR_READ);
+  ADV_INT(cUnitHeal, err, ERROR_READ);
+  ADV_INT(cUnitMovPoint, err, ERROR_READ);
+  ADV_INT(cUnitAtkType, err, ERROR_READ);
+  ADV_INT(cUnitAtkChance, err, ERROR_READ);
+  ADV_INT(cUnitAbsis, err, ERROR_READ);
+  ADV_INT(cUnitOrdinat, err, ERROR_READ);
+  ADV_INT(cUnitRecCost, err, ERROR_READ);
+  ADV_INT(cUnitType, err, ERROR_READ);
 
-    cUnitPoint = (Point*) malloc(sizeof(Point));
-    MakePoint(cUnitAbsis, cUnitOrdinat, cUnitPoint);
-    cUnit = (Unit*) malloc(sizeof(Unit));
-    CreateUnit(cUnit, cUnitType, *cUnitPoint);
-    MaxHealth(*cUnit) = cUnitMaxHealth;
-    Health(*cUnit) = cUnitHealth;
-    Atk(*cUnit) = cUnitAtk;
-    Heal(*cUnit) = cUnitHeal;
-    MovPoint(*cUnit) = cUnitMovPoint;
-    AtkType(*cUnit) = cUnitAtkType;
-    AtkChance(*cUnit) = cUnitAtkChance;
-    RecCost(*cUnit) = cUnitRecCost;
+  cUnitPoint = (Point*) malloc(sizeof(Point));
+  MakePoint(cUnitAbsis, cUnitOrdinat, cUnitPoint);
+  cUnit = (Unit*) malloc(sizeof(Unit));
+  CreateUnit(cUnit, cUnitType, *cUnitPoint);
+  MaxHealth(*cUnit) = cUnitMaxHealth;
+  Health(*cUnit) = cUnitHealth;
+  Atk(*cUnit) = cUnitAtk;
+  Heal(*cUnit) = cUnitHeal;
+  MovPoint(*cUnit) = cUnitMovPoint;
+  AtkType(*cUnit) = cUnitAtkType;
+  AtkChance(*cUnit) = cUnitAtkChance;
+  RecCost(*cUnit) = cUnitRecCost;
 
-    CurrentUnit(*GC) = cUnit;
+  CurrentUnit(*GC) = cUnit;
 
+  // End of Loading
+  FormattedPrint(0, '=', 57, 0); endl;
+  printf("Game is loaded succesfully.\n");
+  goto LOAD_FINISH;
 
-    // End of Loading
-    FormattedPrint(0, '=', 57, 0); endl;
-    printf("Game is loaded succesfully.\n");
+  // Print error message when error occured
+  ERROR_READ:
+    printf("Error has been occured. Cannot load game file.\n");
     goto LOAD_FINISH;
 
-    // Print error message when error occured
-    ERROR_READ:
-      printf("Error has been occured. Cannot load game file.\n");
-      goto LOAD_FINISH;
-
-    // Finishing
-    LOAD_FINISH:
-      printf("Loading finished.\n");
-  }
+  // Finishing
+  LOAD_FINISH:
+    printf("Loading finished.\n");
 }
+
 
 void SaveGame(GameCoordinator GC) {
   char* filename = GetSavedFileName();
@@ -488,7 +486,7 @@ void SaveGame(GameCoordinator GC) {
         LSAddress addrUnit;
         LLAddress addrBuilding;
         Stack moves;
-        Unit curretUnit;
+        Unit currentUnit;
 
         // Saving Map Size
         FormattedPrint("Saving Map Data", '.', 50, 0);
@@ -497,6 +495,7 @@ void SaveGame(GameCoordinator GC) {
 
         // Getting Player Queue
         queue = QI(GC);
+
         // Saving Player from Head of Queue
         count = 0;
         while(count < 2) {
@@ -513,7 +512,7 @@ void SaveGame(GameCoordinator GC) {
           arg[0] = playerQueue;
           FormattedPrint("Saving Player %d Data", '.', 50, arg);
           fprintf(file, "%d\n", playerQueue);
-          fprintf(file, "%d %d %d %d\n", Cash(player), Income(player), UpKeep(player), Warna(player));
+          fprintf(file, "%d %d %d\n", Cash(player), Income(player), Warna(player));
           printf("Success\n");
 
           // Saving every player's units
@@ -561,14 +560,14 @@ void SaveGame(GameCoordinator GC) {
         fprintf(file, "%d\n", SNbElmt(MoveRecord(GC)));
         moves = SReverse(MoveRecord(GC));
         while(!SIsEmpty(moves)) {
-          SInfoType info = SInfo(STop(moves));
-          SPop(&moves, SInfo(STop(moves)));
+          SInfoType info;
+          SPop(&moves, &info);
           fprintf(file, "%d %d ", Absis(info), Ordinat(info));
         }
         printf("Success\n");
 
         // Saving Current Unit
-        Unit currentUnit = *CurrentUnit(GC);
+        currentUnit = *CurrentUnit(GC);
         fprintf(file, "%d %d %d %d %d %d %d %d %d %d %d\n", 
           MaxHealth(currentUnit), Health(currentUnit), Atk(currentUnit), Heal(currentUnit), MovPoint(currentUnit), 
           AtkType(currentUnit), AtkChance(currentUnit), Absis(Location(currentUnit)), Ordinat(Location(currentUnit)),
@@ -579,6 +578,7 @@ void SaveGame(GameCoordinator GC) {
         FormattedPrint(0, '=', 57, 0); endl;
         fprintf(file, "#");
         printf("All data has been saved succesfully.\n");
+        fclose(file);
       }
     }
   }
@@ -588,31 +588,42 @@ void RunGame(GameCoordinator* GC) {
   system("cls");
   char cmd[100];
   boolean IsRunning;
+  int MapBrs, MapKol;
 
   IsRunning = true;
+  ReduceCash(&Pi(*GC,QInfoHead(QI(*GC))));
   while (IsRunning) {
     printf("Player %d's Turn\n", QInfoHead(QI(*GC)));
     printPlayerInfo(Pi(*GC,QInfoHead(QI(*GC))));
     printCurrentUnitInfo(*CurrentUnit(*GC));
+    printf("Command List: | MOVE | UNDO | CHANGE_UNIT | RECRUIT | ATTACK |\n");
+    printf("              | MAP  | INFO | END_TURN    | SAVE    | EXIT   |\n");
     printf("Your input: "); scanf("%s", cmd);
 
-    if (!strcmp(cmd, "MAP" )) {
+    if (strcmp(cmd, "MOVE") && strcmp(cmd, "MAP") && strcmp(cmd, "INFO")) {
+      SPopAll(&MoveRecord(*GC));
+    }
+
+    if (!strcmp(cmd, "MAP")) {
       system("cls");
-      TulisMap(GameMap(*GC));
+      TulisMap(GameMap(*GC), Location(*CurrentUnit(*GC)));
     } else if (!strcmp(cmd, "EXIT")) {
       IsRunning = false;
+    } else if (!strcmp(cmd, "END_TURN")) {
+      system("cls");
+      EndTurn(GC);
+      printf("Player %d's turn!\n", QInfoHead(QI(*GC)));
     } else {
       system("cls");
       printf("Command is Not Recognized\n\n\n");
-    }
-
-    
+    } 
   }
+  system("cls");
   printf("Thanks for playing! See You!\n");
 }
 
 void printPlayerInfo(Player P) {
-  printf("Cash: %dG | Income: %dG | Upkeep: %dG\n", Cash(P), Income(P), UpKeep(P));
+  printf("Cash: %dG | Income: %dG | UpKeep: %dG\n", Cash(P), Income(P), UpKeep(P));
 }
 
 void printCurrentUnitInfo(Unit U) {
@@ -624,5 +635,23 @@ void printCurrentUnitInfo(Unit U) {
     printf("Yes\n");
   } else {
     printf("No\n");
+  }
+}
+
+void EndTurn(GameCoordinator* GC) {
+  QInfoType X;
+
+  QAdd(&QI(*GC), QInfoHead(QI(*GC)));
+  QDel(&QI(*GC), &X);
+
+  CurrentUnit(*GC) = (Unit*) LSInfo(LSFirst(ListUnit(Pi(*GC,QInfoHead(QI(*GC))))));
+
+  ReduceCash(&Pi(*GC,QInfoHead(QI(*GC))));
+}
+
+void ReduceCash(Player* P) {
+  Cash(*P) -= UpKeep(*P);
+  if (Cash(*P) < 0) {
+    Cash(*P) = 0;
   }
 }

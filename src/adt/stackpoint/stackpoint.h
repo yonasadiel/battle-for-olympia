@@ -63,7 +63,7 @@ void SPush(Stack* S, SInfoType X);
  *      jika tidak, S tetap
  *      Pada dasarnya adalah operasi InsertFirst pada List Linier
  */
-void SPop(Stack* S, SInfoType X);
+void SPop(Stack* S, SInfoType* X);
 /**
  * Menghapus X dari Stack S
  * I.S. S tidak mungkin kosong
@@ -83,6 +83,12 @@ int SNbElmt(Stack S);
 /**
  * S mungkin kosong
  * Mengembalikan jumlah elemen pada Stack S
+ */
+
+void SPopAll(Stack* S);
+/**
+ * I.S. S terdefinisi, mungkin kosong
+ * F.S. S kosong
  */
 
 #endif

@@ -3,6 +3,7 @@
 #include "../point/point.h"
 #include "../boolean/boolean.h"
 #include "../building/building.h"
+#include "../unit/unit.h"
 #include <stdio.h>
 
 /* Ukuran minimum dan maksimum baris dan kolom */
@@ -64,6 +65,12 @@ boolean IsIdxValid(IdxMap i, IdxMap j) {
  */
   return ((i >= MapBrsMin && i <= MapBrsMax) && (j >= MapKolMin && j <= MapKolMax));
 }
+boolean IsMapSizeValid(int Brs, int Kol) {
+/**
+ * Mengembalikan true jika i, j adalah indeks yang valid untuk Map apapun
+ */
+  return (Brs <= MapBrsMax - MapBrsMin && Kol <= MapKolMax - MapKolMin && Brs >= 8 && Kol >= 8);
+}
 
 /* *** Selektor: Untuk sebuah Map M yang terdefinisi: *** */
 IdxMap GetMapFirstIdxBrs(Map M) {
@@ -87,7 +94,7 @@ boolean IsIdxMapEff(Map M, IdxMap i, IdxMap j) {
 }
 
 /* *** Kelompok Baca/Tulis *** */
-void TulisMap(Map M) {
+void TulisMap(Map M, Point CurrentUnitLoc) {
   IdxMap i,j;
   
   printf ("      ");
@@ -125,17 +132,21 @@ void TulisMap(Map M) {
 		}
 		for (j = 1; j<=GetMapLastIdxKol(M); j++) {
 			printf (" ");
-			PrintInColor(Unit(M,i,j), ColorUnit(M,i,j));
+      if (i == Absis(CurrentUnitLoc) && j == Ordinat(CurrentUnitLoc)) {
+			  printf("\033[01;42m"); PrintInColor(Unit(M,i,j), ColorUnit(M,i,j)); printf("\033[0m");
+      } else {
+        PrintInColor(Unit(M,i,j), ColorUnit(M,i,j));
+      }
 			printf (" *");
 		}
 		printf("\n");
 		
-		/* untuk baris 3 */		
+		/* untuk baris 3
 		printf ("    *");
 		for (j=1; j<=GetMapLastIdxKol(M); j++) {
 			printf ("   *");
 		}
-		printf("\n");
+		printf("\n"); */
 
 		/* untuk baris 4 */		
 		printf ("    *");
@@ -169,3 +180,12 @@ void InitMap(Map* M) {
   
 }
 
+void MapPutUnit(Map* M, Unit U, Color Warna) {
+  Unit(*M, Absis(Location(U)), Ordinat(Location(U))) = Type(U);
+  ColorUnit(*M, Absis(Location(U)), Ordinat(Location(U))) = Warna;
+}
+
+void MapPutBuilding(Map* M, Building B, Color Warna) {
+  Building(*M, Absis(BCoordinate(B)), Ordinat(BCoordinate(B))) = BType(B);
+  ColorBuilding(*M, Absis(BCoordinate(B)), Ordinat(BCoordinate(B))) = Warna;
+}

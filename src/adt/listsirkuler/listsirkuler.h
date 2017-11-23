@@ -150,9 +150,9 @@ void LSDelP (ListSirkuler *L, infotype X);
  */
 
 int LSNbElmt (ListSirkuler L);
-/** 
- * Mengirimkan banyaknya elemen list; 
- * mengirimkan 0 jika list kosong 
+/**
+ * Prekondisi: L terdefinisi
+ * Kembalian : banyaknya elemen di L
  */
 
 #endif

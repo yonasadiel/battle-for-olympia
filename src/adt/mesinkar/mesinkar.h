@@ -8,7 +8,8 @@
 extern char CC;
 extern boolean EOP;
 
-void START(char* filename);
+boolean START(char* filename);
+/* Mengembalikan true jika file berhasil dibuka, false jika gagal */
 /* Mesin siap dioperasikan. Pita disiapkan untuk dibaca.
    Karakter pertama yang ada pada pita posisinya adalah pada jendela.
    I.S. : sembarang
@@ -22,5 +23,8 @@ void ADV();
    F.S. : CC adalah karakter berikutnya dari CC yang lama, 
           CC mungkin = MARK
           Jika  CC = MARK maka EOP akan menyala (true) */
+
+void CLOSE();
+/* Mengakhiri pembacaan file */
 
 #endif
