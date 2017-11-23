@@ -72,13 +72,3 @@ void PrintUnitName(Unit U) {
   else if (Type(U) == 'S') { printf("Swordsman");  }
   else if (Type(U) == 'W') { printf("White Mage"); }
 }
-
-void MoveUnit(Map* M, Unit* U, Point Source, Point Dest) {
-  char temp;
-
-  Location(*U) = Dest;
-  temp = Unit(*M, Absis(Source), Ordinat(Source));
-  Unit(*M, Absis(Source), Ordinat(Source)) = ' ';
-  Unit(*M, Absis(Dest), Ordinat(Dest)) = temp;
-  ColorUnit(*M, Absis(Dest), Ordinat(Dest)) = ColorUnit(*M, Absis(Source), Ordinat(Source));
-}

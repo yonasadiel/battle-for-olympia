@@ -364,3 +364,13 @@ void UndoMovement(GameCoordinator* GC) {
     SPop(&MoveRecord(*GC), &X);
   }
 }
+
+void MoveUnit(Map* M, Unit* U, Point Source, Point Dest) {
+  char temp;
+
+  Location(*U) = Dest;
+  temp = Unit(*M, Absis(Source), Ordinat(Source));
+  Unit(*M, Absis(Source), Ordinat(Source)) = ' ';
+  Unit(*M, Absis(Dest), Ordinat(Dest)) = temp;
+  ColorUnit(*M, Absis(Dest), Ordinat(Dest)) = ColorUnit(*M, Absis(Source), Ordinat(Source));
+}

@@ -83,4 +83,11 @@ void UndoMovement(GameCoordinator* GC);
  *      Jika kosong, tampilkan pesan kesalahan
  */
 
+void MoveUnit(Map* M, Unit* U, Point Source, Point Dest);
+/**
+ * I.S. Semua terdefinisi dan valid, Source mungkin sama dengan Dest
+ * F.S. Memindahkan unit U dari Source ke Dest dengan mengganti Location,
+ *      mengganti karakter di peta, dan mengganti warna di peta
+ */
+
 #endif
