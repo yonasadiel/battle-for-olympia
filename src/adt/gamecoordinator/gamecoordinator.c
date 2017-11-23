@@ -295,17 +295,17 @@ void RunGame(GameCoordinator* GC) {
       SPopAll(&MoveRecord(*GC));
     }
 
+    system("cls");
     if (!strcmp(cmd, "MAP")) {
-      system("cls");
       TulisMap(GameMap(*GC), Location(*CurrentUnit(*GC)));
-    } else if (!strcmp(cmd, "EXIT")) {
-      IsRunning = false;
+    } else if (!strcmp(cmd, "UNDO")) {
+      UndoMovement(GC);
     } else if (!strcmp(cmd, "END_TURN")) {
-      system("cls");
       EndTurn(GC);
       printf("Player %d's turn!\n", QInfoHead(QI(*GC)));
+    } else if (!strcmp(cmd, "EXIT")) {
+      IsRunning = false;
     } else {
-      system("cls");
       printf("Command is Not Recognized\n\n\n");
     } 
   }
@@ -343,4 +343,24 @@ void EndTurn(GameCoordinator* GC) {
 void ReduceCash(Player* P) {
   Cash(*P) -= UpKeep(*P);
   if (Cash(*P) < 0) Cash(*P) = 0;
+}
+
+void UndoMovement(GameCoordinator* GC) {
+  Point X;
+
+  if (SIsEmpty(MoveRecord(*GC))) {
+    printf("Error: Current unit hasn't moved yet\n\n");
+  } else {
+    X = SInfoTop(MoveRecord(*GC));
+
+    PrintUnitName(*CurrentUnit(*GC));
+    printf(" berhasil UNDO dari ");
+    TulisPoint(Location(*CurrentUnit(*GC)));
+    printf(" ke ");
+    TulisPoint(X);
+    printf("\n\n");
+
+    MoveUnit(&GameMap(*GC), CurrentUnit(*GC), Location(*CurrentUnit(*GC)), X);
+    SPop(&MoveRecord(*GC), &X);
+  }
 }

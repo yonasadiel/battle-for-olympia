@@ -76,4 +76,11 @@ void ReduceCash(Player* P);
  * F.S. Cash P berkurang sesuai upkeep
  */
 
+void UndoMovement(GameCoordinator* GC);
+/**
+ * I.S. GC terdefinisi
+ * F.S. Jika stack MoveRecord tidak kosong, kembalikan unit ke top stack
+ *      Jika kosong, tampilkan pesan kesalahan
+ */
+
 #endif
