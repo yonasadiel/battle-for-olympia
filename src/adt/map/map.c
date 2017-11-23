@@ -94,7 +94,7 @@ boolean IsIdxMapEff(Map M, IdxMap i, IdxMap j) {
 }
 
 /* *** Kelompok Baca/Tulis *** */
-void TulisMap(Map M) {
+void TulisMap(Map M, Point CurrentUnitLoc) {
   IdxMap i,j;
   
   printf ("      ");
@@ -132,17 +132,21 @@ void TulisMap(Map M) {
 		}
 		for (j = 1; j<=GetMapLastIdxKol(M); j++) {
 			printf (" ");
-			PrintInColor(Unit(M,i,j), ColorUnit(M,i,j));
+      if (i == Absis(CurrentUnitLoc) && j == Ordinat(CurrentUnitLoc)) {
+			  printf("\033[01;42m"); PrintInColor(Unit(M,i,j), ColorUnit(M,i,j)); printf("\033[0m");
+      } else {
+        PrintInColor(Unit(M,i,j), ColorUnit(M,i,j));
+      }
 			printf (" *");
 		}
 		printf("\n");
 		
-		/* untuk baris 3 */
+		/* untuk baris 3
 		printf ("    *");
 		for (j=1; j<=GetMapLastIdxKol(M); j++) {
 			printf ("   *");
 		}
-		printf("\n");
+		printf("\n"); */
 
 		/* untuk baris 4 */		
 		printf ("    *");

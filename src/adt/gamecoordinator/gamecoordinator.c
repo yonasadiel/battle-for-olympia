@@ -297,7 +297,7 @@ void RunGame(GameCoordinator* GC) {
 
     if (!strcmp(cmd, "MAP")) {
       system("cls");
-      TulisMap(GameMap(*GC));
+      TulisMap(GameMap(*GC), Location(*CurrentUnit(*GC)));
     } else if (!strcmp(cmd, "EXIT")) {
       IsRunning = false;
     } else if (!strcmp(cmd, "END_TURN")) {
