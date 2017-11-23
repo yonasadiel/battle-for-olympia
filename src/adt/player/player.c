@@ -37,8 +37,12 @@ void InitPlayer(Player* P, int cash, int income, int upkeep, ListSirkuler units,
 }
 
 void MakePlayer(Player* P, Color W, Point Loc) {
-  Unit U;
-  Building T, CN, CW, CE, CS;
+  Unit* U = (Unit*) malloc(sizeof(Unit));
+  Building* T = (Building*) malloc(sizeof(Building));
+  Building* CN = (Building*) malloc(sizeof(Building));
+  Building* CW = (Building*) malloc(sizeof(Building));
+  Building* CE = (Building*) malloc(sizeof(Building));
+  Building*CS = (Building*) malloc(sizeof(Building));
 
   Cash(*P) = 50;
   Income(*P) = 0;
@@ -47,17 +51,17 @@ void MakePlayer(Player* P, Color W, Point Loc) {
   LLCreateEmpty(&ListBuilding(*P));
   Warna(*P) = W;
 
-  CreateUnit(&U, 'K', Loc);
-  LSInsVFirst(&ListUnit(*P), &U);
+  CreateUnit(U, 'K', Loc);
+  LSInsVFirst(&ListUnit(*P), U);
 
-  MakeBuilding(&T, Loc, 'T');
-  MakeBuilding(&CN, PlusDelta(Loc, 0, -1), 'C');
-  MakeBuilding(&CS, PlusDelta(Loc, 0,  1), 'C');
-  MakeBuilding(&CE, PlusDelta(Loc,  1, 0), 'C');
-  MakeBuilding(&CW, PlusDelta(Loc, -1, 0), 'C');
-  LLInsVFirst(&ListBuilding(*P), &T);
-  LLInsVFirst(&ListBuilding(*P), &CN);
-  LLInsVFirst(&ListBuilding(*P), &CS);
-  LLInsVFirst(&ListBuilding(*P), &CE);
-  LLInsVFirst(&ListBuilding(*P), &CW);
+  MakeBuilding(T, Loc, 'T');
+  MakeBuilding(CN, PlusDelta(Loc, 0, -1), 'C');
+  MakeBuilding(CS, PlusDelta(Loc, 0,  1), 'C');
+  MakeBuilding(CE, PlusDelta(Loc,  1, 0), 'C');
+  MakeBuilding(CW, PlusDelta(Loc, -1, 0), 'C');
+  LLInsVFirst(&ListBuilding(*P), T);
+  LLInsVFirst(&ListBuilding(*P), CN);
+  LLInsVFirst(&ListBuilding(*P), CS);
+  LLInsVFirst(&ListBuilding(*P), CE);
+  LLInsVFirst(&ListBuilding(*P), CW);
 }

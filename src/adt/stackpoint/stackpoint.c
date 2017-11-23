@@ -1,6 +1,7 @@
 #include "stackpoint.h"
 #include "../boolean/boolean.h"
 #include "../point/point.h"
+#include <stdio.h>
 
 /* Konstanta */
 /* #define Nil NULL
@@ -56,13 +57,28 @@ void SPop(Stack* S, SInfoType X) {
 Stack SReverse(Stack S) {
   Stack R;
   SCreateEmpty(&R);
-  SAddress addr;
-
-  addr = STop(S);
-  while(addr != Nil) {
-  	SPush(&R, SInfo(addr));
-  	addr = SNext(addr);
+  if(!SIsEmpty(S)) {
+    SAddress addr;
+    addr = STop(S);
+    while(addr != Nil) {
+      SPush(&R, SInfo(addr));
+      addr = SNext(addr);
+    }
   }
-
   return R;
+}
+
+int SNbElmt(Stack S) {
+  if(SIsEmpty(S)) {
+    return 0;
+  } else {
+    SAddress p = STop(S);
+    int count = 0;
+    while(p != Nil) {
+      p = SNext(p);
+      printf("%d\n", count);
+      count++;
+    }
+    return count;
+  }
 }

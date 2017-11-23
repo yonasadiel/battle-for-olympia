@@ -1,4 +1,5 @@
 #include "listsirkuler.h"
+#include <stdio.h>
 
 /**
  * #define Nil NULL
@@ -10,7 +11,7 @@
  *   LSAddress next;
  * } ElmtListSirkuler;
  * typedef struct {
- *   LSAddress LSFirst;
+ *   LSAddress first;
  * } ListSirkuler;
 
 /** 
@@ -24,7 +25,7 @@
  * *** Notasi Akses ***
  * #define LSInfo(P) (P)->info
  * #define LSNext(P) (P)->next
- * #define LSFirst(L) ((L).LSFirst)
+ * #define LSFirst(L) ((L).first)
  */
 
 boolean LSIsEmpty (ListSirkuler L) {
@@ -231,4 +232,16 @@ void LSDelP (ListSirkuler *L, infotype X) {
             }
         }
     }
+}
+
+int LSNbElmt (ListSirkuler L) {   
+    int count = 0;
+    LSAddress p = LSFirst(L);
+    if(!LSIsEmpty(L)) {
+        do {
+            count++;
+            p = LSNext(p);
+        } while(p != LSFirst(L));
+    }
+    return count;
 }

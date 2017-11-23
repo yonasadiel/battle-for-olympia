@@ -3,6 +3,7 @@
 
 #include "mesinkata.h"
 #include "../boolean/boolean.h"
+#include <stdio.h>
 
 /* #define NMax 50 */
 /* #define BLANK ' ' */
@@ -16,14 +17,18 @@
 boolean EndKata;
 Kata CKata;
 
+boolean IsBlank() {
+  return (CC == BLANK || CC == 10);
+}
+
 void IgnoreBlank() {
-  while (CC == BLANK && CC != MARK) {
+  while (IsBlank() && !EOP) {
     ADV();
   }
 }
 
-void STARTKATA() {
-  START();
+void STARTKATA(char* filename) {
+  START(filename);
   IgnoreBlank();
   if (CC == MARK) {
     EndKata = true;
@@ -47,15 +52,43 @@ void ADVKATA() {
 void SalinKata() {
   int i = 1;
 
-  for (;;) {
+  while(1) {
     CKata.TabKata[i] = CC;
     ADV();
-    if (CC == BLANK || CC == MARK || i == NMax) {
+    if (IsBlank() || EOP || i == NMax) { 
       break;
     } else {
       i++;
     }
   }
-
   CKata.Length = i;
+  CKata.TabKata[i+1] = 0;
+}
+
+void ToInteger(int* X, boolean* err) {
+  int i, j;
+  boolean negative;
+
+  *err = false;
+  *X = 0;
+
+  negative = false;
+  i = 1;
+  while(i <= CKata.Length && *err == false) {
+    j = CKata.TabKata[i] - 48;
+    if(j >= 0 && j <= 9) {
+      *X = *X * 10 + j;
+      i++;
+    } else if(CKata.TabKata[i] == '-') {
+      negative = true;
+      i++;
+    } else {
+      printf("ERROR WHEN READING %d\n", CKata.TabKata[i]);
+      *err = true;
+    }
+  }
+
+  if(negative) {
+    *X = *X * -1;
+  }
 }

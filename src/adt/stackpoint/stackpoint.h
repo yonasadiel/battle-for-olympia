@@ -3,6 +3,7 @@
 
 #include "../boolean/boolean.h"
 #include "../point/point.h"
+#include <stdlib.h>
 
 /* Konstanta */
 #define Nil NULL
@@ -77,5 +78,11 @@ Stack SReverse(Stack S);
   * Mengembalikan Stack yang urutannya berkebalikan dengan S
   * Seluruh elemen di alokasi
   */
+
+int SNbElmt(Stack S);
+/**
+ * S mungkin kosong
+ * Mengembalikan jumlah elemen pada Stack S
+ */
 
 #endif

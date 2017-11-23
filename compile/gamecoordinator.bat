@@ -13,5 +13,7 @@ gcc^
     "src\adt\queueint\queueint.c"^
     "src\adt\stackpoint\stackpoint.c"^
     "src\adt\unit\unit.c"^
+    "src\adt\mesinkar\mesinkar.c"^
+    "src\adt\mesinkata\mesinkata.c"^
   -o^
     "bin\driver\gamecoordinator"

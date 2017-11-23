@@ -1,4 +1,5 @@
 #include "listlinier.h"
+#include <stdio.h>
 
 /**
  * #define Nil NULL

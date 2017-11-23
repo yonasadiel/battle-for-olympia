@@ -13,7 +13,7 @@ typedef struct tElmtListSirkuler {
 	LSAddress next;
 } ElmtListSirkuler;
 typedef struct {
-	LSAddress LSFirst;
+	LSAddress first;
 } ListSirkuler;
 
 /** 
@@ -26,7 +26,7 @@ typedef struct {
 /* *** Notasi Akses *** */
 #define LSInfo(P) (P)->info
 #define LSNext(P) (P)->next
-#define LSFirst(L) ((L).LSFirst)
+#define LSFirst(L) ((L).first)
 
 /* *** TEST LIST KOSONG *** */
 boolean LSIsEmpty (ListSirkuler L);
@@ -147,6 +147,12 @@ void LSDelP (ListSirkuler *L, infotype X);
  * Maka P dihapus dari list dan di-dealokasi
  * Jika tidak ada elemen list dengan LSInfo(P)=X, maka list tetap
  * ListSirkuler mungkin menjadi kosong karena penghapusan 
+ */
+
+int LSNbElmt (ListSirkuler L);
+/** 
+ * Mengirimkan banyaknya elemen list; 
+ * mengirimkan 0 jika list kosong 
  */
 
 #endif
