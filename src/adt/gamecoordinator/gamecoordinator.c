@@ -36,6 +36,7 @@
 int arg[16];
 
 void PrintMenu(void) {
+  system("cls");
 	printf ("_____________________________________________________T ___H ___E ______________________________________________________________\n");
 	printf ("___________####### ___________# ____ # ___# ____________________####### __# ___________________________________________________\n");
 	printf ("____________##   ## __________## ____## __## __________________##     ## _##__________________________________## ______________\n");
@@ -190,7 +191,7 @@ char* GetLoadedFileName() {
     printf("File number: ");
     scanf("%d", &n); endl;
 
-    if(n >= 0 && n <= size) {
+    if(n > 0 && n <= size) {
       int idx = 0;
       res = (char*) malloc(sizeof(char) * 40);
       do {
@@ -199,18 +200,22 @@ char* GetLoadedFileName() {
       } while(filenames[n][idx] != 0);
       res[idx] = 0;
     } else {
-      printf("Invalid number.");
+      res = 0;
     }
   }
 
   return res;
 }
 
-void LoadGame(GameCoordinator* GC) {
+boolean LoadGame(GameCoordinator* GC) {
   char* filename = GetLoadedFileName();
   boolean err;
   int NBrsMap, NKolMap;
   int count, i;
+
+  if(filename == 0) {
+    goto INVAlID_NAME;
+  }
 
   printf("Load file %s\n", filename);
   // Start to read file
@@ -251,8 +256,6 @@ void LoadGame(GameCoordinator* GC) {
     LSCreateEmpty(playerUnits);
     LLCreateEmpty(playerBuildings);
     ADV_INT(playerNumber, err, ERROR_READ);
-    Pi(*GC, playerNumber) = *player;
-    QAdd(&QI(*GC), playerNumber);
 
     // Load Player Basic Properties
     arg[0] = playerNumber;
@@ -349,6 +352,10 @@ void LoadGame(GameCoordinator* GC) {
         printf("Success\n");
       }
     }
+
+    // Add Player to GameCoordinator
+    Pi(*GC, playerNumber) = *player;
+    QAdd(&QI(*GC), playerNumber);
   }
 
   // Load MoveRecord
@@ -420,14 +427,19 @@ void LoadGame(GameCoordinator* GC) {
   printf("Game is loaded succesfully.\n");
   goto LOAD_FINISH;
 
+  INVAlID_NAME:
+    printf("Invalid number.\n");
+    return false;
+
   // Print error message when error occured
   ERROR_READ:
     printf("Error has been occured. Cannot load game file.\n");
-    goto LOAD_FINISH;
+    return false;
 
   // Finishing
   LOAD_FINISH:
     printf("Loading finished.\n");
+    return true;
 }
 
 
