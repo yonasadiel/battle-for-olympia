@@ -756,3 +756,30 @@ void PrintAllUnitInfo(ListSirkuler LU) {
     } while(P != LSFirst(LU));
   }
 }
+
+void printInfo(GameCoordinator GC,int x,int y) {
+	printf("== Cell Info ==\n");
+	if (Building(GameMap(GC),x,y) == 'V'){
+		printf("Village\n");
+		printf("Owned by ");
+		if (ColorBuilding(GameMap(GC),x,y) == CGREEN){
+			printf("Player 2\n");
+		}else{
+			printf("Player 1\n");
+		}
+	}else if (Building(GameMap(GC),x,y) == 'C'){
+		printf("Castle\n");
+	}else if (Building(GameMap(GC),x,y) == 'T'){
+		printf("Tower\n");
+	}
+	printf("== Unit Info ==\n");
+	PrintUnitName(*CurrentUnit(GC));
+	printf("\n");
+	printf("Owned by ");
+	if (ColorUnit(GameMap(GC),x,y) == CGREEN){
+			printf("Player 2\n");
+		}else{
+			printf("Player 1\n");
+		}
+  printInfoUnit(*CurrentUnit(GC));
+}

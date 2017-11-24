@@ -109,4 +109,10 @@ void PrintAllUnitInfo(ListSirkuler LU);
  * F.S. menuliskan semua unit yang ada di LU
  */
 
+void printInfo(GameCoordinator GC, int x, int y);
+/**
+ * I.S. GC terdefinisi, x dan y terdefinisi
+ * F.S. menuliskan semua informasi mengenai suatu petak
+ */	
+
 #endif
