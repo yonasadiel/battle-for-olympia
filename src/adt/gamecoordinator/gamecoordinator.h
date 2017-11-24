@@ -36,7 +36,7 @@ void InitGame(GameCoordinator* GC, int NInitBaris, int NInitKolom);
  * I.S. GC tidak terdefinisi.
  * F.S. GC terdefinisi default berukuran NInitBaris x NInitKolom.
  */
-void LoadGame(GameCoordinator* GC);
+boolean LoadGame(GameCoordinator* GC);
 /**
  * I.S. GC terdefinisi.
  * F.S. GC terdefinisi sesuai save file.
@@ -102,5 +102,30 @@ void Attack(GameCoordinator *GC);
  * I.S. GC terdefinisi, LS sembarang
  * F.S. 
  */
+
+void ChangeUnit(GameCoordinator* GC);
+/**
+ * I.S. GC terdefinisi
+ * F.S. Menampilkan daftar unit player dan meminta input nomor
+ *      Mengganti Current Unit dnegan unit pilihan player
+ */
+
+void NextUnit(GameCoordinator* GC);
+/**
+ * I.S. GC terdefinisi
+ * F.S. Mengganti Current Unit dengan unit sesudahnya di list unit
+ */
+
+void PrintAllUnitInfo(ListSirkuler LU);
+/**
+ * I.S. LU terdefinisi
+ * F.S. menuliskan semua unit yang ada di LU
+ */
+
+void printInfo(GameCoordinator GC, int x, int y);
+/**
+ * I.S. GC terdefinisi, x dan y terdefinisi
+ * F.S. menuliskan semua informasi mengenai suatu petak
+ */	
 
 #endif

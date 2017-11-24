@@ -79,6 +79,12 @@ Stack SReverse(Stack S);
   * Seluruh elemen di alokasi
   */
 
+int SNbElmt(Stack S);
+/**
+ * S mungkin kosong
+ * Mengembalikan jumlah elemen pada Stack S
+ */
+
 void SPopAll(Stack* S);
 /**
  * I.S. S terdefinisi, mungkin kosong
