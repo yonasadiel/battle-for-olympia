@@ -36,7 +36,7 @@ void InitGame(GameCoordinator* GC, int NInitBaris, int NInitKolom);
  * I.S. GC tidak terdefinisi.
  * F.S. GC terdefinisi default berukuran NInitBaris x NInitKolom.
  */
-void LoadGame(GameCoordinator* GC);
+boolean LoadGame(GameCoordinator* GC);
 /**
  * I.S. GC terdefinisi.
  * F.S. GC terdefinisi sesuai save file.
