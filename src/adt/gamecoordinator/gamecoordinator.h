@@ -90,4 +90,17 @@ void MoveUnit(Map* M, Unit* U, Point Source, Point Dest);
  *      mengganti karakter di peta, dan mengganti warna di peta
  */
 
+ListSirkuler GetListSurroundingUnit(GameCoordinator GC);
+/**
+ * I.S. GC terdefinisi, LS sembarang
+ * F.S. LS berisi semua Unit musuh yang adjacent di petak atas, bawah, 
+ * 		kanan, atau kiri dari Current Unit.
+ */
+ 
+void Attack(GameCoordinator *GC);
+/**
+ * I.S. GC terdefinisi, LS sembarang
+ * F.S. 
+ */
+
 #endif

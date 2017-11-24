@@ -291,7 +291,7 @@ void RunGame(GameCoordinator* GC) {
     printf("              | MAP  | INFO | END_TURN    | SAVE    | EXIT   |\n");
     printf("Your input: "); scanf("%s", cmd);
 
-    if (strcmp(cmd, "MOVE") && strcmp(cmd, "MAP") && strcmp(cmd, "INFO")) {
+    if (strcmp(cmd, "MOVE") && strcmp(cmd, "MAP") && strcmp(cmd, "INFO") && strcmp(cmd, "ATTACK")) {
       SPopAll(&MoveRecord(*GC));
     }
 
@@ -305,6 +305,8 @@ void RunGame(GameCoordinator* GC) {
       printf("Player %d's turn!\n", QInfoHead(QI(*GC)));
     } else if (!strcmp(cmd, "EXIT")) {
       IsRunning = false;
+    } else if (!strcmp(cmd, "ATTACK")) {
+      Attack(GC);
     } else {
       printf("Command is Not Recognized\n\n\n");
     } 
@@ -374,3 +376,130 @@ void MoveUnit(Map* M, Unit* U, Point Source, Point Dest) {
   Unit(*M, Absis(Dest), Ordinat(Dest)) = temp;
   ColorUnit(*M, Absis(Dest), Ordinat(Dest)) = ColorUnit(*M, Absis(Source), Ordinat(Source));
 }
+
+ListSirkuler GetListSurroundingUnit(GameCoordinator GC) {
+	ListSirkuler LS;
+	Point P,Pa,Pb,Pc,Pd;
+	Player Enemy;
+	Unit* checkUnit;
+	int Px,Py;
+	if (QInfoHead(QI(GC)) == 1) {
+		Enemy = Pi(GC,2);
+	} else {
+		Enemy = Pi(GC,1);
+	}
+	
+	P = Location(*CurrentUnit(GC));
+	MakePoint(Absis(P)+1,Ordinat(P),&Pa);
+	MakePoint(Absis(P)-1,Ordinat(P),&Pb);
+	MakePoint(Absis(P),Ordinat(P)+1,&Pc);
+	MakePoint(Absis(P),Ordinat(P)-1,&Pd);
+
+	LSCreateEmpty(&LS);
+	if (!LSIsEmpty(ListUnit(Enemy))) {
+		LSAddress p = LSFirst(ListUnit(Enemy));
+		do {
+			checkUnit = (Unit*) LSInfo(p);
+			if(EQPoint(Location(*checkUnit), Pa) || EQPoint(Location(*checkUnit), Pb) || EQPoint(Location(*checkUnit), Pc) || EQPoint(Location(*checkUnit), Pd)) {
+				LSInsVLast(&LS,checkUnit);
+			}
+			p = LSNext(p);
+		}
+		while (p != LSFirst(ListUnit(Enemy)));
+	}
+	return LS;
+}
+	
+void Attack(GameCoordinator *GC) {
+	if (AtkChance(*CurrentUnit(*GC))) {
+		ListSirkuler LS;
+		LSCreateEmpty(&LS);
+		LS = GetListSurroundingUnit(*GC);
+		boolean Retaliate[100], ret;
+		LSAddress p;
+		int i,j,option;
+		Unit* checkUnit;
+		Unit* attackedUnit;
+		
+		if (LSIsEmpty(LS)) {
+			printf ("No enemy to attack\n");
+		} else {
+			printf ("Please select enemy you want to attack:\n");
+			p = LSFirst(LS);
+			i = 0;
+			do {
+				i++;
+				checkUnit = (Unit*) LSInfo(p);
+				printf ("%d. ",i);
+				PrintUnitName(*checkUnit);
+				printf(" ");
+				TulisPoint(Location(*checkUnit));
+				printf (" | Health %d/%d (",Health(*checkUnit),MaxHealth(*checkUnit));
+				if ((AtkType(*CurrentUnit(*GC)) == AtkType(*checkUnit)) || (Type(*checkUnit) == 'K')) {
+					printf ("Retaliates)\n");
+					Retaliate[i] = true;
+				} else {
+					printf ("Doesn't retaliate)\n");
+					Retaliate[i] = false;
+				}
+				p = LSNext(p);
+			}
+			while (p != LSFirst(LS));
+			
+			do {
+				printf ("Select enemy you want to attack:");
+				scanf ("%d",&option);
+				if ((option > i) || (option <= 0)) {
+					printf ("Wrong input, please select attackable enemy\n");
+				}
+			}
+			while ((option > i) || (option <= 0));
+			
+			j = 1;
+			p = LSFirst(LS);
+			while(j<option) {
+				p = LSNext(p);
+				j++;
+			}
+			ret = Retaliate[j];
+			attackedUnit = (Unit*) LSInfo(p);
+			Health(*attackedUnit) -= Atk(*CurrentUnit(*GC));
+			printf("Enemy's ");
+			PrintUnitName(*attackedUnit);
+			printf(" is damaged by %d.\n",Atk(*CurrentUnit(*GC)));
+			if (Health(*attackedUnit) > 0) {
+				if (ret) {
+					printf("Enemy's ");
+					PrintUnitName(*attackedUnit);
+					printf(" retaliates.\n");
+					Health(*CurrentUnit(*GC)) -= Atk(*attackedUnit);
+					printf("Your ");
+					PrintUnitName(*CurrentUnit(*GC));
+					printf(" is damaged by %d.\n",Atk(*attackedUnit));
+				}
+				if (Health(*CurrentUnit(*GC)) <= 0) {
+					printf("Your ");
+					PrintUnitName(*CurrentUnit(*GC));
+					printf(" is dead :(\n");
+				}
+			} else {
+				printf("Enemy's ");
+				PrintUnitName(*attackedUnit);
+				printf(" is dead :)\n");
+			}
+		}
+		AtkChance(*CurrentUnit(*GC)) = false;
+		MovPoint(*CurrentUnit(*GC)) = 0;
+	} else {
+		printf("Your ");
+		PrintUnitName(*CurrentUnit(*GC));
+		printf(" can't attack anymore in this turn\n");
+	}
+}
+			
+				
+				
+	
+	
+	
+	
