@@ -699,14 +699,15 @@ void ReduceCash(Player* P) {
 }
 
 void RecruitUnit(Player *P, GameCoordinator GC, Map *M) {
-	int x,y;char UnitType; Point P1;Unit U;
-	if ((Type(CurrentUnit(GC)))=='K') {
-		if (BType(Building(*M,Absis(Location(CurrentUnit(GC))),Ordinat(Location(CurrentUnit(GC))))=='T')) {
+	int x,y;char UnitType; Point P1;Unit U;Unit *U1;
+	U1=CurrentUnit(GC);
+	if ((Type(*U1))=='K') {
+		if (Building(*M,Absis(Location(*U1)),Ordinat(Location(*U1)))=='T') {
 			printf("Input castle absis:");
 			scanf("%d",&x);
 			printf("Input castle ordinate:");
 			scanf("%d",&y);
-			if (IsPlayerCastle(*M, Building(*M,x,y),Warna(*P))) {
+			if (IsPlayerCastle(*M,x,y,Warna(*P))) {
 				if (IsLocEmpty(*M,x,y)) {
 					PrintAvailRecruit(Cash(*P));
 					printf("What unit you want to recruit? (A/S/W):");
