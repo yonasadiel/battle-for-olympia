@@ -73,10 +73,11 @@ boolean IsIdxMapEff(Map M, IdxMap i, IdxMap j);
 /* Mengembalikan true jika i, j adalah indeks efektif bagi M */
 
 /* *** Kelompok Baca/Tulis *** */
-void TulisMap(Map M);
+void TulisMap(Map M, Point CurrentUnitLoc);
 /**
  * I.S. M terdefinisi
- * F.S. M ditampilkan ke layar sesuai format di spek
+ * F.S. M ditampilkan ke layar sesuai format di spesifikasi
+*       Unit yang sedang dipilih akan berwarna hijau
  */
 
 /* *** Kelompok Operasi Map *** */

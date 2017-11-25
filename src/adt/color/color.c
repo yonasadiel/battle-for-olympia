@@ -19,4 +19,5 @@ void PrintInColor(char c, Color Warna) {
   else if (Warna == CBLUE)    { print_blue(c);    }
   else if (Warna == CMAGENTA) { print_magenta(c); }
   else if (Warna == CCYAN)    { print_cyan(c);    }
+  else                        { printf("%c", c);  }
 }

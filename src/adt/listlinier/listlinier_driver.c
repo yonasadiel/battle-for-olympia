@@ -18,11 +18,12 @@ void PrintTitik(Titik titik) {
 }
 
 int main() {
+	Titik* Ttemp;
 	Titik titik1 = createTitik(1, 2);
 	Titik titik2 = createTitik(2, 3);
 	Titik titik3 = createTitik(3, 4);
 
-	List L;
+	ListLinier L;
 
 	LLCreateEmpty(&L);
 
@@ -30,7 +31,11 @@ int main() {
 	LLInsVFirst(&L, &titik2);
 	LLInsVFirst(&L, &titik3);
 
-	address p = LLFirst(L);
+	Ttemp = (Titik*) LLInfo(LLNthAddress(L, 1)); PrintTitik(*Ttemp);
+	Ttemp = (Titik*) LLInfo(LLNthAddress(L, 2)); PrintTitik(*Ttemp);
+	Ttemp = (Titik*) LLInfo(LLNthAddress(L, 3)); PrintTitik(*Ttemp);
+
+	LLAddress p = LLFirst(L);
 	while(p != Nil) {
 		Titik* titikerToTitik = (Titik*) LLInfo(p);
 		Titik isiTitikerTitik = *titikerToTitik; 

@@ -73,9 +73,27 @@ void MakePlayer(Player* P, Color W, Point Loc, Map* M) {
   MapPutBuilding(M, *CS, W);
   MapPutBuilding(M, *CE, W);
   MapPutBuilding(M, *CW, W);
+  
+  ResetMovPointAllUnit(P);
 }
 
 void AddUnit(Player *P, Point Loc, char UnitType,Unit* U) {
 	CreateUnit(U, UnitType, Loc);
 	LSInsVLast (&ListUnit(*P), U);
 }
+
+void ResetMovPointAllUnit(Player* P) {
+  LSAddress PU;
+
+  if (!LSIsEmpty(ListUnit(*P))) {
+    PU = LSFirst(ListUnit(*P));
+
+    do {
+      Unit* U = (Unit*) LSInfo(PU);
+      MovPoint(*U) = 2;
+
+      PU = LSNext(PU);
+    } while (PU != LSFirst(ListUnit(*P)));
+  }
+}
+

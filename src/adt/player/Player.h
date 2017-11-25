@@ -50,4 +50,10 @@ void AddUnit(Player *P, Point Loc, char UnitType,Unit* U);
 	* F.S. U terdefinisi sebagai bagian dari ListUnit P
 	*/
 
+void ResetMovPointAllUnit(Player* P);
+/**
+ * I.S. P terdefinisi
+ * F.S. Semua Unit di P punya movement point 2
+ */
+
 #endif

@@ -8,7 +8,7 @@ typedef struct {
 	int MaxHealth;     /* darah unit saat pertama kali direkrut */
 	int Health;        /* darah yang tersisa */
 	int Atk;           /* Besar damage yang diterima unit lain yang diserang */
-	int Heal;	       /* Besar pertambahan darah yang diberikan kepada pemain sekutu (kemampuan khusus White Mage) */
+	int Heal;		   /* Besar pertambahan darah yang diberikan kepada pemain sekutu (kemampuan khusus White Mage) */
 	int MovPoint;      /* banyak gerakan yang tersisa */
 	char AtkType;      /* 'm' = melee, 'r' = ranged */
 	boolean AtkChance; /* true = unit belum menyerang */
@@ -53,6 +53,12 @@ void PrintAvailRecruit(int Cash);
 /**
 	*	Menuliskan semua unit yang dapat direcruit beserta infonya.
 	*/
+
+void printInfoUnit(Unit U);
+/**
+ * I.S. U terdefinisi
+ * F.S. tercetak semua info U: Nama Unit, Maximum Health, Health, ..., Recruit Cost.
+ */
 
 #endif
 

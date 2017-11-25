@@ -36,47 +36,53 @@ void CreateUnit (Unit* U, char UnitType, Point P) {
     Health(*U)      = 29;
     Atk(*U)         = 10;
     Heal(*U)        = 0;
-    MovPoint(*U)    = 2;
     AtkType(*U)     = 'r';
-    AtkChance(*U)   = true;
     RecCost(*U)     = 17;
   } else if (UnitType == 'K') {
     MaxHealth(*U)   = 60;
     Health(*U)      = 60;
     Atk(*U)         = 15;
     Heal(*U)        = 0;
-    MovPoint(*U)    = 2;
     AtkType(*U)     = 'm';
-    AtkChance(*U)   = true;
     RecCost(*U)     = 0;
   } else if (UnitType == 'S') {
     MaxHealth(*U)   = 55;
     Health(*U)      = 55;
     Atk(*U)         = 16;
     Heal(*U)        = 0;
-    MovPoint(*U)    = 2;
     AtkType(*U)     = 'm';
-    AtkChance(*U)   = true;
     RecCost(*U)     = 25;
   } else if (UnitType == 'W') {
     MaxHealth(*U)   = 35;
     Health(*U)      = 35;
     Heal(*U)        = 8;
     Atk(*U)         = 12;
-    MovPoint(*U)    = 2;
     AtkType(*U)     = 'm';
-    AtkChance(*U)   = true;
     RecCost(*U)     = 40;
   }
+  AtkChance(*U)   = true;
+  MovPoint(*U)    = 0;
   Location(*U)    = P;
   Type(*U) = UnitType;
 }
 
 void PrintUnitName(Unit U) {
-    if      (Type(U) == 'A') { printf("Archer");     }
-    else if (Type(U) == 'K') { printf("King");       }
-    else if (Type(U) == 'S') { printf("Swordsman");  }
-    else if (Type(U) == 'W') { printf("White Mage"); }
+  if      (Type(U) == 'A') { printf("Archer");     }
+  else if (Type(U) == 'K') { printf("King");       }
+  else if (Type(U) == 'S') { printf("Swordsman");  }
+  else if (Type(U) == 'W') { printf("White Mage"); }
+}
+
+void printInfoUnit(Unit U) {
+	PrintUnitName(U);
+  TulisPoint(Location(U));
+	printf(", ");
+	printf("Health : %d / %d | ", Health(U), MaxHealth(U));
+	printf("ATK  %d(%c) | ",Atk(U), AtkType(U));
+  printf("Movement Point  %d | ", MovPoint(U));
+	printf("Can Attack: ");
+	if (AtkChance(U)) { printf("yes"); }
+  else              { printf("no"); }
 }
 
 int CheckGold(char UnitType)	{

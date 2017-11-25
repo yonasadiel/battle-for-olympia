@@ -1,4 +1,10 @@
 #include <stdio.h>
+#ifdef __unix__
+  #include <unistd.h>
+#elif defined _WIN32
+  #include <windows.h>
+  #define sleep(x) Sleep(1000 * x)
+#endif
 #include "adt/boolean/boolean.h"
 #include "adt/gamecoordinator/gamecoordinator.h"
 
@@ -31,11 +37,16 @@ int main() {
       RunGame(&GC);
     } else if (pilmenu == 2) {
       /* load game */
-      LoadGame(&GC);
-      RunGame(&GC);
+      if(LoadGame(&GC)) {
+        sleep(2);
+        RunGame(&GC);
+      } else {
+        sleep(2);
+      }
     } else if (pilmenu == 3) {
       /* save game */
       SaveGame(GC);
+      sleep(2);
     } else if (pilmenu == 4) {
       /* keluar dari game */
       isUp = false;

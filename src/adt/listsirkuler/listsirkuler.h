@@ -13,7 +13,7 @@ typedef struct tElmtListSirkuler {
 	LSAddress next;
 } ElmtListSirkuler;
 typedef struct {
-	LSAddress LSFirst;
+	LSAddress first;
 } ListSirkuler;
 
 /** 
@@ -26,7 +26,7 @@ typedef struct {
 /* *** Notasi Akses *** */
 #define LSInfo(P) (P)->info
 #define LSNext(P) (P)->next
-#define LSFirst(L) ((L).LSFirst)
+#define LSFirst(L) ((L).first)
 
 /* *** TEST LIST KOSONG *** */
 boolean LSIsEmpty (ListSirkuler L);
@@ -153,6 +153,12 @@ int LSNbElmt (ListSirkuler L);
 /**
  * Prekondisi: L terdefinisi
  * Kembalian : banyaknya elemen di L
+ */
+
+LSAddress LSNthAddress (ListSirkuler L, int N);
+/**
+ * Prekondisi: L terdefinisi dengan panjang <= N
+ * Kembalian : Address dari elemen ke N di L
  */
 
 #endif

@@ -10,15 +10,25 @@ boolean EOP;
 static FILE * pita;
 static int retval;
 
-void START() {
-  pita = fopen("save.dat","r");
+boolean START(char* filename) {
+  pita = fopen(filename,"r");
+  printf("Attempt to open file %s\n", filename);
   ADV();
+  if(pita) {
+  	return true;
+  } else {
+  	return false; 
+  }
 }
 
 void ADV() {
   retval = fscanf(pita,"%c",&CC);
-  EOP = (CC == MARK);
-  if (EOP) {
+  EOP = (CC == MARK || retval != 1);
+   if (EOP) {
        fclose(pita);
   }
+}
+
+void CLOSE() {
+	fclose(pita);
 }
