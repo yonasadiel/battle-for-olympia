@@ -344,3 +344,43 @@ void ReduceCash(Player* P) {
   Cash(*P) -= UpKeep(*P);
   if (Cash(*P) < 0) Cash(*P) = 0;
 }
+
+void RecruitUnit(Player *P, GameCoordinator GC, Map *M) {
+	int x,y;char UnitType; Point P1;Unit U;
+	if ((Type(CurrentUnit(GC)))=='K') {
+		if (BType(Building(*M,Absis(Location(CurrentUnit(GC))),Ordinat(Location(CurrentUnit(GC))))=='T')) {
+			printf("Input castle absis:");
+			scanf("%d",&x);
+			printf("Input castle ordinate:");
+			scanf("%d",&y);
+			if (IsPlayerCastle(*M, Building(*M,x,y),Warna(*P))) {
+				if (IsLocEmpty(*M,x,y)) {
+					PrintAvailRecruit(Cash(*P));
+					printf("What unit you want to recruit? (A/S/W):");
+					scanf("%c",&UnitType);
+					if (CheckGold(UnitType)<=Cash(*P)) {
+						MakePoint(x,y,&P1);
+						AddUnit(P, P1, UnitType,&U);
+						MapPutUnit(M, U, Warna(*P));
+						Cash(*P)-=CheckGold(UnitType);
+					}
+					else {
+						printf("You do not have enough gold.\n");
+					}
+				}
+				else {
+					printf("The location is not empty.\n");
+				}
+			}
+			else {
+				printf("That is not your castle.\n");
+			}
+		}
+		else {
+			printf("To recruit a unit, your King must be in the tower.\n");
+		}
+	}
+	else {
+		printf("To recruit a unit, your current unit must be the King.\n");
+	}
+}

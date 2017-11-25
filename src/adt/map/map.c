@@ -185,3 +185,11 @@ void MapPutBuilding(Map* M, Building B, Color Warna) {
   Building(*M, Absis(BCoordinate(B)), Ordinat(BCoordinate(B))) = BType(B);
   ColorBuilding(*M, Absis(BCoordinate(B)), Ordinat(BCoordinate(B))) = Warna;
 }
+
+boolean IsPlayerCastle(Map M, Building B, Color Warna) {
+	return ((ColorBuilding(M,Absis(BCoordinate(B)), Ordinat(BCoordinate(B))) == Warna)&&(BType(B)=='C'));
+}
+
+boolean IsLocEmpty(Map M, int x, int y) {
+	return (Unit(M, x, y) = ' ');
+}

@@ -99,4 +99,14 @@ void MapPutBuilding(Map* M, Building B, Color Warna);
  * F.S. Tertulis building B di Map dengan warna Warna
  */
 
+boolean IsPlayerCastle(Map M, Building B, Color Warna);
+/**
+	* Mengembalikan nilai kebenaran apakah building B merupakan milik player
+	*/ 
+ 
+boolean IsLocEmpty(Map M, int X, int Y);
+/**
+	* Mengembalikan nilai kebenaran apakah sel (X,Y) kosong
+	*/
+	
 #endif

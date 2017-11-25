@@ -44,6 +44,16 @@ void PrintUnitName(Unit U);
  * F.S. tercetak nama U: "King", "Archer", "Swordsman", atau "White Mage"
  */
 
+int CheckGold(char UnitType);
+/**
+	*	Mengembalikan jumlah gold yang diperlukan untuk merecruit unit U.
+	*/
+
+void PrintAvailRecruit(int Cash);
+/**
+	*	Menuliskan semua unit yang dapat direcruit beserta infonya.
+	*/
+
 #endif
 
 

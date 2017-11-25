@@ -43,5 +43,11 @@ void MakePlayer(Player* P, Color W, Point Loc, Map* M);
  *      dan Warna sesuai W.
  *      Basecamp P ada di Loc
  */
+	
+void AddUnit(Player *P, Point Loc, char UnitType,Unit* U);
+/**
+	*	I.S. P dan U terdefinisi
+	* F.S. U terdefinisi sebagai bagian dari ListUnit P
+	*/
 
 #endif

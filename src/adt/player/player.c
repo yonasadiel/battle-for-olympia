@@ -74,3 +74,8 @@ void MakePlayer(Player* P, Color W, Point Loc, Map* M) {
   MapPutBuilding(M, *CE, W);
   MapPutBuilding(M, *CW, W);
 }
+
+void AddUnit(Player *P, Point Loc, char UnitType,Unit* U) {
+	CreateUnit(U, UnitType, Loc);
+	LSInsVLast (&ListUnit(*P), U);
+}

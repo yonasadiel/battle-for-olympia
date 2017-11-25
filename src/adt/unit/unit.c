@@ -78,3 +78,31 @@ void PrintUnitName(Unit U) {
     else if (Type(U) == 'S') { printf("Swordsman");  }
     else if (Type(U) == 'W') { printf("White Mage"); }
 }
+
+int CheckGold(char UnitType)	{
+	if (UnitType=='A') {
+		return 17;
+	}
+	else if (UnitType=='S') {
+		return 17;
+	}
+	else if (UnitType=='W') {
+		return 40;
+	}
+}
+
+void PrintAvailRecruit(int Cash)	{
+	printf("Units you can recruit:\n");
+	if (Cash>=40) {
+		printf("-White Mage\n");
+		}
+	if (Cash>=25)	{
+		printf("-Swordsman\n");
+		}
+	if (Cash>=17)	{
+		printf("-Archer\n");
+		}
+	else {
+		printf("Insufficient gold.\n");
+		}
+}
