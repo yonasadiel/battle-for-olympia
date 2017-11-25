@@ -10,12 +10,15 @@
 #include <stdio.h>
 #include <conio.h>
 #include <string.h>
+#include <time.h>
+#include <stdlib.h>
 
 /* #define NMaxPlayer 2 */
 /* typedef struct { */
 /*   Player P[NMaxPlayer+1]; */
 /*   Queue QI; */
 /*   Map GameMap; */
+/*   ListLinier ListVillage; */
 /*   Stack MoveRecord; */
 /*   Unit* CurrentUnit; */
 /* } GameCoordinator; */
@@ -24,6 +27,7 @@
 /* #define Pi(GC,i) (GC).P[(i)] */
 /* #define QI(GC) (GC).QI */
 /* #define GameMap(GC) (GC).GameMap */
+/* #define ListVliiage(GC) (GC).ListVliiage */
 /* #define MoveRecord(GC) (GC).MoveRecord */
 /* #define CurrentUnit(GC) (GC).CurrentUnit */
 
@@ -56,6 +60,8 @@ void PrintMenu(void) {
 
 void InitGame(GameCoordinator* GC, int NInitBaris, int NInitKolom) {
   Point P1, P2;
+  Building *V;
+  int i,x,y;
 
   system("cls");
 
@@ -69,6 +75,21 @@ void InitGame(GameCoordinator* GC, int NInitBaris, int NInitKolom) {
   QCreateEmpty(&QI(*GC));
   QAdd(&QI(*GC), 1);
   QAdd(&QI(*GC), 2);
+
+  LLCreateEmpty(&ListVillage(*GC));
+  V = (Building*) malloc(1 * sizeof (Building));
+  srand(time(NULL));
+  for (i=0; i<(NInitBaris*NInitKolom)/20; i++) {
+    do {
+      x = rand() % NInitBaris; x++;
+      y = rand() % NInitKolom; y++;
+    } while (Building(GameMap(*GC), x, y) != ' ');
+    MakePoint(x, y, &P1);
+    MakeBuilding(V, P1, 'V');
+    LLInsVFirst(&ListVillage(*GC), V);
+    Building(GameMap(*GC), x, y) = 'V';
+    ColorBuilding(GameMap(*GC), x, y) = CWHITE;
+  }
 
   SCreateEmpty(&MoveRecord(*GC));
   CurrentUnit(*GC) = (Unit*) LSInfo(LSFirst(ListUnit(Pi(*GC,QInfoHead(QI(*GC))))));
@@ -623,6 +644,9 @@ void RunGame(GameCoordinator* GC) {
       UndoMovement(GC);
     } else if (!strcmp(cmd, "CHANGE_UNIT")) {
       ChangeUnit(GC);
+    } else if (!strcmp(cmd, "INFO")) {
+      TulisMap(GameMap(*GC), Location(*CurrentUnit(*GC)));
+      ShowInfo(*GC);
     } else if (!strcmp(cmd, "NEXT_UNIT")) {
       NextUnit(GC);
     } else if (!strcmp(cmd, "MAP")) {
@@ -636,7 +660,7 @@ void RunGame(GameCoordinator* GC) {
       Attack(GC);
     } else {
       printf("Command is Not Recognized\n\n\n");
-    } 
+    }
   }
   system("cls");
   printf("Thanks for playing! See You!\n");
@@ -893,29 +917,62 @@ void PrintAllUnitInfo(ListSirkuler LU) {
   }
 }
 
-void printInfo(GameCoordinator GC,int x,int y) {
-	printf("== Cell Info ==\n");
-	if (Building(GameMap(GC),x,y) == 'V'){
-		printf("Village\n");
-		printf("Owned by ");
-		if (ColorBuilding(GameMap(GC),x,y) == CGREEN){
-			printf("Player 2\n");
-		}else{
-			printf("Player 1\n");
-		}
-	}else if (Building(GameMap(GC),x,y) == 'C'){
-		printf("Castle\n");
-	}else if (Building(GameMap(GC),x,y) == 'T'){
-		printf("Tower\n");
-	}
-	printf("== Unit Info ==\n");
-	PrintUnitName(*CurrentUnit(GC));
-	printf("\n");
-	printf("Owned by ");
-	if (ColorUnit(GameMap(GC),x,y) == CGREEN){
-			printf("Player 2\n");
-		}else{
-			printf("Player 1\n");
-		}
-  printInfoUnit(*CurrentUnit(GC));
+void ShowInfo(GameCoordinator GC) {
+  int x,y;
+  Point P;
+
+  for (;;) {
+    printf("Enter the coordinate of the cell: ");
+    scanf("%d%d",&x,&y);
+
+    if (IsIdxMapEff(GameMap(GC), x+1, y+1)) {
+      break;
+    } else {
+      printf("Coordinate isn't valid\n");
+    }
+  }
+  system("cls");
+  MakePoint(x+1, y+1, &P);
+  printInfo(GC,P);
+  printf("\n");
+}
+
+void printInfo(GameCoordinator GC, Point P) {
+  LSAddress LSP;
+  LLAddress LLP;
+  Unit* U;
+
+  printf("== Cell Info ==\n");
+  if (Building(GameMap(GC),Absis(P),Ordinat(P)) == 'V'){
+    printf("Village\n");
+    printf("Owned by ");
+    if (ColorBuilding(GameMap(GC),Absis(P),Ordinat(P)) == CBLUE) { printf("Player 2\n"); }
+    else                                                         { printf("Player 1\n"); }
+  }else if (Building(GameMap(GC),Absis(P),Ordinat(P)) == 'C'){
+    printf("Castle\n");
+    printf("Owned by ");
+    if (ColorBuilding(GameMap(GC),Absis(P),Ordinat(P)) == CBLUE) { printf("Player 2\n"); }
+    else                                                         { printf("Player 1\n"); }
+  }else if (Building(GameMap(GC),Absis(P),Ordinat(P)) == 'T'){
+    printf("Tower\n");
+    printf("Owned by ");
+    if (ColorBuilding(GameMap(GC),Absis(P),Ordinat(P)) == CBLUE) { printf("Player 2\n"); }
+    else                                                         { printf("Player 1\n"); }
+  }
+  printf("\n");
+
+  printf("== Unit Info ==\n");
+  LSP = LSFirst(ListUnit(Pi(GC,QInfoHead(QI(GC)))));
+  do {
+    U = (Unit*) LSInfo(LSP);
+    if (EQPoint(Location(*U), P)) {
+      printInfoUnit(*CurrentUnit(GC)); printf("\n");
+      printf("Owned by ");
+      if (ColorUnit(GameMap(GC),Absis(P),Ordinat(P)) == CBLUE){ printf("Player 2\n"); }
+      else                                                    { printf("Player 1\n"); }
+    }
+    LSP = LSNext(LSP);
+  } while (LSP != LSFirst(ListUnit(Pi(GC,QInfoHead(QI(GC))))));
+  printf("\n");
+  
 }

@@ -14,6 +14,7 @@ typedef struct {
   Player P[NMaxPlayer+1];
   Queue QI;
   Map GameMap;
+  ListLinier ListVliiage;
   Stack MoveRecord;
   Unit* CurrentUnit;
 } GameCoordinator;
@@ -22,6 +23,7 @@ typedef struct {
 #define Pi(GC,i) (GC).P[(i)]
 #define QI(GC) (GC).QI
 #define GameMap(GC) (GC).GameMap
+#define ListVillage(GC) (GC).ListVliiage
 #define MoveRecord(GC) (GC).MoveRecord
 #define CurrentUnit(GC) (GC).CurrentUnit
 
@@ -122,7 +124,13 @@ void PrintAllUnitInfo(ListSirkuler LU);
  * F.S. menuliskan semua unit yang ada di LU
  */
 
-void printInfo(GameCoordinator GC, int x, int y);
+void ShowInfo(GameCoordinator GC);
+/**
+ * I.S. GC terdefinisi
+ * F.S. diminta x dan y, ditampilkan info di x dan y
+ */
+
+void printInfo(GameCoordinator GC, Point P);
 /**
  * I.S. GC terdefinisi, x dan y terdefinisi
  * F.S. menuliskan semua informasi mengenai suatu petak

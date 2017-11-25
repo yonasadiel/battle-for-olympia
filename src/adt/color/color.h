@@ -1,6 +1,7 @@
 #ifndef COLOR_H
 #define COLOR_H
 
+#define CWHITE 0
 #define CRED 1
 #define CGREEN 2
 #define CYELLOW 3
