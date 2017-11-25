@@ -605,11 +605,13 @@ void RunGame(GameCoordinator* GC) {
   IsRunning = true;
   ReduceCash(&Pi(*GC,QInfoHead(QI(*GC))));
   while (IsRunning) {
+    TulisMap(GameMap(*GC), Location(*CurrentUnit(*GC)));
+
     printf("Player %d's Turn\n", QInfoHead(QI(*GC)));
     printPlayerInfo(Pi(*GC,QInfoHead(QI(*GC))));
     printCurrentUnitInfo(*CurrentUnit(*GC));
-    printf("Command List: | MOVE | UNDO | CHANGE_UNIT | RECRUIT | ATTACK |\n");
-    printf("              | MAP  | INFO | END_TURN    | SAVE    | EXIT   |\n");
+    printf("Command List: | MOVE | RECRUIT | CHANGE_UNIT | INFO     | SAVE |\n");
+    printf("              | UNDO | ATTACK  | NEXT_UNIT   | END_TURN | EXIT |\n");
     printf("Your input: "); scanf("%s", cmd);
 
     if (strcmp(cmd, "MOVE") && strcmp(cmd, "MAP") && strcmp(cmd, "INFO") && strcmp(cmd, "ATTACK")) {

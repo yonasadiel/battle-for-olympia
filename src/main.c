@@ -1,7 +1,12 @@
 #include <stdio.h>
+#ifdef __unix__
+  #include <unistd.h>
+#elif defined _WIN32
+  #include <windows.h>
+  #define sleep(x) Sleep(1000 * x)
+#endif
 #include "adt/boolean/boolean.h"
 #include "adt/gamecoordinator/gamecoordinator.h"
-#include <unistd.h>
 
 int main() {
   boolean isUp;
