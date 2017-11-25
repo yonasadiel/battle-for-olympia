@@ -36,7 +36,7 @@ void InitGame(GameCoordinator* GC, int NInitBaris, int NInitKolom);
  * I.S. GC tidak terdefinisi.
  * F.S. GC terdefinisi default berukuran NInitBaris x NInitKolom.
  */
-void LoadGame(GameCoordinator* GC);
+boolean LoadGame(GameCoordinator* GC);
 /**
  * I.S. GC terdefinisi.
  * F.S. GC terdefinisi sesuai save file.
@@ -90,6 +90,19 @@ void MoveUnit(Map* M, Unit* U, Point Source, Point Dest);
  *      mengganti karakter di peta, dan mengganti warna di peta
  */
 
+ListSirkuler GetListSurroundingUnit(GameCoordinator GC);
+/**
+ * I.S. GC terdefinisi, LS sembarang
+ * F.S. LS berisi semua Unit musuh yang adjacent di petak atas, bawah, 
+ * 		kanan, atau kiri dari Current Unit.
+ */
+ 
+void Attack(GameCoordinator *GC);
+/**
+ * I.S. GC terdefinisi, LS sembarang
+ * F.S. 
+ */
+
 void ChangeUnit(GameCoordinator* GC);
 /**
  * I.S. GC terdefinisi
@@ -108,5 +121,11 @@ void PrintAllUnitInfo(ListSirkuler LU);
  * I.S. LU terdefinisi
  * F.S. menuliskan semua unit yang ada di LU
  */
+
+void printInfo(GameCoordinator GC, int x, int y);
+/**
+ * I.S. GC terdefinisi, x dan y terdefinisi
+ * F.S. menuliskan semua informasi mengenai suatu petak
+ */	
 
 #endif

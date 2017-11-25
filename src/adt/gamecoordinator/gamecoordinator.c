@@ -36,6 +36,7 @@
 int arg[16];
 
 void PrintMenu(void) {
+  system("cls");
 	printf ("_____________________________________________________T ___H ___E ______________________________________________________________\n");
 	printf ("___________####### ___________# ____ # ___# ____________________####### __# ___________________________________________________\n");
 	printf ("____________##   ## __________## ____## __## __________________##     ## _##__________________________________## ______________\n");
@@ -190,7 +191,7 @@ char* GetLoadedFileName() {
     printf("File number: ");
     scanf("%d", &n); endl;
 
-    if(n >= 0 && n <= size) {
+    if(n > 0 && n <= size) {
       int idx = 0;
       res = (char*) malloc(sizeof(char) * 40);
       do {
@@ -199,18 +200,22 @@ char* GetLoadedFileName() {
       } while(filenames[n][idx] != 0);
       res[idx] = 0;
     } else {
-      printf("Invalid number.");
+      res = 0;
     }
   }
 
   return res;
 }
 
-void LoadGame(GameCoordinator* GC) {
+boolean LoadGame(GameCoordinator* GC) {
   char* filename = GetLoadedFileName();
   boolean err;
   int NBrsMap, NKolMap;
   int count, i;
+
+  if(filename == 0) {
+    goto INVAlID_NAME;
+  }
 
   printf("Load file %s\n", filename);
   // Start to read file
@@ -251,8 +256,6 @@ void LoadGame(GameCoordinator* GC) {
     LSCreateEmpty(playerUnits);
     LLCreateEmpty(playerBuildings);
     ADV_INT(playerNumber, err, ERROR_READ);
-    Pi(*GC, playerNumber) = *player;
-    QAdd(&QI(*GC), playerNumber);
 
     // Load Player Basic Properties
     arg[0] = playerNumber;
@@ -349,6 +352,10 @@ void LoadGame(GameCoordinator* GC) {
         printf("Success\n");
       }
     }
+
+    // Add Player to GameCoordinator
+    Pi(*GC, playerNumber) = *player;
+    QAdd(&QI(*GC), playerNumber);
   }
 
   // Load MoveRecord
@@ -420,14 +427,19 @@ void LoadGame(GameCoordinator* GC) {
   printf("Game is loaded succesfully.\n");
   goto LOAD_FINISH;
 
+  INVAlID_NAME:
+    printf("Invalid number.\n");
+    return false;
+
   // Print error message when error occured
   ERROR_READ:
     printf("Error has been occured. Cannot load game file.\n");
-    goto LOAD_FINISH;
+    return false;
 
   // Finishing
   LOAD_FINISH:
     printf("Loading finished.\n");
+    return true;
 }
 
 
@@ -600,7 +612,7 @@ void RunGame(GameCoordinator* GC) {
     printf("              | MAP  | INFO | END_TURN    | SAVE    | EXIT   |\n");
     printf("Your input: "); scanf("%s", cmd);
 
-    if (strcmp(cmd, "MOVE") && strcmp(cmd, "MAP") && strcmp(cmd, "INFO")) {
+    if (strcmp(cmd, "MOVE") && strcmp(cmd, "MAP") && strcmp(cmd, "INFO") && strcmp(cmd, "ATTACK")) {
       SPopAll(&MoveRecord(*GC));
     }
 
@@ -618,6 +630,8 @@ void RunGame(GameCoordinator* GC) {
       printf("Player %d's turn!\n", QInfoHead(QI(*GC)));
     } else if (!strcmp(cmd, "EXIT")) {
       IsRunning = false;
+    } else if (!strcmp(cmd, "ATTACK")) {
+      Attack(GC);
     } else {
       printf("Command is Not Recognized\n\n\n");
     } 
@@ -688,6 +702,126 @@ void MoveUnit(Map* M, Unit* U, Point Source, Point Dest) {
   ColorUnit(*M, Absis(Dest), Ordinat(Dest)) = ColorUnit(*M, Absis(Source), Ordinat(Source));
 }
 
+ListSirkuler GetListSurroundingUnit(GameCoordinator GC) {
+	ListSirkuler LS;
+	Point P,Pa,Pb,Pc,Pd;
+	Player Enemy;
+	Unit* checkUnit;
+	int Px,Py;
+	if (QInfoHead(QI(GC)) == 1) {
+		Enemy = Pi(GC,2);
+	} else {
+		Enemy = Pi(GC,1);
+	}
+	
+	P = Location(*CurrentUnit(GC));
+	MakePoint(Absis(P)+1,Ordinat(P),&Pa);
+	MakePoint(Absis(P)-1,Ordinat(P),&Pb);
+	MakePoint(Absis(P),Ordinat(P)+1,&Pc);
+	MakePoint(Absis(P),Ordinat(P)-1,&Pd);
+
+	LSCreateEmpty(&LS);
+	if (!LSIsEmpty(ListUnit(Enemy))) {
+		LSAddress p = LSFirst(ListUnit(Enemy));
+		do {
+			checkUnit = (Unit*) LSInfo(p);
+			if(EQPoint(Location(*checkUnit), Pa) || EQPoint(Location(*checkUnit), Pb) || EQPoint(Location(*checkUnit), Pc) || EQPoint(Location(*checkUnit), Pd)) {
+				LSInsVLast(&LS,checkUnit);
+			}
+			p = LSNext(p);
+		}
+		while (p != LSFirst(ListUnit(Enemy)));
+	}
+	return LS;
+}
+	
+void Attack(GameCoordinator *GC) {
+	if (AtkChance(*CurrentUnit(*GC))) {
+		ListSirkuler LS;
+		LSCreateEmpty(&LS);
+		LS = GetListSurroundingUnit(*GC);
+		boolean Retaliate[100], ret;
+		LSAddress p;
+		int i,j,option;
+		Unit* checkUnit;
+		Unit* attackedUnit;
+		
+		if (LSIsEmpty(LS)) {
+			printf ("No enemy to attack\n");
+		} else {
+			printf ("Please select enemy you want to attack:\n");
+			p = LSFirst(LS);
+			i = 0;
+			do {
+				i++;
+				checkUnit = (Unit*) LSInfo(p);
+				printf ("%d. ",i);
+				PrintUnitName(*checkUnit);
+				printf(" ");
+				TulisPoint(Location(*checkUnit));
+				printf (" | Health %d/%d (",Health(*checkUnit),MaxHealth(*checkUnit));
+				if ((AtkType(*CurrentUnit(*GC)) == AtkType(*checkUnit)) || (Type(*checkUnit) == 'K')) {
+					printf ("Retaliates)\n");
+					Retaliate[i] = true;
+				} else {
+					printf ("Doesn't retaliate)\n");
+					Retaliate[i] = false;
+				}
+				p = LSNext(p);
+			}
+			while (p != LSFirst(LS));
+			
+			do {
+				printf ("Select enemy you want to attack:");
+				scanf ("%d",&option);
+				if ((option > i) || (option <= 0)) {
+					printf ("Wrong input, please select attackable enemy\n");
+				}
+			}
+			while ((option > i) || (option <= 0));
+			
+			j = 1;
+			p = LSFirst(LS);
+			while(j<option) {
+				p = LSNext(p);
+				j++;
+			}
+			ret = Retaliate[j];
+			attackedUnit = (Unit*) LSInfo(p);
+			Health(*attackedUnit) -= Atk(*CurrentUnit(*GC));
+			printf("Enemy's ");
+			PrintUnitName(*attackedUnit);
+			printf(" is damaged by %d.\n",Atk(*CurrentUnit(*GC)));
+			if (Health(*attackedUnit) > 0) {
+				if (ret) {
+					printf("Enemy's ");
+					PrintUnitName(*attackedUnit);
+					printf(" retaliates.\n");
+					Health(*CurrentUnit(*GC)) -= Atk(*attackedUnit);
+					printf("Your ");
+					PrintUnitName(*CurrentUnit(*GC));
+					printf(" is damaged by %d.\n",Atk(*attackedUnit));
+				}
+				if (Health(*CurrentUnit(*GC)) <= 0) {
+					printf("Your ");
+					PrintUnitName(*CurrentUnit(*GC));
+					printf(" is dead :(\n");
+				}
+			} else {
+				printf("Enemy's ");
+				PrintUnitName(*attackedUnit);
+				printf(" is dead :)\n");
+			}
+		}
+		AtkChance(*CurrentUnit(*GC)) = false;
+		MovPoint(*CurrentUnit(*GC)) = 0;
+	} else {
+		printf("Your ");
+		PrintUnitName(*CurrentUnit(*GC));
+		printf(" can't attack anymore in this turn\n");
+	}
+}
+			
 void ChangeUnit(GameCoordinator* GC) {
   int NUnit;
   int pil;
@@ -755,4 +889,31 @@ void PrintAllUnitInfo(ListSirkuler LU) {
       P = LSNext(P);
     } while(P != LSFirst(LU));
   }
+}
+
+void printInfo(GameCoordinator GC,int x,int y) {
+	printf("== Cell Info ==\n");
+	if (Building(GameMap(GC),x,y) == 'V'){
+		printf("Village\n");
+		printf("Owned by ");
+		if (ColorBuilding(GameMap(GC),x,y) == CGREEN){
+			printf("Player 2\n");
+		}else{
+			printf("Player 1\n");
+		}
+	}else if (Building(GameMap(GC),x,y) == 'C'){
+		printf("Castle\n");
+	}else if (Building(GameMap(GC),x,y) == 'T'){
+		printf("Tower\n");
+	}
+	printf("== Unit Info ==\n");
+	PrintUnitName(*CurrentUnit(GC));
+	printf("\n");
+	printf("Owned by ");
+	if (ColorUnit(GameMap(GC),x,y) == CGREEN){
+			printf("Player 2\n");
+		}else{
+			printf("Player 1\n");
+		}
+  printInfoUnit(*CurrentUnit(GC));
 }

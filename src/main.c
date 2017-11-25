@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "adt/boolean/boolean.h"
 #include "adt/gamecoordinator/gamecoordinator.h"
+#include <unistd.h>
 
 int main() {
   boolean isUp;
@@ -31,11 +32,16 @@ int main() {
       RunGame(&GC);
     } else if (pilmenu == 2) {
       /* load game */
-      LoadGame(&GC);
-      RunGame(&GC);
+      if(LoadGame(&GC)) {
+        sleep(2);
+        RunGame(&GC);
+      } else {
+        sleep(2);
+      }
     } else if (pilmenu == 3) {
       /* save game */
       SaveGame(GC);
+      sleep(2);
     } else if (pilmenu == 4) {
       /* keluar dari game */
       isUp = false;
