@@ -605,14 +605,14 @@ void RunGame(GameCoordinator* GC) {
     }
 
     system("cls");
-    if (!strcmp(cmd, "MAP")) {
-      TulisMap(GameMap(*GC), Location(*CurrentUnit(*GC)));
-    } else if (!strcmp(cmd, "UNDO")) {
+    if (!strcmp(cmd, "UNDO")) {
       UndoMovement(GC);
     } else if (!strcmp(cmd, "CHANGE_UNIT")) {
       ChangeUnit(GC);
     } else if (!strcmp(cmd, "NEXT_UNIT")) {
       NextUnit(GC);
+    } else if (!strcmp(cmd, "MAP")) {
+      TulisMap(GameMap(*GC), Location(*CurrentUnit(*GC)));
     } else if (!strcmp(cmd, "END_TURN")) {
       EndTurn(GC);
       printf("Player %d's turn!\n", QInfoHead(QI(*GC)));
