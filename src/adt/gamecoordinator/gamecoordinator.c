@@ -368,45 +368,47 @@ boolean LoadGame(GameCoordinator* GC) {
 
       LSInsVFirst(playerUnits, unit);
       printf("Success\n");
+    }
 
-      // Load Player's Buldings
-      ADV_INT(buildingCount, err, ERROR_READ);
-      printf("Loading %d Player's Building.\n", buildingCount);
-      i = 0;
-      while(i < buildingCount) {
-        i++; 
-        arg[0] = i;
-        FormattedPrint("Loading Bulding %d", '.', 50, arg);
+    // Load Player's Buldings
+    ADV_INT(buildingCount, err, ERROR_READ);
+    printf("Loading %d Player's Building.\n", buildingCount);
+    i = 0;
+    while(i < buildingCount) {
+      i++; 
+      arg[0] = i;
+      FormattedPrint("Loading Bulding %d", '.', 50, arg);
 
-        Building* building;
-        int buildingAbsis;
-        int buildingOrdinat;
-        int buildingType;
-        Color buildingColor;
-        Point* buildingPoint;
+      Building* building;
+      int buildingAbsis;
+      int buildingOrdinat;
+      int buildingType;
+      Color buildingColor;
+      Point* buildingPoint;
 
-        // Init Building
-        buildingPoint = (Point*) malloc(sizeof(Point));
-        building = (Building*) malloc(sizeof(Building));
+      // Init Building
+      buildingPoint = (Point*) malloc(sizeof(Point));
+      building = (Building*) malloc(sizeof(Building));
 
-        ADV_INT(buildingAbsis, err, ERROR_READ);
-        ADV_INT(buildingOrdinat, err, ERROR_READ);
-        ADV_INT(buildingType, err, ERROR_READ);
-        ADV_INT(buildingColor, err, ERROR_READ);
+      ADV_INT(buildingAbsis, err, ERROR_READ);
+      ADV_INT(buildingOrdinat, err, ERROR_READ);
+      ADV_INT(buildingType, err, ERROR_READ);
+      ADV_INT(buildingColor, err, ERROR_READ);
 
-        // Load to Map
-        Building(*map, buildingAbsis, buildingOrdinat) = buildingType;
-        ColorBuilding(*map, buildingAbsis, buildingOrdinat) = buildingColor;
+      // Load to Map
+      Building(*map, buildingAbsis, buildingOrdinat) = buildingType;
+      ColorBuilding(*map, buildingAbsis, buildingOrdinat) = buildingColor;
 
-        MakePoint(buildingAbsis, buildingOrdinat, buildingPoint);
-        MakeBuilding(building, *buildingPoint, buildingType);
-        LLInsVFirst(playerBuildings, building);
+      MakePoint(buildingAbsis, buildingOrdinat, buildingPoint);
+      MakeBuilding(building, *buildingPoint, buildingType);
+      LLInsVFirst(playerBuildings, building);
 
-        printf("Success\n");
-      }
+      printf("Success\n");
     }
 
     // Add Player to GameCoordinator
+    ListUnit(*player) = *playerUnits;
+    ListBuilding(*player) = *playerBuildings;
     Pi(*GC, playerNumber) = *player;
     QAdd(&QPlayer(*GC), player);
   }
