@@ -17,6 +17,10 @@ typedef struct {
   ListLinier ListVliiage;
   Stack MoveRecord;
   Unit* CurrentUnit;
+  int State;
+  /* 0 bila game belum dimulai */
+  /* 1 bila game sudah berjalan */
+  /* 2 bila game sudah selesai */
 } GameCoordinator;
 
 /* *** Selektor *** */
@@ -26,6 +30,7 @@ typedef struct {
 #define ListVillage(GC) (GC).ListVliiage
 #define MoveRecord(GC) (GC).MoveRecord
 #define CurrentUnit(GC) (GC).CurrentUnit
+#define State(GC) (GC).State
 
 void PrintMenu(void);
 /**

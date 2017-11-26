@@ -18,12 +18,15 @@ boolean EndKata;
 Kata CKata;
 
 boolean IsBlank() {
-  return (CC == BLANK || CC == 10);
+  return (CC == BLANK || CC == 10 || CC == 0);
 }
 
 void IgnoreBlank() {
-  while (IsBlank() && !EOP) {
+  while (IsBlank()) {
     ADV();
+    if(EOP) {
+      break;
+    }
   }
 }
 
@@ -44,7 +47,7 @@ boolean STARTKATA(char* filename) {
 void ADVKATA() {
   IgnoreBlank();
   if (EOP) {
-    EndKata = true;
+    EndKata = true;  
   } else /* CC != MARK */ {
     EndKata = false;
     SalinKata();
@@ -98,4 +101,13 @@ void ToInteger(int* X, boolean* err) {
 
 void CLOSEKATA() {
   CLOSE();
+}
+
+void Salin(char* str) {
+  int i;
+  for(i = 0; i < CKata.Length; ++i) {
+    printf("%d\n", CKata.TabKata[i+1]);
+    str[i] = CKata.TabKata[i+1];
+  }
+  str[CKata.Length] = 0;
 }

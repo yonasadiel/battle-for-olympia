@@ -21,6 +21,7 @@
 /*   ListLinier ListVillage; */
 /*   Stack MoveRecord; */
 /*   Unit* CurrentUnit; */
+/*   int State; */
 /* } GameCoordinator; */
 
 /* *** Selektor *** */
@@ -30,6 +31,7 @@
 /* #define ListVliiage(GC) (GC).ListVliiage */
 /* #define MoveRecord(GC) (GC).MoveRecord */
 /* #define CurrentUnit(GC) (GC).CurrentUnit */
+/* #define State(GC) (GC).State */
 
 /* Simplify LoadGame */
 #define VALID_ADV(ERR, GOTO) if(ERR){goto GOTO;}ADVKATA()
@@ -39,6 +41,8 @@
 
 /* Global Variable to Use FormattedPrint */
 int arg[16];
+/* Global Variable to use ToInteger */
+boolean ERR;
 
 void PrintMenu(void) {
   system("cls");
@@ -94,6 +98,7 @@ void InitGame(GameCoordinator* GC, int NInitBaris, int NInitKolom) {
 
   SCreateEmpty(&MoveRecord(*GC));
   CurrentUnit(*GC) = (Unit*) LSInfo(LSFirst(ListUnit(*((Player*) QInfoHead(QPlayer(*GC))))));
+  State(*GC) = 0;
 }
 
 void FormattedPrint(char* s, char aes, int size, int* arg) {
@@ -146,11 +151,11 @@ char* GetSavedFileName() {
 
   printf("Input file name. Maximum 30 Character. Alphabet and Number only.\n");
   printf("File Name: ");
-  
+
   len = 0;
   valid = true;
   do {
-    scanf("%c", &c);
+    START(0);
     if(c != 10 && c != 0) {
       valid = valid && IsValidInput(c) && (len < 31);
       if(valid) {
@@ -179,9 +184,10 @@ char* GetLoadedFileName() {
   char* res;
 
   file = fopen("size.sdat", "r");
+  STARTKATA("size.sdat");
   if(file) {
-    fscanf(file, "%d", &size);
-    fclose(file);
+    ToInteger(&size, &ERR);
+    CLOSEKATA();
   } else {
     size = 0;
   }
@@ -211,7 +217,8 @@ char* GetLoadedFileName() {
 
     printf("Choose file to load.\n");
     printf("File number: ");
-    scanf("%d", &n); endl;
+    STARTKATA(0);
+    ToInteger(&n, &ERR); endl;
 
     if(n > 0 && n <= size) {
       int idx = 0;
@@ -475,8 +482,10 @@ void SaveGame(GameCoordinator GC) {
     // Check if file already exist
     FILE *file = fopen(filename, "r");
     if(file) {
+      CLEAR();
       printf("File already exist. Do you want to replace? (y/n) ");
-      scanf("%c", &c);
+      START(0);
+      c = CC;
       isNew = false;
     } else {
       isNew = true;
@@ -625,53 +634,67 @@ void RunGame(GameCoordinator* GC) {
   int MapBrs, MapKol;
 
   IsRunning = true;
+  State(*GC) = 1;
   ReduceCash(QInfoHead(QPlayer(*GC)));
   while (IsRunning) {
     TulisMap(GameMap(*GC), Location(*CurrentUnit(*GC)));
 
-    printf("Player %d's Turn\n", (QInfoHead(QPlayer(*GC)) == &Pi(*GC, 1))? 1:2);
-    
-    printPlayerInfo(*((Player*) QInfoHead(QPlayer(*GC))));
-    printCurrentUnitInfo(*CurrentUnit(*GC));
-    printf("Command List: | MOVE | RECRUIT | CHANGE_UNIT | INFO     | SAVE |\n");
-    printf("              | UNDO | ATTACK  | NEXT_UNIT   | END_TURN | EXIT |\n");
-    printf("Your input: "); scanf("%s", cmd);
+    if (State(*GC) == 1) {
+      printf("Player %d's Turn\n", (QInfoHead(QPlayer(*GC)) == &Pi(*GC, 1))? 1:2);
+      
+      printPlayerInfo(*((Player*) QInfoHead(QPlayer(*GC))));
+      printCurrentUnitInfo(*CurrentUnit(*GC));
+      printf("Command List: | MOVE | RECRUIT | CHANGE_UNIT | INFO     | SAVE |\n");
+      printf("              | UNDO | ATTACK  | NEXT_UNIT   | END_TURN | EXIT |\n");
+      printf("Your input: "); 
+      STARTKATA(0); Salin(cmd);
 
-    if (strcmp(cmd, "MOVE") && strcmp(cmd, "MAP") && strcmp(cmd, "INFO") && strcmp(cmd, "UNDO")) {
-      SPopAll(&MoveRecord(*GC));
-    }
+      if (strcmp(cmd, "MOVE") && strcmp(cmd, "MAP") && strcmp(cmd, "INFO") && strcmp(cmd, "UNDO")) {
+        SPopAll(&MoveRecord(*GC));
+      }
 
-    system("cls");
-    if (!strcmp(cmd, "MOVE")) {
-      MakeMovement(GC);
-    } else if (!strcmp(cmd, "RECRUIT")) {
-      TulisMap(GameMap(*GC), Location(*CurrentUnit(*GC)));
-      RecruitUnit(GC);
-    } else if (!strcmp(cmd, "UNDO")) {
-      UndoMovement(GC);
-    } else if (!strcmp(cmd, "CHANGE_UNIT")) {
-      TulisMap(GameMap(*GC), Location(*CurrentUnit(*GC)));
-      ChangeUnit(GC);
-    } else if (!strcmp(cmd, "INFO")) {
-      TulisMap(GameMap(*GC), Location(*CurrentUnit(*GC)));
-      ShowInfo(*GC);
-    } else if (!strcmp(cmd, "NEXT_UNIT")) {
-      NextUnit(GC);
-    } else if (!strcmp(cmd, "MAP")) {
-      TulisMap(GameMap(*GC), Location(*CurrentUnit(*GC)));
-    } else if (!strcmp(cmd, "END_TURN")) {
-      EndTurn(GC);
-      printf("Next Turn!\n");
-    } else if (!strcmp(cmd, "EXIT")) {
-      IsRunning = false;
-    } else if (!strcmp(cmd, "ATTACK")) {
-      Attack(GC);
+      system("cls");
+      if (!strcmp(cmd, "MOVE")) {
+        MakeMovement(GC);
+      } else if (!strcmp(cmd, "RECRUIT")) {
+        TulisMap(GameMap(*GC), Location(*CurrentUnit(*GC)));
+        RecruitUnit(GC);
+      } else if (!strcmp(cmd, "UNDO")) {
+        UndoMovement(GC);
+      } else if (!strcmp(cmd, "CHANGE_UNIT")) {
+        TulisMap(GameMap(*GC), Location(*CurrentUnit(*GC)));
+        ChangeUnit(GC);
+      } else if (!strcmp(cmd, "INFO")) {
+        TulisMap(GameMap(*GC), Location(*CurrentUnit(*GC)));
+        ShowInfo(*GC);
+      } else if (!strcmp(cmd, "NEXT_UNIT")) {
+        NextUnit(GC);
+      } else if (!strcmp(cmd, "MAP")) {
+        TulisMap(GameMap(*GC), Location(*CurrentUnit(*GC)));
+      } else if (!strcmp(cmd, "END_TURN")) {
+        EndTurn(GC);
+        printf("Next Turn!\n");
+      } else if (!strcmp(cmd, "EXIT")) {
+        IsRunning = false;
+      } else if (!strcmp(cmd, "ATTACK")) {
+        Attack(GC);
+      } else {
+        printf("Command is Not Recognized\n\n\n");
+      }
     } else {
-      printf("Command is Not Recognized\n\n\n");
+      printf("Congratulations! You have won the battle\n");
+      printf("Command List: | SAVE | EXIT |\n");
+      printf("Your input: "); 
+      STARTKATA(0); Salin(cmd);
+
+      system("cls");
+      if (!strcmp(cmd, "EXIT")) {
+        IsRunning = false;
+      } else {
+        printf("Command is Not Recognized\n\n\n");
+      }
     }
   }
-  system("cls");
-  printf("Thanks for playing! See You!\n");
 }
 
 void printPlayerInfo(Player P) {
@@ -721,7 +744,9 @@ void RecruitUnit(GameCoordinator *GC) {
 	if ((Type(*U1))=='K') {
 		if (Building(*M,Absis(Location(*U1)),Ordinat(Location(*U1)))=='T') {
 			printf("Input castle coordinate: ");
-			scanf("%d%d",&x,&y); x++; y++;
+      STARTKATA(0); ToInteger(&x, &ERR);
+      STARTKATA(0); ToInteger(&y, &ERR);
+      x++; y++;
 			if (IsPlayerCastle(*M,x,y,Warna(*P))) {
 				if (IsLocEmpty(*M,x,y)) {
 					PrintAvailRecruit(Cash(*P)); printf("\n");
@@ -731,7 +756,7 @@ void RecruitUnit(GameCoordinator *GC) {
             printf("2. Swordsman\n");
             printf("3. White Mage\n");
             printf("Your choice [1-3]: ");
-            scanf("%d",&pil);
+            STARTKATA(0); ToInteger(&pil, &ERR);
             if (pil >= 1 && pil <= 3) {
               break;
             } else {
@@ -959,7 +984,7 @@ void Attack(GameCoordinator *GC) {
 			
 			do {
 				printf ("Select enemy you want to attack: ");
-				scanf ("%d",&option);
+				STARTKATA(0); ToInteger(&option, &ERR);
 				if ((option > i) || (option <= 0)) {
 					printf ("Wrong input, please select attackable enemy\n");
 				}
@@ -994,10 +1019,11 @@ void Attack(GameCoordinator *GC) {
 					PrintUnitName(*CurrentUnit(*GC));
 					printf(" is dead :(\n");
           DeleteUnit(QInfoHead(QPlayer(*GC)), CurrentUnit(*GC), &GameMap(*GC));
-          *CurrentUnit(*GC) = LSFirst(ListUnit(*((Player*) QInfoHead(QPlayer(*GC)))))
+          CurrentUnit(*GC) = (Unit*) LSInfo(LSFirst(ListUnit(*((Player*) QInfoHead(QPlayer(*GC))))));
 				}
 			} else {
 				printf("Enemy's ");
+        if (Type(*attackedUnit) == 'K') State(*GC) = 2;
 				PrintUnitName(*attackedUnit);
 				printf(" is dead :)\n");
         DeleteUnit(Enemy, attackedUnit, &GameMap(*GC));
@@ -1021,7 +1047,8 @@ void ChangeUnit(GameCoordinator* GC) {
 
   for (;;) {
     printf("Please enter the no. of unit you want to select: ");
-    scanf("%d",&pil);
+    STARTKATA(0);
+    ToInteger(&pil, &ERR);
     if (pil > NUnit || pil < 1) {
       printf("Wrong input, please choose between 1 to %d\n", NUnit);
     } else {
@@ -1087,7 +1114,8 @@ void ShowInfo(GameCoordinator GC) {
 
   for (;;) {
     printf("Enter the coordinate of the cell: ");
-    scanf("%d%d",&x,&y);
+    STARTKATA(0); ToInteger(&x, &ERR);
+    STARTKATA(0); ToInteger(&y, &ERR);
 
     if (IsIdxMapEff(GameMap(GC), x+1, y+1)) {
       break;
