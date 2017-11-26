@@ -3,14 +3,14 @@
 #include "../mesinkata/mesinkata.h"
 
 int main() {
-	GameCoordinator GC;
-	InitGame(&GC, 8, 8);
+	// GameCoordinator GC;
+	// InitGame(&GC, 8, 8);
 
-	Point point;
-	MakePoint(1, 2, &point);
-	Unit* unit = (Unit*) malloc(sizeof(Unit));
-	CreateUnit(unit, 'K', point);
-	CurrentUnit(GC) = unit;
+	// Point point;
+	// MakePoint(1, 2, &point);
+	// Unit* unit = (Unit*) malloc(sizeof(Unit));
+	// CreateUnit(unit, 'K', point);
+	// CurrentUnit(GC) = unit;
 
 	/*
 	FILE* file = fopen("saved\\hee.dat", "r");
@@ -29,6 +29,15 @@ int main() {
 	}
 	*/
 
-	SaveGame(GC);
-	LoadGame(&GC);
+	// SaveGame(GC);
+	// LoadGame(&GC);
+
+	START(0);
+	char c = CC;
+	printf("%c\n", c);
+	char d = CC;
+	printf("%c\n", d);
+	START(0);
+	char e = CC;
+	printf("%c\n", e);
 }

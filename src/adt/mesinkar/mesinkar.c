@@ -11,8 +11,11 @@ static FILE * pita;
 static int retval;
 
 boolean START(char* filename) {
-  pita = fopen(filename,"r");
-  printf("Attempt to open file %s\n", filename);
+  if(filename != 0) {
+    pita = fopen(filename,"r");
+  } else {
+    pita = stdin;
+  }
   ADV();
   if(pita) {
   	return true;
@@ -24,7 +27,7 @@ boolean START(char* filename) {
 void ADV() {
   retval = fscanf(pita,"%c",&CC);
   EOP = (CC == MARK || retval != 1);
-   if (EOP) {
+  if (EOP) {
        fclose(pita);
   }
 }
