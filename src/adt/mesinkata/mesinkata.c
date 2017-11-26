@@ -106,7 +106,6 @@ void CLOSEKATA() {
 void Salin(char* str) {
   int i;
   for(i = 0; i < CKata.Length; ++i) {
-    printf("%d\n", CKata.TabKata[i+1]);
     str[i] = CKata.TabKata[i+1];
   }
   str[CKata.Length] = 0;
