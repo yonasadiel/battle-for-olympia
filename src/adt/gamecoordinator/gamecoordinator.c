@@ -149,7 +149,8 @@ char* GetSavedFileName() {
   len = 0;
   valid = true;
   do {
-    scanf("%c", &c);
+    START(0);
+    c = CC;
     if(c != 10 && c != 0) {
       valid = valid && IsValidInput(c) && (len < 31);
       if(valid) {

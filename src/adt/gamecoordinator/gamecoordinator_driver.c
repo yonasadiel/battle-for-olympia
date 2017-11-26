@@ -31,4 +31,12 @@ int main() {
 
 	// SaveGame(GC);
 	// LoadGame(&GC);
+	STARTKATA(0);
+	printf("STRING %s\n", &CKata.TabKata[1]);
+	STARTKATA(0);
+	printf("STRING %s\n", &CKata.TabKata[1]);
+	//int x;
+	//boolean err;
+	//ToInteger(&x, &err);
+	//printf("%s\n", x);
 }

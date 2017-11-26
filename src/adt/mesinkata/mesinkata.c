@@ -16,6 +16,7 @@
 /* State Mesin Kata */
 boolean EndKata;
 Kata CKata;
+boolean isStdin;
 
 boolean IsBlank() {
   return (CC == BLANK || CC == 10 || CC == 0);
@@ -29,6 +30,7 @@ void IgnoreBlank() {
 
 boolean STARTKATA(char* filename) {
   boolean success = START(filename);
+  isStdin = (filename == 0);
 
   IgnoreBlank();
   if (CC == MARK) {
@@ -44,8 +46,9 @@ boolean STARTKATA(char* filename) {
 void ADVKATA() {
   IgnoreBlank();
   if (EOP) {
-    EndKata = true;
+    EndKata = true;  
   } else /* CC != MARK */ {
+    printf("CC = %c\n", CC);
     EndKata = false;
     SalinKata();
     IgnoreBlank();
