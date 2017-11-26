@@ -669,6 +669,8 @@ void RunGame(GameCoordinator* GC) {
         RecruitUnit(GC);
       } else if (!strcmp(cmd, "UNDO")) {
         UndoMovement(GC);
+      } else if (!strcmp(cmd, "ATTACK")) {
+        Attack(GC);
       } else if (!strcmp(cmd, "CHANGE_UNIT")) {
         TulisMap(GameMap(*GC), Location(*CurrentUnit(*GC)));
         ChangeUnit(GC);
@@ -682,10 +684,10 @@ void RunGame(GameCoordinator* GC) {
       } else if (!strcmp(cmd, "END_TURN")) {
         EndTurn(GC);
         printf("Next Turn!\n");
+      } else if (!strcmp(cmd, "SAVE")) {
+        SaveGame(*GC);
       } else if (!strcmp(cmd, "EXIT")) {
         IsRunning = false;
-      } else if (!strcmp(cmd, "ATTACK")) {
-        Attack(GC);
       } else {
         printf("Command is Not Recognized\n\n\n");
       }
