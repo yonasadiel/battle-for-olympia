@@ -82,7 +82,7 @@ void AddUnit(Player *P, Point Loc, char UnitType, Map* M) {
 
   U = (Unit*) malloc(1* sizeof(Unit));
   CreateUnit(U, UnitType, Loc);
-  LSInsVFirst(&ListUnit(*P), U);
+  LSInsVLast(&ListUnit(*P), U);
   MapPutUnit(M, *U, Warna(*P));
   MovPoint(*U) = 0;
   AtkChance(*U) = false;

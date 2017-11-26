@@ -1077,7 +1077,7 @@ void ChangeUnit(GameCoordinator* GC) {
 
 void NextUnit(GameCoordinator* GC) {
   int NUnit;
-  LSAddress AddrCurUnit;
+  LSAddress AddrCurUnit, PAddr;
 
   NUnit = LSNbElmt(ListUnit(*((Player*) QInfoHead(QPlayer(*GC)))));
   if (NUnit == 0) {
@@ -1086,7 +1086,11 @@ void NextUnit(GameCoordinator* GC) {
     printf("You only have one unit, canceling...\n");
   } else {
     AddrCurUnit = LSSearch(ListUnit(*((Player*) QInfoHead(QPlayer(*GC)))), CurrentUnit(*GC));
-    CurrentUnit(*GC) = LSInfo(LSNext(AddrCurUnit));
+    PAddr = AddrCurUnit;
+    do {
+      PAddr = LSNext(PAddr);
+    } while (PAddr != AddrCurUnit && MovPoint(*((Unit*) LSInfo(PAddr))) == 0 && !AtkChance(*((Unit*) LSInfo(PAddr))));
+    CurrentUnit(*GC) = LSInfo(PAddr);
   }
   printf("\n");
 
