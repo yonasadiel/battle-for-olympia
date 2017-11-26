@@ -27,4 +27,6 @@ void ADV();
 void CLOSE();
 /* Mengakhiri pembacaan file */
 
+void CLEAR();
+
 #endif

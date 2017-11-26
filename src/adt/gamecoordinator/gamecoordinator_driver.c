@@ -31,13 +31,4 @@ int main() {
 
 	// SaveGame(GC);
 	// LoadGame(&GC);
-
-	START(0);
-	char c = CC;
-	printf("%c\n", c);
-	char d = CC;
-	printf("%c\n", d);
-	START(0);
-	char e = CC;
-	printf("%c\n", e);
 }

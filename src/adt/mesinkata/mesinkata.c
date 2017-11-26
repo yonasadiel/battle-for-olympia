@@ -18,7 +18,7 @@ boolean EndKata;
 Kata CKata;
 
 boolean IsBlank() {
-  return (CC == BLANK || CC == 10);
+  return (CC == BLANK || CC == 10 || CC == 0);
 }
 
 void IgnoreBlank() {
