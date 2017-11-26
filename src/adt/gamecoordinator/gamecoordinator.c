@@ -210,30 +210,32 @@ char* GetLoadedFileName() {
     int n;
 
     STARTKATA("saved.sdat");
-    count = 1;
+    count = 0;
     while(count <= size) {
       int idx = 1;
       while(idx <= CKata.Length) {
         filenames[count][idx-1] = CKata.TabKata[idx];
         idx++;
       }
-      filenames[count][idx-1] = '\0';
-      printf("%d. %s\n", count, filenames[count]);
+      filenames[count][idx-1] = 0;
+      printf("%d. %s\n", count+1, filenames[count]);
       ADVKATA();
       count++;
     }
     CLOSEKATA();
+    count--;
 
     printf("Choose file to load.\n");
     printf("File number: ");
     STARTKATA(0);
     ToInteger(&n, &ERR); endl;
-
     if(n > 0 && n <= size) {
+      n--;
       int idx = 0;
-      res = (char*) malloc(sizeof(char) * 40);
+      res = (char*) malloc(sizeof(char) * 255);
       do {
         res[idx] = filenames[n][idx];
+        printf("RES %d\n", res[idx]);
         idx++;
       } while(filenames[n][idx] != 0);
       res[idx] = 0;
@@ -631,6 +633,8 @@ void SaveGame(GameCoordinator GC) {
         fprintf(file, "#");
         printf("All data has been saved succesfully.\n");
         fclose(file);
+      } else {
+        printf("Cannot save game file. Please make sure you have folder /saved.\n"); 
       }
     }
   }
