@@ -543,7 +543,7 @@ void SaveGame(GameCoordinator GC) {
           buildingCount = LLNbElmt(buildings);
 
           // Saving player properties
-          arg[0] = (QInfoHead(QPlayer(GC)) == &Pi(GC, 1))? 1 : 0;
+          arg[0] = (QInfoHead(QPlayer(GC)) == &Pi(GC, 1))? 1 : 2;
           FormattedPrint("Saving Player %d Data", '.', 50, arg);
           fprintf(file, "%d\n", playerQueue);
           fprintf(file, "%d %d %d\n", Cash(player), Income(player), Warna(player));
@@ -644,9 +644,13 @@ void RunGame(GameCoordinator* GC) {
     system("cls");
     if (!strcmp(cmd, "MOVE")) {
       MakeMovement(GC);
+    } else if (!strcmp(cmd, "RECRUIT")) {
+      TulisMap(GameMap(*GC), Location(*CurrentUnit(*GC)));
+      RecruitUnit(GC);
     } else if (!strcmp(cmd, "UNDO")) {
       UndoMovement(GC);
     } else if (!strcmp(cmd, "CHANGE_UNIT")) {
+      TulisMap(GameMap(*GC), Location(*CurrentUnit(*GC)));
       ChangeUnit(GC);
     } else if (!strcmp(cmd, "INFO")) {
       TulisMap(GameMap(*GC), Location(*CurrentUnit(*GC)));
@@ -678,7 +682,7 @@ void printCurrentUnitInfo(Unit U) {
   printf("Unit: ");
   PrintUnitName(U);
   TulisPoint(Location(U));
-  printf(" | Movement Point: %d | Can Attack: ", MovPoint(U));
+  printf(" | Health: %d/%d | Movement Point: %d | Can Attack: ", Health(U), MaxHealth(U), MovPoint(U));
   if (AtkChance(U)) {
     printf("Yes\n");
   } else {
@@ -704,43 +708,65 @@ void ReduceCash(Player* P) {
   if (Cash(*P) < 0) Cash(*P) = 0;
 }
 
-void RecruitUnit(Player *P, GameCoordinator GC, Map *M) {
-	int x,y;char UnitType; Point P1;Unit U;Unit *U1;
-	U1=CurrentUnit(GC);
+void RecruitUnit(GameCoordinator *GC) {
+  Player *P = (Player*) QInfoHead(QPlayer(*GC));
+  Map* M = &GameMap(*GC);
+	int x,y,pil;
+  char UnitType;
+  Point P1;
+  Unit U;
+  Unit *U1;
+
+	U1=CurrentUnit(*GC);
 	if ((Type(*U1))=='K') {
 		if (Building(*M,Absis(Location(*U1)),Ordinat(Location(*U1)))=='T') {
-			printf("Input castle absis:");
-			scanf("%d",&x);
-			printf("Input castle ordinate:");
-			scanf("%d",&y);
+			printf("Input castle coordinate: ");
+			scanf("%d%d",&x,&y); x++; y++;
 			if (IsPlayerCastle(*M,x,y,Warna(*P))) {
 				if (IsLocEmpty(*M,x,y)) {
-					PrintAvailRecruit(Cash(*P));
-					printf("What unit you want to recruit? (A/S/W):");
-					scanf("%c",&UnitType);
-					if (CheckGold(UnitType)<=Cash(*P)) {
+					PrintAvailRecruit(Cash(*P)); printf("\n");
+          for (;;) {
+					  printf("What unit you want to recruit?\n");
+            printf("1. Archer\n");
+            printf("2. Swordsman\n");
+            printf("3. White Mage\n");
+            printf("Your choice [1-3]: ");
+            scanf("%d",&pil);
+            if (pil >= 1 && pil <= 3) {
+              break;
+            } else {
+              printf("Input salah\n");
+            }
+          }
+
+          if      (pil == 1) UnitType = 'A';
+          else if (pil == 2) UnitType = 'S';
+          else               UnitType = 'W';
+
+					if (CheckGold(UnitType) <= Cash(*P)) {
 						MakePoint(x,y,&P1);
-						AddUnit(P, P1, UnitType,&U);
-						MapPutUnit(M, U, Warna(*P));
-						Cash(*P)-=CheckGold(UnitType);
-					}
-					else {
+						AddUnit(P, P1, UnitType, &GameMap(*GC));
+						Cash(*P) -= CheckGold(UnitType);
+            system("cls");
+            printf("Recruit Success\n");
+					} else {
+            system("cls");
 						printf("You do not have enough gold.\n");
 					}
-				}
-				else {
+				} else {
+          system("cls");
 					printf("The location is not empty.\n");
 				}
-			}
-			else {
+			} else {
+        system("cls");
 				printf("That is not your castle.\n");
 			}
-		}
-		else {
+		} else {
+      system("cls");
 			printf("To recruit a unit, your King must be in the tower.\n");
 		}
-	}
-	else {
+	} else {
+    system("cls");
 		printf("To recruit a unit, your current unit must be the King.\n");
 	}
 }
@@ -862,7 +888,7 @@ ListSirkuler GetListSurroundingUnit(GameCoordinator GC) {
 	Player Enemy;
 	Unit* checkUnit;
 	int Px,Py;
-	if (QInfoHead(QPlayer(GC)) == &Pi(GC,1)) {
+	if (Warna(*((Player*) QInfoHead(QPlayer(GC)))) == Warna(Pi(GC,1))) {
 		Enemy = Pi(GC,2);
 	} else {
 		Enemy = Pi(GC,1);
@@ -899,7 +925,13 @@ void Attack(GameCoordinator *GC) {
 		int i,j,option;
 		Unit* checkUnit;
 		Unit* attackedUnit;
-		
+    Player* Enemy;
+
+    if (Warna(*((Player*) QInfoHead(QPlayer(*GC)))) == Warna(Pi(*GC,1))) {
+      Enemy = &Pi(*GC,2);
+    } else {
+      Enemy = &Pi(*GC,1);
+    }
 		if (LSIsEmpty(LS)) {
 			printf ("No enemy to attack\n");
 		} else {
@@ -926,7 +958,7 @@ void Attack(GameCoordinator *GC) {
 			while (p != LSFirst(LS));
 			
 			do {
-				printf ("Select enemy you want to attack:");
+				printf ("Select enemy you want to attack: ");
 				scanf ("%d",&option);
 				if ((option > i) || (option <= 0)) {
 					printf ("Wrong input, please select attackable enemy\n");
@@ -934,6 +966,7 @@ void Attack(GameCoordinator *GC) {
 			}
 			while ((option > i) || (option <= 0));
 			
+      printf("\n");
 			j = 1;
 			p = LSFirst(LS);
 			while(j<option) {
@@ -960,11 +993,14 @@ void Attack(GameCoordinator *GC) {
 					printf("Your ");
 					PrintUnitName(*CurrentUnit(*GC));
 					printf(" is dead :(\n");
+          DeleteUnit(QInfoHead(QPlayer(*GC)), CurrentUnit(*GC), &GameMap(*GC));
+          *CurrentUnit(*GC) = LSFirst(ListUnit(*((Player*) QInfoHead(QPlayer(*GC)))))
 				}
 			} else {
 				printf("Enemy's ");
 				PrintUnitName(*attackedUnit);
 				printf(" is dead :)\n");
+        DeleteUnit(Enemy, attackedUnit, &GameMap(*GC));
 			}
       AtkChance(*CurrentUnit(*GC)) = false;
       MovPoint(*CurrentUnit(*GC)) = 0;
@@ -993,6 +1029,7 @@ void ChangeUnit(GameCoordinator* GC) {
     }
   }
 
+  system("cls");
   if (CurrentUnit(*GC) == LSInfo(LSNthAddress(ListUnit(*((Player*) QInfoHead(QPlayer(*GC)))), pil))) {
     printf("Selected unit is current unit, canceling\n");
   } else {
@@ -1013,7 +1050,6 @@ void NextUnit(GameCoordinator* GC) {
     printf("You only have one unit, canceling...\n");
   } else {
     AddrCurUnit = LSSearch(ListUnit(*((Player*) QInfoHead(QPlayer(*GC)))), CurrentUnit(*GC));
-    if (AddrCurUnit == Nil) printf("erroooor\n");
     CurrentUnit(*GC) = LSInfo(LSNext(AddrCurUnit));
   }
   printf("\n");
@@ -1094,7 +1130,7 @@ void printInfo(GameCoordinator GC, Point P) {
   do {
     U = (Unit*) LSInfo(LSP);
     if (EQPoint(Location(*U), P)) {
-      printInfoUnit(*CurrentUnit(GC)); printf("\n");
+      printInfoUnit(*U); printf("\n");
       printf("Owned by Player 1");
     }
     LSP = LSNext(LSP);
@@ -1103,7 +1139,7 @@ void printInfo(GameCoordinator GC, Point P) {
   do {
     U = (Unit*) LSInfo(LSP);
     if (EQPoint(Location(*U), P)) {
-      printInfoUnit(*CurrentUnit(GC)); printf("\n");
+      printInfoUnit(*U); printf("\n");
       printf("Owned by Player 2");
     }
     LSP = LSNext(LSP);

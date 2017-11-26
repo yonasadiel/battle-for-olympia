@@ -77,9 +77,20 @@ void MakePlayer(Player* P, Color W, Point Loc, Map* M) {
   ResetMovPointAllUnit(P);
 }
 
-void AddUnit(Player *P, Point Loc, char UnitType,Unit* U) {
-	CreateUnit(U, UnitType, Loc);
-	LSInsVLast (&ListUnit(*P), U);
+void AddUnit(Player *P, Point Loc, char UnitType, Map* M) {
+  Unit* U;
+
+  U = (Unit*) malloc(1* sizeof(Unit));
+  CreateUnit(U, UnitType, Loc);
+  LSInsVFirst(&ListUnit(*P), U);
+  MapPutUnit(M, *U, Warna(*P));
+  MovPoint(*U) = 0;
+  AtkChance(*U) = false;
+}
+
+void DeleteUnit(Player *P, Unit* U, Map* M) {
+  Unit(*M, Absis(Location(*U)), Ordinat(Location(*U))) = ' ';
+  LSDelP(&ListUnit(*P), U);
 }
 
 void ResetMovPointAllUnit(Player* P) {
@@ -91,6 +102,7 @@ void ResetMovPointAllUnit(Player* P) {
     do {
       Unit* U = (Unit*) LSInfo(PU);
       MovPoint(*U) = 2;
+      AtkChance(*U) = true;
 
       PU = LSNext(PU);
     } while (PU != LSFirst(ListUnit(*P)));

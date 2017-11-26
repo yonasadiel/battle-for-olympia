@@ -78,7 +78,7 @@ void ReduceCash(Player* P);
  * F.S. Cash P berkurang sesuai upkeep
  */
 
-void RecruitUnit(Player *P, GameCoordinator GC, Map *M);
+void RecruitUnit(GameCoordinator *GC);
 /**
 	* I.S. P dan UnitType terdefinisi
 	* F.S. Unit ditambahkan ke dalam ListUnit player dan gold player berkurang bila recruitment berhasil

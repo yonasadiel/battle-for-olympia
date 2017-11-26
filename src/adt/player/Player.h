@@ -30,9 +30,8 @@ typedef struct {
 
 void InitPlayer(Player* P, int cash, int income, ListSirkuler units, ListLinier buildings, Color warna);
 /**
- * TODO
- * ada orang tidak bertanggung jawab bikin fungsi ini tanpa header
- * ada sukarelawan?
+ * I.S. P sembarang, lainnya terdefinisi
+ * F.S. P terdefinisi sesuai parameter yang lain
  */
 
 void MakePlayer(Player* P, Color W, Point Loc, Map* M);
@@ -43,12 +42,18 @@ void MakePlayer(Player* P, Color W, Point Loc, Map* M);
  *      dan Warna sesuai W.
  *      Basecamp P ada di Loc
  */
-	
-void AddUnit(Player *P, Point Loc, char UnitType,Unit* U);
+  
+void AddUnit(Player *P, Point Loc, char UnitType, Map* M);
 /**
-	*	I.S. P dan U terdefinisi
-	* F.S. U terdefinisi sebagai bagian dari ListUnit P
-	*/
+  * I.S. P terdefinisi, UnitType dan Loc valid, M terdefinisi
+  * F.S. ListUnit dari P ditambahkan unit U sesuai UnitType
+  */
+  
+void DeleteUnit(Player *P, Unit* U, Map* M);
+/**
+  * I.S. P, U, dan M terdefinisi, U pasti anggota ListUnit P
+  * F.S. Unit U didelete dari ListUnit P dan Map M
+  */
 
 void ResetMovPointAllUnit(Player* P);
 /**

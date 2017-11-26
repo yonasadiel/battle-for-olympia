@@ -79,7 +79,7 @@ void printInfoUnit(Unit U) {
 	printf(", ");
 	printf("Health : %d / %d | ", Health(U), MaxHealth(U));
 	printf("ATK  %d(%c) | ",Atk(U), AtkType(U));
-  printf("Movement Point  %d | ", MovPoint(U));
+  printf("Movement Point: %d | ", MovPoint(U));
 	printf("Can Attack: ");
 	if (AtkChance(U)) { printf("yes"); }
   else              { printf("no"); }
@@ -99,16 +99,8 @@ int CheckGold(char UnitType)	{
 
 void PrintAvailRecruit(int Cash)	{
 	printf("Units you can recruit:\n");
-	if (Cash>=40) {
-		printf("-White Mage\n");
-		}
-	if (Cash>=25)	{
-		printf("-Swordsman\n");
-		}
-	if (Cash>=17)	{
-		printf("-Archer\n");
-		}
-	else {
-		printf("Insufficient gold.\n");
-		}
+  if (Cash>=17) { printf("- Archer\n"); }
+  if (Cash>=25) { printf("- Swordsman\n"); }
+	if (Cash>=40) { printf("- White Mage\n"); }
+	if (Cash< 17) { printf("Insufficient gold.\n"); }
 }

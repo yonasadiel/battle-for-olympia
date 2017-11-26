@@ -212,26 +212,26 @@ void LSDelAfter (ListSirkuler *L, LSAddress *Pdel, LSAddress Prec) {
 }
 
 void LSDelP (ListSirkuler *L, infotype X) {
-    if (!LSIsEmpty(*L)) {
-        if(LSInfo(LSFirst(*L)) == X) {
-            infotype x;
-            LSDelVFirst(L, &x);
-        } else {
-            LSAddress p = LSNext(LSFirst(*L));
-            LSAddress c = LSFirst(*L);
-            while(p != LSFirst(*L) && LSInfo(p) != X) {
-                c = p;
-                p = LSNext(p);
-            }
-            if(LSNext(p) == LSFirst(*L)) {
-                infotype x;
-                LSDelVLast(L, &x);
-            } else if(p != LSFirst(*L)) {
-                LSNext(c) = LSNext(p);
-                LSDealokasi(p);
-            }
-        }
+  LSAddress Prec = Nil;
+  LSAddress P;
+
+  if (!LSIsEmpty(*L)) {
+    if (X == LSInfo(LSFirst(*L))) {
+      LSDelFirst(L, &P);
+      LSDealokasi(P);
+    } else {
+      P = LSFirst(*L);
+       while (LSNext(P) != LSFirst(*L) && LSInfo(P) != X) {
+        Prec = P;
+        P = LSNext(P);
+      }
+
+      if (LSInfo(P) == X) {
+        LSDelAfter(L, &P, Prec);
+        LSDealokasi(P);
+      }
     }
+  }
 }
 
 int LSNbElmt (ListSirkuler L) {   
