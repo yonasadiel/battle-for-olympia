@@ -195,7 +195,7 @@ boolean IsPlayerCastle(Map M, int x, int y, Color Warna) {
 }
 
 boolean IsLocEmpty(Map M, int x, int y) {
-	return (Unit(M, x, y) = ' ');
+	return (Unit(M, x, y) == ' ');
 }
 
 void MCopy(Map M1, Map* M2) {

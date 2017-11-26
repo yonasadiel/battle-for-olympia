@@ -1,5 +1,6 @@
 #include "queue.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 void PrintIsiQueue(Queue Q) {
   int* X;
