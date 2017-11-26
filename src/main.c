@@ -20,12 +20,14 @@ int main() {
   isUp = true;
   InitGame(&GC, 8, 8);
   while (isUp) {
-    PrintMenu();
+    PrintMenu(GC);
 
     printf(">>> ");
-    STARTKATA(0);
-    ToInteger(&pilmenu, &ERR);
-    if (pilmenu == 1) {
+    STARTKATA(0); ToInteger(&pilmenu, &ERR);
+    if (pilmenu == 1 && State(GC) == 1) {
+      /* meresume game */
+      RunGame(&GC);
+    } else if ((pilmenu == 1 && State(GC) == 0) || (pilmenu == 2 && State(GC) == 1)) {
       /* memulai game */
       MapBrs = 0; MapKol = 0;
       for (;;) {
@@ -39,7 +41,7 @@ int main() {
       }
       InitGame(&GC, MapBrs, MapKol);
       RunGame(&GC);
-    } else if (pilmenu == 2) {
+    } else if ((pilmenu == 2 && State(GC) == 0) || (pilmenu == 3 && State(GC) == 1)) {
       /* load game */
       if(LoadGame(&GC)) {
         sleep(2);
@@ -47,17 +49,17 @@ int main() {
       } else {
         sleep(2);
       }
-    } else if (pilmenu == 3) {
+    } else if ((pilmenu == 3 && State(GC) == 0) || (pilmenu == 4 && State(GC) == 1)) {
       /* save game */
       SaveGame(GC);
       sleep(2);
-    } else if (pilmenu == 4) {
+    } else if ((pilmenu == 4 && State(GC) == 0) || (pilmenu == 5 && State(GC) == 1)) {
       /* keluar dari game */
       isUp = false;
     } else {
       /* pilihan tidak terdaftar */
       printf("Input salah, coba lagi\n");
-      PrintMenu();
+      PrintMenu(GC);
     }
   }
   printf("Game diakhiri, terima kasih sudah bermain!\n");

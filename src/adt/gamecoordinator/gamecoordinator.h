@@ -32,7 +32,7 @@ typedef struct {
 #define CurrentUnit(GC) (GC).CurrentUnit
 #define State(GC) (GC).State
 
-void PrintMenu(void);
+void PrintMenu(GameCoordinator GC);
 /**
  * I.S. Game belum dimulai
  * F.S. menu utama tampil di layar beserta pilihannya 

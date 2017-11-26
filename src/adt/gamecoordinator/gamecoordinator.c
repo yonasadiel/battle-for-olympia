@@ -44,7 +44,7 @@ int arg[16];
 /* Global Variable to use ToInteger */
 boolean ERR;
 
-void PrintMenu(void) {
+void PrintMenu(GameCoordinator GC) {
   system("cls");
 	printf ("_____________________________________________________T ___H ___E ______________________________________________________________\n");
 	printf ("___________####### ___________# ____ # ___# ____________________####### __# ___________________________________________________\n");
@@ -56,10 +56,18 @@ void PrintMenu(void) {
 	printf ("___________####### _###### ___## ____## ___### _##### __________####### ___### ____ ## _## _## _### _## ______## _###### ______\n");
 	printf ("_______________________________### ___### ______________________________________###### ______________## _______________________\n");
 	printf ("\n==== MAIN MENU ====\n");
-	printf ("1. New Game\n");
-	printf ("2. Load Game\n");
-	printf ("3. Save Game\n");
-	printf ("4. Quit\n");
+  if (State(GC) == 1) {
+    printf ("1. Resume Game\n");
+  	printf ("2. New Game\n");
+  	printf ("3. Load Game\n");
+  	printf ("4. Save Game\n");
+  	printf ("5. Quit\n");
+  } else {
+    printf ("1. New Game\n");
+    printf ("2. Load Game\n");
+    printf ("3. Save Game\n");
+    printf ("4. Quit\n");
+  }
 	
 }
 
@@ -136,9 +144,9 @@ void FormattedPrint(char* s, char aes, int size, int* arg) {
 }
 
 boolean IsValidInput(char c) {
-  return  (c >= 48 && c <= 57) ||
-          (c >= 65 && c <= 90) ||
-          (c >= 97 && c <= 122);
+  return  (c >= '0' && c <= '9') ||
+          (c >= 'a' && c <= 'z') ||
+          (c >= 'A' && c <= 'Z');
 }
 
 char* GetSavedFileName() {
