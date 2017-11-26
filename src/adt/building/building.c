@@ -1,7 +1,7 @@
 #include "building.h"
 #include "../point/point.h"
 
-/* #define GoldPerTurn 10 /* gold yang diberikan village tiap turn */
+/* #define GoldPerVillage 10 /* gold yang diberikan village tiap turn */
 
 /* typedef struct { */
 /*   Point Coordinate; /* koordinat building */

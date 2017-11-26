@@ -109,5 +109,11 @@ boolean IsLocEmpty(Map M, int X, int Y);
 /**
 	* Mengembalikan nilai kebenaran apakah sel (X,Y) kosong
 	*/
+
+void MCopy(Map M1, Map* M2);
+/**
+ * I.S. M1 sembarang
+ * F.S. M2 sama seperti M1
+ */
 	
 #endif
