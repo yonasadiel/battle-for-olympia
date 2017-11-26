@@ -7,6 +7,9 @@
 #endif
 #include "adt/boolean/boolean.h"
 #include "adt/gamecoordinator/gamecoordinator.h"
+#include "adt/mesinkata/mesinkata.h"
+
+boolean ERR;
 
 int main() {
   boolean isUp;
@@ -20,7 +23,8 @@ int main() {
     PrintMenu();
 
     printf(">>> ");
-    scanf("%d", &pilmenu);
+    STARTKATA(0);
+    ToInteger(&pilmenu, &ERR);
     if (pilmenu == 1) {
       /* memulai game */
       MapBrs = 0; MapKol = 0;

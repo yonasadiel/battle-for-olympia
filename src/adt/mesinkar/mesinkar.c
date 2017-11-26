@@ -26,7 +26,11 @@ boolean START(char* filename) {
 
 void ADV() {
   retval = fscanf(pita,"%c",&CC);
-  EOP = (CC == MARK || CC == 10 || CC == 0 || retval != 1);
+  if(pita == stdin) {
+    EOP = (CC == MARK || CC == 10 || CC == 0 || retval != 1);  
+  } else {
+    EOP = (CC == MARK || retval != 1);
+  }
   if (EOP) {
     if(pita != stdin) {
       fclose(pita);
@@ -39,7 +43,7 @@ void CLOSE() {
 }
 
 void CLEAR() {
-  while(CC != 10) {
-     fscanf(pita, "%c", &CC);   
+  while(CC != 10 && CC != 0) {
+     fscanf(pita, "%c", &CC); 
   }
 }

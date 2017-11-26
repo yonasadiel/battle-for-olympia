@@ -56,4 +56,7 @@ void ToInteger(int* X, boolean* err);
 void CLOSEKATA();
 /* Mengakhiri pembacaan file */
 
+void Salin();
+/* Menyalin isi CKata.TabKata */
+
 #endif

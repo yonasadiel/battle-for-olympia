@@ -28,5 +28,6 @@ void CLOSE();
 /* Mengakhiri pembacaan file */
 
 void CLEAR();
+/* Mengabaikan seluruh karakter sampai karakter enter */
 
 #endif

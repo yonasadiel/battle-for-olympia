@@ -38,6 +38,8 @@
 
 /* Global Variable to Use FormattedPrint */
 int arg[16];
+/* Global Variable to use ToInteger */
+boolean ERR;
 
 void PrintMenu(void) {
   system("cls");
@@ -145,12 +147,11 @@ char* GetSavedFileName() {
 
   printf("Input file name. Maximum 30 Character. Alphabet and Number only.\n");
   printf("File Name: ");
-  
+
   len = 0;
   valid = true;
   do {
     START(0);
-    c = CC;
     if(c != 10 && c != 0) {
       valid = valid && IsValidInput(c) && (len < 31);
       if(valid) {
@@ -179,9 +180,10 @@ char* GetLoadedFileName() {
   char* res;
 
   file = fopen("size.sdat", "r");
+  STARTKATA("size.sdat");
   if(file) {
-    fscanf(file, "%d", &size);
-    fclose(file);
+    ToInteger(&size, &ERR);
+    CLOSEKATA();
   } else {
     size = 0;
   }
@@ -211,7 +213,8 @@ char* GetLoadedFileName() {
 
     printf("Choose file to load.\n");
     printf("File number: ");
-    scanf("%d", &n); endl;
+    STARTKATA(0);
+    ToInteger(&n, &ERR); endl;
 
     if(n > 0 && n <= size) {
       int idx = 0;
@@ -475,8 +478,10 @@ void SaveGame(GameCoordinator GC) {
     // Check if file already exist
     FILE *file = fopen(filename, "r");
     if(file) {
+      CLEAR();
       printf("File already exist. Do you want to replace? (y/n) ");
-      scanf("%c", &c);
+      START(0);
+      c = CC;
       isNew = false;
     } else {
       isNew = true;
@@ -635,7 +640,9 @@ void RunGame(GameCoordinator* GC) {
     printCurrentUnitInfo(*CurrentUnit(*GC));
     printf("Command List: | MOVE | RECRUIT | CHANGE_UNIT | INFO     | SAVE |\n");
     printf("              | UNDO | ATTACK  | NEXT_UNIT   | END_TURN | EXIT |\n");
-    printf("Your input: "); scanf("%s", cmd);
+    printf("Your input: "); 
+    STARTKATA(0);
+    Salin(cmd);
 
     if (strcmp(cmd, "MOVE") && strcmp(cmd, "MAP") && strcmp(cmd, "INFO") && strcmp(cmd, "ATTACK")) {
       SPopAll(&MoveRecord(*GC));
@@ -706,14 +713,17 @@ void RecruitUnit(Player *P, GameCoordinator GC, Map *M) {
 	if ((Type(*U1))=='K') {
 		if (Building(*M,Absis(Location(*U1)),Ordinat(Location(*U1)))=='T') {
 			printf("Input castle absis:");
-			scanf("%d",&x);
+      STARTKATA(0);
+      ToInteger(&x, &ERR);
 			printf("Input castle ordinate:");
-			scanf("%d",&y);
+      STARTKATA(0);
+      ToInteger(&y, &ERR);
 			if (IsPlayerCastle(*M,x,y,Warna(*P))) {
 				if (IsLocEmpty(*M,x,y)) {
 					PrintAvailRecruit(Cash(*P));
 					printf("What unit you want to recruit? (A/S/W):");
-					scanf("%c",&UnitType);
+          START(0);
+          UnitType = CC;
 					if (CheckGold(UnitType)<=Cash(*P)) {
 						MakePoint(x,y,&P1);
 						AddUnit(P, P1, UnitType,&U);
@@ -842,7 +852,8 @@ void Attack(GameCoordinator *GC) {
 			
 			do {
 				printf ("Select enemy you want to attack:");
-				scanf ("%d",&option);
+        STARTKATA(0);
+        ToInteger(&option, &ERR);
 				if ((option > i) || (option <= 0)) {
 					printf ("Wrong input, please select attackable enemy\n");
 				}
@@ -900,7 +911,8 @@ void ChangeUnit(GameCoordinator* GC) {
 
   for (;;) {
     printf("Please enter the no. of unit you want to select: ");
-    scanf("%d",&pil);
+    STARTKATA(0);
+    ToInteger(&pil, &ERR);
     if (pil > NUnit || pil < 1) {
       printf("Wrong input, please choose between 1 to %d\n", NUnit);
     } else {
@@ -966,7 +978,10 @@ void ShowInfo(GameCoordinator GC) {
 
   for (;;) {
     printf("Enter the coordinate of the cell: ");
-    scanf("%d%d",&x,&y);
+    STARTKATA(0);
+    ToInteger(&x, &ERR);
+    ADVKATA();
+    ToInteger(&y, &ERR);
 
     if (IsIdxMapEff(GameMap(GC), x+1, y+1)) {
       break;
