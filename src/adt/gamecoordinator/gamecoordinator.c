@@ -120,8 +120,9 @@ void FormattedPrint(char* s, char aes, int size, int* arg) {
         idx += 2;
 
         int xCount = 0;
-        while(arg[iArg] > 0) {
-          arg[iArg] /= 10;
+        int xArg = arg[iArg];
+        while(xArg > 0) {
+          xArg /= 10;
           xCount++;
         }
         if(xCount > 1) {
@@ -210,7 +211,7 @@ char* GetLoadedFileName() {
 
     STARTKATA("saved.sdat");
     count = 0;
-    while(count <= size) {
+    while(count < size) {
       int idx = 1;
       while(idx <= CKata.Length) {
         filenames[count][idx-1] = CKata.TabKata[idx];
@@ -234,7 +235,6 @@ char* GetLoadedFileName() {
       res = (char*) malloc(sizeof(char) * 255);
       do {
         res[idx] = filenames[n][idx];
-        printf("RES %d\n", res[idx]);
         idx++;
       } while(filenames[n][idx] != 0);
       res[idx] = 0;
@@ -267,9 +267,10 @@ boolean LoadGame(GameCoordinator* GC) {
 
   // Load Map 
   FormattedPrint("Loading Map Data.", '.', 50, 0);
+  Map* map = (Map*) malloc(sizeof(Map));
   ADV_INT(NBrsMap, err, ERROR_READ);
   ADV_INT(NKolMap, err, ERROR_READ);
-  MakeMap(NBrsMap, NKolMap, &GameMap(*GC));
+  MakeMap(NBrsMap, NKolMap, map);
   printf("Success\n");
 
   // Load Players
@@ -330,8 +331,10 @@ boolean LoadGame(GameCoordinator* GC) {
       int unitOrdinat;
       int unitRecCost;
       int unitType;
+      Color unitColor;
       Point* unitPoint;
-     // Init Units
+
+      // Init Units
       unitPoint = (Point*) malloc(sizeof(Point));
       unit = (Unit*) malloc(sizeof(Unit));
 
@@ -346,6 +349,7 @@ boolean LoadGame(GameCoordinator* GC) {
       ADV_INT(unitOrdinat, err, ERROR_READ);
       ADV_INT(unitRecCost, err, ERROR_READ);
       ADV_INT(unitType, err, ERROR_READ);
+      ADV_INT(unitColor, err, ERROR_READ);
       
       MakePoint(unitAbsis, unitOrdinat, unitPoint);
       CreateUnit(unit, unitType, *unitPoint);
@@ -358,12 +362,16 @@ boolean LoadGame(GameCoordinator* GC) {
       AtkChance(*unit) = unitAtkChance;
       RecCost(*unit) = unitRecCost;
 
+      // Load to Map
+      Unit(*map, unitAbsis, unitOrdinat) = unitType;
+      ColorUnit(*map, unitAbsis, unitOrdinat) = unitColor; 
+
       LSInsVFirst(playerUnits, unit);
       printf("Success\n");
 
       // Load Player's Buldings
-      printf("Loading %d Player's Building.\n", buildingCount);
       ADV_INT(buildingCount, err, ERROR_READ);
+      printf("Loading %d Player's Building.\n", buildingCount);
       i = 0;
       while(i < buildingCount) {
         i++; 
@@ -374,6 +382,7 @@ boolean LoadGame(GameCoordinator* GC) {
         int buildingAbsis;
         int buildingOrdinat;
         int buildingType;
+        Color buildingColor;
         Point* buildingPoint;
 
         // Init Building
@@ -383,6 +392,11 @@ boolean LoadGame(GameCoordinator* GC) {
         ADV_INT(buildingAbsis, err, ERROR_READ);
         ADV_INT(buildingOrdinat, err, ERROR_READ);
         ADV_INT(buildingType, err, ERROR_READ);
+        ADV_INT(buildingColor, err, ERROR_READ);
+
+        // Load to Map
+        Building(*map, buildingAbsis, buildingOrdinat) = buildingType;
+        ColorBuilding(*map, buildingAbsis, buildingOrdinat) = buildingColor;
 
         MakePoint(buildingAbsis, buildingOrdinat, buildingPoint);
         MakeBuilding(building, *buildingPoint, buildingType);
@@ -460,6 +474,8 @@ boolean LoadGame(GameCoordinator* GC) {
   RecCost(*cUnit) = cUnitRecCost;
 
   CurrentUnit(*GC) = cUnit;
+
+  GameMap(*GC) = *map;
 
   // End of Loading
   FormattedPrint(0, '=', 57, 0); endl;
@@ -562,7 +578,7 @@ void SaveGame(GameCoordinator GC) {
           buildingCount = LLNbElmt(buildings);
 
           // Saving player properties
-          arg[0] = (QInfoHead(QPlayer(GC)) == &Pi(GC, 1))? 1 : 2;
+          arg[0] = (Warna(player) == Warna(Pi(GC,1)))? 1 : 2;
           FormattedPrint("Saving Player %d Data", '.', 50, arg);
           fprintf(file, "%d\n", arg[0]);
           fprintf(file, "%d %d %d\n", Cash(player), Income(player), Warna(player));
@@ -578,10 +594,11 @@ void SaveGame(GameCoordinator GC) {
               arg[0] = i;
               FormattedPrint("Saving Unit %d", '.', 50, arg);
               Unit unit = (*(Unit*) LSInfo(addrUnit));
-              fprintf(file, "%d %d %d %d %d %d %d %d %d %d %d\n", 
+              fprintf(file, "%d %d %d %d %d %d %d %d %d %d %d %d\n", 
                 MaxHealth(unit), Health(unit), Atk(unit), Heal(unit), MovPoint(unit), 
                 AtkType(unit), AtkChance(unit), Absis(Location(unit)), Ordinat(Location(unit)),
-                RecCost(unit), Type(unit));
+                RecCost(unit), Type(unit), 
+                ColorUnit(GameMap(GC), Absis(Location(unit)), Ordinat(Location(unit))));
               addrUnit = LSNext(addrUnit);
               i++;
               printf("Success\n");
@@ -597,7 +614,9 @@ void SaveGame(GameCoordinator GC) {
             arg[0] = i;
             FormattedPrint("Saving Building %d", '.', 50, arg);
             Building building = *((Building*) LLInfo(addrBuilding));
-            fprintf(file, "%d %d %d\n", Absis(BCoordinate(building)), Ordinat(BCoordinate(building)), BType(building));
+            fprintf(file, "%d %d %d %d\n", Absis(BCoordinate(building)), Ordinat(BCoordinate(building)), 
+              BType(building),
+              ColorBuilding(GameMap(GC), Absis(BCoordinate(building)), Ordinat(BCoordinate(building))));
             addrBuilding = LLNext(addrBuilding); 
             i++;
             printf("Success\n");
@@ -606,6 +625,7 @@ void SaveGame(GameCoordinator GC) {
           QAdd(&queue, playerQueue);
           count++;
         }
+
 
         // Saving Move Record
         FormattedPrint(0, '=', 57, 0); endl;
@@ -652,7 +672,8 @@ void RunGame(GameCoordinator* GC) {
     TulisMap(GameMap(*GC), Location(*CurrentUnit(*GC)));
 
     if (State(*GC) == 1) {
-      printf("Player %d's Turn\n", (QInfoHead(QPlayer(*GC)) == &Pi(*GC, 1))? 1:2);
+      Player player = *((Player*) QInfoHead(QPlayer(*GC)));
+      printf("Player %d's Turn\n", (Warna(player) == Warna(Pi(*GC, 1)))? 1:2);
       
       printPlayerInfo(*((Player*) QInfoHead(QPlayer(*GC))));
       printCurrentUnitInfo(*CurrentUnit(*GC));
@@ -661,7 +682,7 @@ void RunGame(GameCoordinator* GC) {
       printf("Your input: "); 
       STARTKATA(0); Salin(cmd);
 
-      if (strcmp(cmd, "MOVE") && strcmp(cmd, "MAP") && strcmp(cmd, "INFO") && strcmp(cmd, "UNDO")) {
+      if (strcmp(cmd, "MOVE") && strcmp(cmd, "MAP") && strcmp(cmd, "INFO") && strcmp(cmd, "UNDO") && strcmp(cmd, "SAVE") && strcmp(cmd, "EXIT")) {
         SPopAll(&MoveRecord(*GC));
       }
 
