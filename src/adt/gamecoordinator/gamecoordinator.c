@@ -791,13 +791,24 @@ void MakeMovement(GameCoordinator *GC) {
       int nx = Absis(P) + dx[i];
       int ny = Ordinat(P) + dy[i];
       if (IsIdxMapEff(MNew, nx, ny) &&
-          Unit(MNew, nx, ny) == ' ' &&
+          (Unit(MNew, nx, ny) == ' ' ||
+           (Unit(MNew, nx, ny) != ' ' &&
+           ColorUnit(MNew, nx, ny) == Warna(*((Player*) QInfoHead(QPlayer(*GC)))))) &&
           abs(nx-Absis(PU)) + abs(ny-Ordinat(PU)) <= MovPoint(*CurrentUnit(*GC))) {
         PT = (Point*) malloc(1 * sizeof(Point));
         MakePoint(nx, ny, PT);
         Unit(MNew,nx,ny) = '#';
         ColorUnit(MNew,nx,ny) = CGREEN;
         QAdd(&Q, PT);
+      }
+    }
+  }
+
+  for (i = GetMapFirstIdxBrs(MNew); i<=GetMapLastIdxBrs(MNew); i++) {
+    for (j = GetMapFirstIdxKol(MNew); j<=GetMapLastIdxKol(MNew); j++) {
+      if (Unit(GameMap(*GC), i, j) != ' ') {
+        Unit(MNew, i, j) = Unit(GameMap(*GC), i, j);
+        ColorUnit(MNew, i, j) = ColorUnit(GameMap(*GC), i, j);
       }
     }
   }
@@ -818,9 +829,6 @@ void MakeMovement(GameCoordinator *GC) {
   if (!(x == 0 && y == 0)) {
     MakePoint(x,y,&P);
     SPush(&MoveRecord(*GC), Location(*CurrentUnit(*GC)));
-    if (SIsEmpty(MoveRecord(*GC))) {
-      printf("KOK KOSONG???\n");
-    }
     MoveUnit(&GameMap(*GC), CurrentUnit(*GC), P);
     MovPoint(*CurrentUnit(*GC)) -= abs(x-Absis(PU)) + abs(y-Ordinat(PU));
 
