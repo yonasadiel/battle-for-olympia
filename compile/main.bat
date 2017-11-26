@@ -10,7 +10,7 @@ gcc^
     "src\adt\color\color.c"^
     "src\adt\player\player.c"^
     "src\adt\point\point.c"^
-    "src\adt\queueint\queueint.c"^
+    "src\adt\queue\queue.c"^
     "src\adt\stackpoint\stackpoint.c"^
     "src\adt\unit\unit.c"^
     "src\adt\mesinkata\mesinkata.c"^

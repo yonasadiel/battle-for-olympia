@@ -6,13 +6,13 @@
 #include "../listsirkuler/listsirkuler.h"
 #include "../map/map.h"
 #include "../stackpoint/stackpoint.h"
-#include "../queueint/queueint.h"
+#include "../queue/queue.h"
 #include "../player/player.h"
 
 #define NMaxPlayer 2
 typedef struct {
   Player P[NMaxPlayer+1];
-  Queue QI;
+  Queue QPlayer;
   Map GameMap;
   ListLinier ListVliiage;
   Stack MoveRecord;
@@ -21,7 +21,7 @@ typedef struct {
 
 /* *** Selektor *** */
 #define Pi(GC,i) (GC).P[(i)]
-#define QI(GC) (GC).QI
+#define QPlayer(GC) (GC).QPlayer
 #define GameMap(GC) (GC).GameMap
 #define ListVillage(GC) (GC).ListVliiage
 #define MoveRecord(GC) (GC).MoveRecord

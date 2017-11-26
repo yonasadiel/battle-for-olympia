@@ -1,11 +1,11 @@
-#include "queueint.h"
+#include "queue.h"
 #include "../boolean/boolean.h"
 #include <stdlib.h>
 
 #define Nil NULL
 
 /* deklarasi tipe info */
-/* typedef int QInfoType; */
+/* typedef void* QInfoType; */
 
 /* Queue dengan representasi berkait dengan pointer */
 /* typedef struct TElmtQueue* QAddress; */

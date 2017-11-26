@@ -4,7 +4,7 @@
 #include "../listsirkuler/listsirkuler.h"
 #include "../map/map.h"
 #include "../stackpoint/stackpoint.h"
-#include "../queueint/queueint.h"
+#include "../queue/queue.h"
 #include "../player/player.h"
 #include "../mesinkata/mesinkata.h"
 #include <stdio.h>
@@ -16,7 +16,7 @@
 /* #define NMaxPlayer 2 */
 /* typedef struct { */
 /*   Player P[NMaxPlayer+1]; */
-/*   Queue QI; */
+/*   Queue QPlayer; */
 /*   Map GameMap; */
 /*   ListLinier ListVillage; */
 /*   Stack MoveRecord; */
@@ -25,7 +25,7 @@
 
 /* *** Selektor *** */
 /* #define Pi(GC,i) (GC).P[(i)] */
-/* #define QI(GC) (GC).QI */
+/* #define QPlayer(GC) (GC).QPlayer */
 /* #define GameMap(GC) (GC).GameMap */
 /* #define ListVliiage(GC) (GC).ListVliiage */
 /* #define MoveRecord(GC) (GC).MoveRecord */
@@ -72,9 +72,9 @@ void InitGame(GameCoordinator* GC, int NInitBaris, int NInitKolom) {
   MakePlayer(&Pi(*GC, 1), CRED, P1, &GameMap(*GC));
   MakePlayer(&Pi(*GC, 2), CBLUE, P2, &GameMap(*GC));
 
-  QCreateEmpty(&QI(*GC));
-  QAdd(&QI(*GC), 1);
-  QAdd(&QI(*GC), 2);
+  QCreateEmpty(&QPlayer(*GC));
+  QAdd(&QPlayer(*GC), &Pi(*GC, 1));
+  QAdd(&QPlayer(*GC), &Pi(*GC, 2));
 
   LLCreateEmpty(&ListVillage(*GC));
   V = (Building*) malloc(1 * sizeof (Building));
@@ -92,7 +92,7 @@ void InitGame(GameCoordinator* GC, int NInitBaris, int NInitKolom) {
   }
 
   SCreateEmpty(&MoveRecord(*GC));
-  CurrentUnit(*GC) = (Unit*) LSInfo(LSFirst(ListUnit(Pi(*GC,QInfoHead(QI(*GC))))));
+  CurrentUnit(*GC) = (Unit*) LSInfo(LSFirst(ListUnit(*((Player*) QInfoHead(QPlayer(*GC))))));
 }
 
 void FormattedPrint(char* s, char aes, int size, int* arg) {
@@ -245,7 +245,7 @@ boolean LoadGame(GameCoordinator* GC) {
   }
 
   // Init GameCoordinator
-  QCreateEmpty(&QI(*GC));
+  QCreateEmpty(&QPlayer(*GC));
 
   // Load Map 
   FormattedPrint("Loading Map Data.", '.', 50, 0);
@@ -376,7 +376,7 @@ boolean LoadGame(GameCoordinator* GC) {
 
     // Add Player to GameCoordinator
     Pi(*GC, playerNumber) = *player;
-    QAdd(&QI(*GC), playerNumber);
+    QAdd(&QPlayer(*GC), player);
   }
 
   // Load MoveRecord
@@ -510,7 +510,7 @@ void SaveGame(GameCoordinator GC) {
       if(file) {
         Queue queue;
         Player player;
-        int playerQueue;
+        QInfoType playerQueue;
         int count;
         int unitCount, buildingCount;
         int i;
@@ -527,7 +527,7 @@ void SaveGame(GameCoordinator GC) {
         printf("Success\n");
 
         // Getting Player Queue
-        queue = QI(GC);
+        queue = QPlayer(GC);
 
         // Saving Player from Head of Queue
         count = 0;
@@ -535,14 +535,14 @@ void SaveGame(GameCoordinator GC) {
           FormattedPrint(0, '=', 57, 0); endl;
 
           QDel(&queue, &playerQueue);
-          player = Pi(GC, playerQueue);
+          player = *((Player*) playerQueue);
           units = ListUnit(player);
           unitCount = LSNbElmt(units);
           buildings = ListBuilding(player);
           buildingCount = LLNbElmt(buildings);
 
           // Saving player properties
-          arg[0] = playerQueue;
+          arg[0] = (QInfoHead(QPlayer(GC)) == &Pi(GC, 1))? 1 : 0;
           FormattedPrint("Saving Player %d Data", '.', 50, arg);
           fprintf(file, "%d\n", playerQueue);
           fprintf(file, "%d %d %d\n", Cash(player), Income(player), Warna(player));
@@ -624,12 +624,13 @@ void RunGame(GameCoordinator* GC) {
   int MapBrs, MapKol;
 
   IsRunning = true;
-  ReduceCash(&Pi(*GC,QInfoHead(QI(*GC))));
+  ReduceCash(QInfoHead(QPlayer(*GC)));
   while (IsRunning) {
     TulisMap(GameMap(*GC), Location(*CurrentUnit(*GC)));
 
-    printf("Player %d's Turn\n", QInfoHead(QI(*GC)));
-    printPlayerInfo(Pi(*GC,QInfoHead(QI(*GC))));
+    printf("Player %d's Turn\n", (QInfoHead(QPlayer(*GC)) == &Pi(*GC, 1))? 1:2);
+    
+    printPlayerInfo(*((Player*) QInfoHead(QPlayer(*GC))));
     printCurrentUnitInfo(*CurrentUnit(*GC));
     printf("Command List: | MOVE | RECRUIT | CHANGE_UNIT | INFO     | SAVE |\n");
     printf("              | UNDO | ATTACK  | NEXT_UNIT   | END_TURN | EXIT |\n");
@@ -653,7 +654,7 @@ void RunGame(GameCoordinator* GC) {
       TulisMap(GameMap(*GC), Location(*CurrentUnit(*GC)));
     } else if (!strcmp(cmd, "END_TURN")) {
       EndTurn(GC);
-      printf("Player %d's turn!\n", QInfoHead(QI(*GC)));
+      printf("Next Turn!\n");
     } else if (!strcmp(cmd, "EXIT")) {
       IsRunning = false;
     } else if (!strcmp(cmd, "ATTACK")) {
@@ -685,12 +686,12 @@ void printCurrentUnitInfo(Unit U) {
 void EndTurn(GameCoordinator* GC) {
   QInfoType X;
 
-  QAdd(&QI(*GC), QInfoHead(QI(*GC)));
-  QDel(&QI(*GC), &X);
+  QDel(&QPlayer(*GC), &X);
+  QAdd(&QPlayer(*GC), X);
 
-  CurrentUnit(*GC) = (Unit*) LSInfo(LSFirst(ListUnit(Pi(*GC,QInfoHead(QI(*GC))))));
+  CurrentUnit(*GC) = (Unit*) LSInfo(LSFirst(ListUnit(*((Player*) QInfoHead(QPlayer(*GC))))));
 
-  ReduceCash(&Pi(*GC,QInfoHead(QI(*GC))));
+  ReduceCash(QInfoHead(QPlayer(*GC)));
 }
 
 void ReduceCash(Player* P) {
@@ -775,7 +776,7 @@ ListSirkuler GetListSurroundingUnit(GameCoordinator GC) {
 	Player Enemy;
 	Unit* checkUnit;
 	int Px,Py;
-	if (QInfoHead(QI(GC)) == 1) {
+	if (QInfoHead(QPlayer(GC)) == &Pi(GC,1)) {
 		Enemy = Pi(GC,2);
 	} else {
 		Enemy = Pi(GC,1);
@@ -893,8 +894,8 @@ void ChangeUnit(GameCoordinator* GC) {
   int NUnit;
   int pil;
 
-  NUnit = LSNbElmt(ListUnit(Pi(*GC,QInfoHead(QI(*GC)))));
-  PrintAllUnitInfo(ListUnit(Pi(*GC,QInfoHead(QI(*GC)))));
+  NUnit = LSNbElmt(ListUnit(*((Player*) QInfoHead(QPlayer(*GC)))));
+  PrintAllUnitInfo(ListUnit(*((Player*) QInfoHead(QPlayer(*GC)))));
 
   for (;;) {
     printf("Please enter the no. of unit you want to select: ");
@@ -906,10 +907,10 @@ void ChangeUnit(GameCoordinator* GC) {
     }
   }
 
-  if (CurrentUnit(*GC) == LSInfo(LSNthAddress(ListUnit(Pi(*GC,QInfoHead(QI(*GC)))), pil))) {
+  if (CurrentUnit(*GC) == LSInfo(LSNthAddress(ListUnit(*((Player*) QInfoHead(QPlayer(*GC)))), pil))) {
     printf("Selected unit is current unit, canceling\n");
   } else {
-    CurrentUnit(*GC) = LSInfo(LSNthAddress(ListUnit(Pi(*GC,QInfoHead(QI(*GC)))), pil));
+    CurrentUnit(*GC) = LSInfo(LSNthAddress(ListUnit(*((Player*) QInfoHead(QPlayer(*GC)))), pil));
   }
   printf("\n");
 
@@ -919,13 +920,13 @@ void NextUnit(GameCoordinator* GC) {
   int NUnit;
   LSAddress AddrCurUnit;
 
-  NUnit = LSNbElmt(ListUnit(Pi(*GC,QInfoHead(QI(*GC)))));
+  NUnit = LSNbElmt(ListUnit(*((Player*) QInfoHead(QPlayer(*GC)))));
   if (NUnit == 0) {
     printf("You dont have any unit, canceling...\n");
   } else if (NUnit == 1) {
     printf("You only have one unit, canceling...\n");
   } else {
-    AddrCurUnit = LSSearch(ListUnit(Pi(*GC,QInfoHead(QI(*GC)))), CurrentUnit(*GC));
+    AddrCurUnit = LSSearch(ListUnit(*((Player*) QInfoHead(QPlayer(*GC)))), CurrentUnit(*GC));
     if (AddrCurUnit == Nil) printf("erroooor\n");
     CurrentUnit(*GC) = LSInfo(LSNext(AddrCurUnit));
   }
@@ -986,9 +987,9 @@ void printInfo(GameCoordinator GC, Point P) {
   printf("== Cell Info ==\n");
   if (Building(GameMap(GC),Absis(P),Ordinat(P)) == 'V'){
     printf("Village\n");
-    printf("Owned by ");
-    if (ColorBuilding(GameMap(GC),Absis(P),Ordinat(P)) == CBLUE) { printf("Player 2\n"); }
-    else                                                         { printf("Player 1\n"); }
+    if      (ColorBuilding(GameMap(GC),Absis(P),Ordinat(P)) == CRED ) { printf("Owned by Player 1\n"); }
+    else if (ColorBuilding(GameMap(GC),Absis(P),Ordinat(P)) == CBLUE) { printf("Owned by Player 2\n"); }
+    else                                                              { printf("Not Owned\n"); }
   }else if (Building(GameMap(GC),Absis(P),Ordinat(P)) == 'C'){
     printf("Castle\n");
     printf("Owned by ");
@@ -1003,17 +1004,24 @@ void printInfo(GameCoordinator GC, Point P) {
   printf("\n");
 
   printf("== Unit Info ==\n");
-  LSP = LSFirst(ListUnit(Pi(GC,QInfoHead(QI(GC)))));
+  LSP = LSFirst(ListUnit(Pi(GC,1)));
   do {
     U = (Unit*) LSInfo(LSP);
     if (EQPoint(Location(*U), P)) {
       printInfoUnit(*CurrentUnit(GC)); printf("\n");
-      printf("Owned by ");
-      if (ColorUnit(GameMap(GC),Absis(P),Ordinat(P)) == CBLUE){ printf("Player 2\n"); }
-      else                                                    { printf("Player 1\n"); }
+      printf("Owned by Player 1");
     }
     LSP = LSNext(LSP);
-  } while (LSP != LSFirst(ListUnit(Pi(GC,QInfoHead(QI(GC))))));
+  } while (LSP != LSFirst(ListUnit(Pi(GC,1))));
+  LSP = LSFirst(ListUnit(Pi(GC,2)));
+  do {
+    U = (Unit*) LSInfo(LSP);
+    if (EQPoint(Location(*U), P)) {
+      printInfoUnit(*CurrentUnit(GC)); printf("\n");
+      printf("Owned by Player 2");
+    }
+    LSP = LSNext(LSP);
+  } while (LSP != LSFirst(ListUnit(Pi(GC,2))));
   printf("\n");
   
 }
