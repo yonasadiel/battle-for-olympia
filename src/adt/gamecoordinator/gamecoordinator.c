@@ -8,7 +8,6 @@
 #include "../player/player.h"
 #include "../mesinkata/mesinkata.h"
 #include <stdio.h>
-#include <conio.h>
 #include <string.h>
 #include <time.h>
 #include <stdlib.h>
@@ -45,7 +44,7 @@ int arg[16];
 boolean ERR;
 
 void PrintMenu(GameCoordinator GC) {
-  system("cls");
+  system("clear");
 	printf ("_____________________________________________________T ___H ___E ______________________________________________________________\n");
 	printf ("___________####### ___________# ____ # ___# ____________________####### __# ___________________________________________________\n");
 	printf ("____________##   ## __________## ____## __## __________________##     ## _##__________________________________## ______________\n");
@@ -76,7 +75,7 @@ void InitGame(GameCoordinator* GC, int NInitBaris, int NInitKolom) {
   Building *V;
   int i,x,y;
 
-  system("cls");
+  system("clear");
 
   MakeMap(NInitBaris,NInitKolom, &GameMap(*GC));
   MakePoint(NInitBaris-1, 2, &P1);
@@ -565,7 +564,7 @@ void SaveGame(GameCoordinator GC) {
           // Saving player properties
           arg[0] = (QInfoHead(QPlayer(GC)) == &Pi(GC, 1))? 1 : 2;
           FormattedPrint("Saving Player %d Data", '.', 50, arg);
-          fprintf(file, "%d\n", playerQueue);
+          fprintf(file, "%d\n", arg[0]);
           fprintf(file, "%d %d %d\n", Cash(player), Income(player), Warna(player));
           printf("Success\n");
 
@@ -641,7 +640,7 @@ void SaveGame(GameCoordinator GC) {
 }
 
 void RunGame(GameCoordinator* GC) {
-  system("cls");
+  system("clear");
   char cmd[100];
   boolean IsRunning;
   int MapBrs, MapKol;
@@ -666,7 +665,7 @@ void RunGame(GameCoordinator* GC) {
         SPopAll(&MoveRecord(*GC));
       }
 
-      system("cls");
+      system("clear");
       if (!strcmp(cmd, "MOVE")) {
         MakeMovement(GC);
       } else if (!strcmp(cmd, "RECRUIT")) {
@@ -700,7 +699,7 @@ void RunGame(GameCoordinator* GC) {
       printf("Your input: "); 
       STARTKATA(0); Salin(cmd);
 
-      system("cls");
+      system("clear");
       if (!strcmp(cmd, "EXIT")) {
         IsRunning = false;
       } else {
@@ -785,26 +784,26 @@ void RecruitUnit(GameCoordinator *GC) {
 						MakePoint(x,y,&P1);
 						AddUnit(P, P1, UnitType, &GameMap(*GC));
 						Cash(*P) -= CheckGold(UnitType);
-            system("cls");
+            system("clear");
             printf("Recruit Success\n");
 					} else {
-            system("cls");
+            system("clear");
 						printf("You do not have enough gold.\n");
 					}
 				} else {
-          system("cls");
+          system("clear");
 					printf("The location is not empty.\n");
 				}
 			} else {
-        system("cls");
+        system("clear");
 				printf("That is not your castle.\n");
 			}
 		} else {
-      system("cls");
+      system("clear");
 			printf("To recruit a unit, your King must be in the tower.\n");
 		}
 	} else {
-    system("cls");
+    system("clear");
 		printf("To recruit a unit, your current unit must be the King.\n");
 	}
 }
@@ -889,7 +888,7 @@ void MakeMovement(GameCoordinator *GC) {
     }
   }
 
-  system("cls");
+  system("clear");
   if (!(x == 0 && y == 0)) {
     MakePoint(x,y,&P);
     SPush(&MoveRecord(*GC), Location(*CurrentUnit(*GC)));
@@ -1069,7 +1068,7 @@ void ChangeUnit(GameCoordinator* GC) {
     }
   }
 
-  system("cls");
+  system("clear");
   if (CurrentUnit(*GC) == LSInfo(LSNthAddress(ListUnit(*((Player*) QInfoHead(QPlayer(*GC)))), pil))) {
     printf("Selected unit is current unit, canceling\n");
   } else {
@@ -1140,7 +1139,7 @@ void ShowInfo(GameCoordinator GC) {
       printf("Coordinate isn't valid\n");
     }
   }
-  system("cls");
+  system("clear");
   MakePoint(x+1, y+1, &P);
   printInfo(GC,P);
   printf("\n");
