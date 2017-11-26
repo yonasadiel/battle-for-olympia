@@ -91,7 +91,13 @@ void UndoMovement(GameCoordinator* GC);
  *      Jika kosong, tampilkan pesan kesalahan
  */
 
-void MoveUnit(Map* M, Unit* U, Point Source, Point Dest);
+void MakeMovement(GameCoordinator* GC);
+/**
+ * I.S. GC terdefinisi
+ * F.S. Melakukan command move sesuai spesifikasi
+ */
+
+void MoveUnit(Map* M, Unit* U, Point Dest);
 /**
  * I.S. Semua terdefinisi dan valid, Source mungkin sama dengan Dest
  * F.S. Memindahkan unit U dari Source ke Dest dengan mengganti Location,

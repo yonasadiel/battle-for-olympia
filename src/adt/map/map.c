@@ -8,9 +8,9 @@
 
 /* Ukuran minimum dan maksimum baris dan kolom */
 /* #define MapBrsMin 1 */
-/* #define MapBrsMax 100 */
+/* #define MapBrsMax 15 */
 /* #define MapKolMin 1 */
-/* #define MapKolMax 100 */
+/* #define MapKolMax 45 */
 
 /* typedef struct { */
 /*   char Building; */
@@ -44,8 +44,8 @@ void MakeMap(int NB, int NK, Map* M) {
 		for (j = GetMapFirstIdxKol(*M); j<=GetMapLastIdxKol(*M); j++) {
 			Building(*M, i, j) = ' ';
 			Unit(*M, i, j) = ' ';
-			ColorBuilding(*M, i, j) = CRED;
-			ColorUnit(*M, i, j) = CRED;
+			ColorBuilding(*M, i, j) = CWHITE;
+			ColorUnit(*M, i, j) = CWHITE;
 		}
 	}
 }
@@ -196,4 +196,18 @@ boolean IsPlayerCastle(Map M, int x, int y, Color Warna) {
 
 boolean IsLocEmpty(Map M, int x, int y) {
 	return (Unit(M, x, y) = ' ');
+}
+
+void MCopy(Map M1, Map* M2) {
+  MakeMap(NBrsEffMap(M1), NKolEffMap(M1), M2);
+  int i,j;
+  
+  for (i = GetMapFirstIdxBrs(M1); i<=GetMapLastIdxBrs(M1); i++) {
+    for (j = GetMapFirstIdxKol(M1); j<=GetMapLastIdxKol(M1); j++) {
+      Building(*M2, i, j) = Building(M1, i, j);
+      Unit(*M2, i, j) = Unit(M1, i, j);
+      ColorBuilding(*M2, i, j) = ColorBuilding(M1, i, j);
+      ColorUnit(*M2, i, j) = ColorUnit(M1, i, j);
+    }
+  }
 }

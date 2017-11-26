@@ -31,12 +31,12 @@ int main() {
   QAdd(&Q, &B);  PrintIsiQueue(Q);         /* 5 6             */
   QAdd(&Q, &C);  PrintIsiQueue(Q);         /* 5 6 8           */
   QAdd(&Q, &D);  PrintIsiQueue(Q);         /* 5 6 8 2         */
-  QDel(&Q, &X);  PrintIsiQueue(Q);         /* 6 8 2           */ F = (int*) X; printf("Deleted: %d\n", *F);
+  QDel(&Q, &X);  PrintIsiQueue(Q);         /* 6 8 2           */ F = (int*) X; printf("Deleted: %d\n", *F); free(X);
   QAdd(&Q, &E);  PrintIsiQueue(Q);         /* 6 8 2 10        */
-  QDel(&Q, &X);  PrintIsiQueue(Q);         /* 8 2 10          */ F = (int*) X; printf("Deleted: %d\n", *F);
-  QDel(&Q, &X);  PrintIsiQueue(Q);         /* 2 10            */ F = (int*) X; printf("Deleted: %d\n", *F);
-  QDel(&Q, &X);  PrintIsiQueue(Q);         /* 10              */ F = (int*) X; printf("Deleted: %d\n", *F);
-  QDel(&Q, &X);  PrintIsiQueue(Q);         /*                 */ F = (int*) X; printf("Deleted: %d\n", *F);
+  QDel(&Q, &X);  PrintIsiQueue(Q);         /* 8 2 10          */ F = (int*) X; printf("Deleted: %d\n", *F); free(X);
+  QDel(&Q, &X);  PrintIsiQueue(Q);         /* 2 10            */ F = (int*) X; printf("Deleted: %d\n", *F); free(X);
+  QDel(&Q, &X);  PrintIsiQueue(Q);         /* 10              */ F = (int*) X; printf("Deleted: %d\n", *F); free(X);
+  QDel(&Q, &X);  PrintIsiQueue(Q);         /*                 */ F = (int*) X; printf("Deleted: %d\n", *F); free(X);
   if (QIsEmpty(Q)) { printf("Queue sudah kosong\n"); }
   //printf("%x %x\n", QHead(Q), QTail(Q));
 

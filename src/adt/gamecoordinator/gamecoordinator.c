@@ -35,6 +35,7 @@
 #define VALID_ADV(ERR, GOTO) if(ERR){goto GOTO;}ADVKATA()
 #define ADV_INT(VAR,ERR,GOTO) ToInteger(&VAR, &ERR);VALID_ADV(ERR,GOTO)
 #define endl printf("\n")
+#define abs(x) ((x >= 0)? (x) : -1*(x))
 
 /* Global Variable to Use FormattedPrint */
 int arg[16];
@@ -644,12 +645,14 @@ void RunGame(GameCoordinator* GC) {
     STARTKATA(0);
     Salin(cmd);
 
-    if (strcmp(cmd, "MOVE") && strcmp(cmd, "MAP") && strcmp(cmd, "INFO") && strcmp(cmd, "ATTACK")) {
+    if (strcmp(cmd, "MOVE") && strcmp(cmd, "MAP") && strcmp(cmd, "INFO") && strcmp(cmd, "UNDO")) {
       SPopAll(&MoveRecord(*GC));
     }
 
     system("cls");
-    if (!strcmp(cmd, "UNDO")) {
+    if (!strcmp(cmd, "MOVE")) {
+      MakeMovement(GC);
+    } else if (!strcmp(cmd, "UNDO")) {
       UndoMovement(GC);
     } else if (!strcmp(cmd, "CHANGE_UNIT")) {
       ChangeUnit(GC);
@@ -699,7 +702,9 @@ void EndTurn(GameCoordinator* GC) {
 
   CurrentUnit(*GC) = (Unit*) LSInfo(LSFirst(ListUnit(*((Player*) QInfoHead(QPlayer(*GC))))));
 
+  ResetMovPointAllUnit(QInfoHead(QPlayer(*GC)));
   ReduceCash(QInfoHead(QPlayer(*GC)));
+  Cash(*((Player*) QInfoHead(QPlayer(*GC)))) += Income(*((Player*) QInfoHead(QPlayer(*GC))));
 }
 
 void ReduceCash(Player* P) {
@@ -766,14 +771,95 @@ void UndoMovement(GameCoordinator* GC) {
     TulisPoint(X);
     printf("\n\n");
 
-    MoveUnit(&GameMap(*GC), CurrentUnit(*GC), Location(*CurrentUnit(*GC)), X);
+    MovPoint(*CurrentUnit(*GC)) += abs(Absis(X) - Absis(Location(*CurrentUnit(*GC))));
+    MovPoint(*CurrentUnit(*GC)) += abs(Ordinat(X) - Ordinat(Location(*CurrentUnit(*GC))));
+    MoveUnit(&GameMap(*GC), CurrentUnit(*GC), X);
     SPop(&MoveRecord(*GC), &X);
   }
 }
 
-void MoveUnit(Map* M, Unit* U, Point Source, Point Dest) {
-  char temp;
+void MakeMovement(GameCoordinator *GC) {
+  Point P, PU, *PT;
+  int x,y,dist,i,j;
+  Map MNew;
+  Queue Q;
+  QInfoType X;
+  int dx[] = {0,1,-1,0};
+  int dy[] = {1,0,0,-1};
 
+  PU = Location(*CurrentUnit(*GC));
+  MCopy(GameMap(*GC), &MNew);
+  MakePoint(Absis(PU), Ordinat(PU), &P);
+  QCreateEmpty(&Q);
+  QAdd(&Q, &P);
+
+  while (!QIsEmpty(Q)) {
+    QDel(&Q, &X);
+    P = *((Point*) X);
+    free(X);
+
+    for (i=0; i<4; i++) {
+      int nx = Absis(P) + dx[i];
+      int ny = Ordinat(P) + dy[i];
+      if (IsIdxMapEff(MNew, nx, ny) &&
+          (Unit(MNew, nx, ny) == ' ' ||
+           (Unit(MNew, nx, ny) != ' ' &&
+           ColorUnit(MNew, nx, ny) == Warna(*((Player*) QInfoHead(QPlayer(*GC)))))) &&
+          abs(nx-Absis(PU)) + abs(ny-Ordinat(PU)) <= MovPoint(*CurrentUnit(*GC))) {
+        PT = (Point*) malloc(1 * sizeof(Point));
+        MakePoint(nx, ny, PT);
+        Unit(MNew,nx,ny) = '#';
+        ColorUnit(MNew,nx,ny) = CGREEN;
+        QAdd(&Q, PT);
+      }
+    }
+  }
+
+  for (i = GetMapFirstIdxBrs(MNew); i<=GetMapLastIdxBrs(MNew); i++) {
+    for (j = GetMapFirstIdxKol(MNew); j<=GetMapLastIdxKol(MNew); j++) {
+      if (Unit(GameMap(*GC), i, j) != ' ') {
+        Unit(MNew, i, j) = Unit(GameMap(*GC), i, j);
+        ColorUnit(MNew, i, j) = ColorUnit(GameMap(*GC), i, j);
+      }
+    }
+  }
+
+  TulisMap(MNew, Location(*CurrentUnit(*GC)));
+
+  for (;;) {
+    printf("Please enter cell's coordinate x y ((-1,-1) to cancel): "); scanf("%d%d",&x,&y);
+    x++; y++;
+    if (!(x == 0 && y == 0) && Unit(MNew, x, y) != '#') {
+      printf("You can't move there\n");
+    } else {
+      break;
+    }
+  }
+
+  system("cls");
+  if (!(x == 0 && y == 0)) {
+    MakePoint(x,y,&P);
+    SPush(&MoveRecord(*GC), Location(*CurrentUnit(*GC)));
+    MoveUnit(&GameMap(*GC), CurrentUnit(*GC), P);
+    MovPoint(*CurrentUnit(*GC)) -= abs(x-Absis(PU)) + abs(y-Ordinat(PU));
+
+    if (Building(GameMap(*GC), Absis(P), Ordinat(P)) == 'V') {
+      if      (ColorBuilding(GameMap(*GC), Absis(P), Ordinat(P)) == Warna(Pi(*GC, 1))) { Income(Pi(*GC, 1)) -= GoldPerVillage; }
+      else if (ColorBuilding(GameMap(*GC), Absis(P), Ordinat(P)) == Warna(Pi(*GC, 2))) { Income(Pi(*GC, 2)) -= GoldPerVillage; }
+      Income(*((Player*) QInfoHead(QPlayer(*GC)))) += GoldPerVillage;
+      ColorBuilding(GameMap(*GC), Absis(P), Ordinat(P)) = Warna(*((Player*) QInfoHead(QPlayer(*GC))));
+      SPopAll(&MoveRecord(*GC));
+    }
+  } else {
+    printf("cancel MOVE...\n");
+  }
+}
+
+void MoveUnit(Map* M, Unit* U, Point Dest) {
+  char temp;
+  Point Source;
+
+  Source = Location(*U);
   Location(*U) = Dest;
   temp = Unit(*M, Absis(Source), Ordinat(Source));
   Unit(*M, Absis(Source), Ordinat(Source)) = ' ';
@@ -892,9 +978,9 @@ void Attack(GameCoordinator *GC) {
 				PrintUnitName(*attackedUnit);
 				printf(" is dead :)\n");
 			}
+      AtkChance(*CurrentUnit(*GC)) = false;
+      MovPoint(*CurrentUnit(*GC)) = 0;
 		}
-		AtkChance(*CurrentUnit(*GC)) = false;
-		MovPoint(*CurrentUnit(*GC)) = 0;
 	} else {
 		printf("Your ");
 		PrintUnitName(*CurrentUnit(*GC));
