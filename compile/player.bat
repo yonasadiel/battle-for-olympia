@@ -8,5 +8,7 @@ gcc^
     "src\adt\color\color.c"^
     "src\adt\point\point.c"^
     "src\adt\unit\unit.c"^
+    "src\adt\player\player.c"^
+    "src\adt\pcolor\pcolor.c"^
   -o^
     "bin\driver\player"
