@@ -90,7 +90,7 @@ int CheckGold(char UnitType)	{
 		return 17;
 	}
 	else if (UnitType=='S') {
-		return 17;
+		return 25;
 	}
 	else if (UnitType=='W') {
 		return 40;
