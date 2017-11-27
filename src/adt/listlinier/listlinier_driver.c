@@ -1,48 +1,62 @@
 #include "listlinier.h"
 #include <stdio.h>
 
-typedef struct {
-	int x;
-	int y;
-} Titik;
-
-Titik createTitik(int x, int y) {
-	Titik titik;
-	titik.x = x;
-	titik.y = y;
-	return titik;
-}
-
-void PrintTitik(Titik titik) {
-	printf("<%d %d>", titik.x, titik.y);
+void PrintIsiList(ListLinier L) {
+	LLAddress P = LLFirst(L);
+	while (P != Nil) {
+		printf("%d ", *((int*) LLInfo(P)));
+		P = LLNext(P);
+	} printf("\n");
 }
 
 int main() {
-	Titik* Ttemp;
-	Titik titik1 = createTitik(1, 2);
-	Titik titik2 = createTitik(2, 3);
-	Titik titik3 = createTitik(3, 4);
+	int u1, u2, u3, u4, u5, u6;
+	int *p1, *p2;
 
-	ListLinier L;
+	u1 = 1; u2 = 2; u3 = 3;
+	u4 = 4; u5 = 5; u6 = 6;
+
+	ListLinier L, L2;
+	LLAddress LP;
 
 	LLCreateEmpty(&L);
+	if (LLIsEmpty(L)) { printf("List terbuat, kosong\n"); }
 
-	LLInsVFirst(&L, &titik1);
-	LLInsVFirst(&L, &titik2);
-	LLInsVFirst(&L, &titik3);
+	LLInsVFirst(&L, &u1);
+	LLInsVFirst(&L, &u2);
+	LLInsVLast(&L, &u3);
+	LLInsVLast(&L, &u4);
 
-	Ttemp = (Titik*) LLInfo(LLNthAddress(L, 1)); PrintTitik(*Ttemp);
-	Ttemp = (Titik*) LLInfo(LLNthAddress(L, 2)); PrintTitik(*Ttemp);
-	Ttemp = (Titik*) LLInfo(LLNthAddress(L, 3)); PrintTitik(*Ttemp);
+	PrintIsiList(L);
 
-	LLAddress p = LLFirst(L);
-	while(p != Nil) {
-		Titik* titikerToTitik = (Titik*) LLInfo(p);
-		Titik isiTitikerTitik = *titikerToTitik; 
-
-		PrintTitik(isiTitikerTitik);
-		p = LLNext(p);
+	if (LLFSearch(L, LLSearch(L, &u1))) {
+		printf("u1 ditemukan pada alamat %x\n", LLSearch(L, &u1));
+		printf("elemen sebelumnya adalah %d\n", *((int*) LLInfo(LLSearchPrec(L, &u1))));
 	}
+
+	LLDelVFirst(&L,(void**) &p1);
+	printf("elemen pertama dihapus dengan nilai %d\n", *(p1));
+	LLDelVLast(&L,(void**) &p1);
+	printf("elemen terakhir dihapus dengan nilai %d\n", *(p1));
+
+	LP = LLAlokasi(&u5); LLInsFirst(&L, LP);
+	LP = LLAlokasi(&u6); LLInsLast(&L, LP);
+
+	printf("saat ini elemen list berjumlah %d\n", LLNbElmt(L));
+	PrintIsiList(L);
+
+	LLInverse(&L);
+	printf("Setelah dibalik:\n");
+	PrintIsiList(L);
+
+	p1 = (int*) LLInfo(LLNthAddress(L, 1)); printf("elemen 1 = %d\n", *p1);
+	p1 = (int*) LLInfo(LLNthAddress(L, 2)); printf("elemen 2 = %d\n", *p1);
+
+	LLCopy(L, &L2);
+	LLDelAll(&L);
+
+	printf("Hasil Copy:\n");
+	PrintIsiList(L2);
 
 	return 0;
 }
