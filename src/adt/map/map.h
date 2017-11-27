@@ -9,9 +9,9 @@
 
 /* Ukuran minimum dan maksimum baris dan kolom */
 #define MapBrsMin 1
-#define MapBrsMax 100
+#define MapBrsMax 15
 #define MapKolMin 1
-#define MapKolMax 100
+#define MapKolMax 45
 
 typedef struct {
   char Building;
@@ -81,13 +81,6 @@ void TulisMap(Map M, Point CurrentUnitLoc);
  */
 
 /* *** Kelompok Operasi Map *** */
-void InitMap(Map* M);
-/**
- * Menyiapkan Map untuk memulai permainan
- * I.S. M kosong
- * F.S. Tower, Castle, Village dan King terassign di Map beserta warnanya
- */
-
 void MapPutUnit(Map* M, Unit U, Color Warna);
 /**
  * I.S. M, U, dan Warna terdefinisi

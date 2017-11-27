@@ -158,28 +158,6 @@ void TulisMap(Map M, Point CurrentUnitLoc) {
 }	  
 		
 /* *** Kelompok Operasi Map *** */
-void InitMap(Map* M) {
-	/* Init player1 building, Default Color = RED*/
-  Building(*M,GetMapLastIdxBrs(*M)-2,2) = 'C';
-  Building(*M,GetMapLastIdxBrs(*M)-1,1) = 'C';
-  Building(*M,GetMapLastIdxBrs(*M)-1,3) = 'C';
-  Building(*M,GetMapLastIdxBrs(*M),2) = 'C';
-  Building(*M,GetMapLastIdxBrs(*M)-1,2) = 'T';
-  
-  /* Init player2 building, Set Color = BLUE */
-  Building(*M,1,GetMapLastIdxKol(*M)-1) = 'C';
-  Building(*M,2,GetMapLastIdxKol(*M)-2) = 'C';
-  Building(*M,2,GetMapLastIdxKol(*M)) = 'C';
-  Building(*M,3,GetMapLastIdxKol(*M)-1) = 'C';
-  Building(*M,2,GetMapLastIdxKol(*M)-1) = 'T';
-  ColorBuilding(*M,1,GetMapLastIdxKol(*M)-1) = CGREEN;
-  ColorBuilding(*M,2,GetMapLastIdxKol(*M)-2) = CGREEN;
-  ColorBuilding(*M,2,GetMapLastIdxKol(*M)) = CGREEN;
-  ColorBuilding(*M,3,GetMapLastIdxKol(*M)-1) = CGREEN;
-  ColorBuilding(*M,2,GetMapLastIdxKol(*M)-1) = CGREEN;
-  
-}
-
 void MapPutUnit(Map* M, Unit U, Color Warna) {
   Unit(*M, Absis(Location(U)), Ordinat(Location(U))) = Type(U);
   ColorUnit(*M, Absis(Location(U)), Ordinat(Location(U))) = Warna;
