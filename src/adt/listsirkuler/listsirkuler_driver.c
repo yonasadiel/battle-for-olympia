@@ -1,49 +1,52 @@
 #include "listsirkuler.h"
 #include <stdio.h>
 
-typedef struct {
-	int x;
-	int y;
-} Titik;
-
-Titik createTitik(int x, int y) {
-	Titik titik;
-	titik.x = x;
-	titik.y = y;
-	return titik;
-}
-
-void PrintTitik(Titik titik) {
-	printf("<%d %d>", titik.x, titik.y);
+void PrintIsiList(ListSirkuler L) {
+	LSAddress P = LSFirst(L);
+	do {
+		printf("%d ", *((int*) LSInfo(P)));
+		P = LSNext(P);
+	} while (P != LSFirst(L));
+	printf("\n");
 }
 
 int main() {
-	Titik* Ttemp;
-	Titik titik1 = createTitik(1, 2);
-	Titik titik2 = createTitik(2, 3);
-	Titik titik3 = createTitik(3, 4);
+	int u1, u2, u3, u4, u5, u6;
+	int *p1, *p2;
 
-	ListSirkuler L;
+	u1 = 1; u2 = 2; u3 = 3;
+	u4 = 4; u5 = 5; u6 = 6;
+
+	ListSirkuler L, L2;
+	LSAddress LP;
 
 	LSCreateEmpty(&L);
+	if (LSIsEmpty(L)) { printf("List terbuat, kosong\n"); }
 
-	LSInsVFirst(&L, &titik1);
-	LSInsVFirst(&L, &titik2);
-	LSInsVFirst(&L, &titik3);
+	LSInsVFirst(&L, &u1);
+	LSInsVFirst(&L, &u2);
+	LSInsVLast(&L, &u3);
+	LSInsVLast(&L, &u4);
 
-	Ttemp = (Titik*) LSInfo(LSNthAddress(L, 1)); PrintTitik(*Ttemp);
-	Ttemp = (Titik*) LSInfo(LSNthAddress(L, 2)); PrintTitik(*Ttemp);
-	Ttemp = (Titik*) LSInfo(LSNthAddress(L, 3)); PrintTitik(*Ttemp);
+	PrintIsiList(L);
 
-	LSAddress p = LSFirst(L);
-	do {
-		Titik* titikerToTitik = (Titik*) LSInfo(p);
-		Titik isiTitikerTitik = *titikerToTitik; 
+	if (LSSearch(L, &u1)) {
+		printf("u1 ditemukan pada alamat %x\n", LSSearch(L, &u1));
+	}
 
-		PrintTitik(isiTitikerTitik);
-		p = LSNext(p);
-	} while(p != LSFirst(L));
+	LSDelVFirst(&L,(void**) &p1);
+	printf("elemen pertama dihapus dengan nilai %d\n", *(p1));
+	LSDelVLast(&L,(void**) &p1);
+	printf("elemen terakhir dihapus dengan nilai %d\n", *(p1));
 
+	LP = LSAlokasi(&u5); LSInsFirst(&L, LP);
+	LP = LSAlokasi(&u6); LSInsLast(&L, LP);
+
+	printf("saat ini elemen list berjumlah %d\n", LSNbElmt(L));
+	PrintIsiList(L);
+
+	p1 = (int*) LSInfo(LSNthAddress(L, 1)); printf("elemen 1 = %d\n", *p1);
+	p1 = (int*) LSInfo(LSNthAddress(L, 2)); printf("elemen 2 = %d\n", *p1);
 
 	return 0;
 }
