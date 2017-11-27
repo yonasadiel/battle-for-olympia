@@ -1,0 +1,6 @@
+gcc \
+    "src/adt/stackpoint/stackpoint_driver.c" \
+    "src/adt/point/point.c" \
+    "src/adt/stackpoint/stackpoint.c" \
+  -o \
+    "bin/driver/stackpoint"

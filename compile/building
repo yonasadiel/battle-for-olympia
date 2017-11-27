@@ -1,0 +1,6 @@
+gcc \
+    "src/adt/building/building_driver.c" \
+    "src/adt/building/building.c" \
+    "src/adt/point/point.c" \
+  -o \
+    "bin/driver/building"

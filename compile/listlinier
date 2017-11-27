@@ -1,0 +1,5 @@
+gcc \
+    "src/adt/listlinier/listlinier_driver.c" \
+    "src/adt/listlinier/listlinier.c" \
+  -o \
+    "bin/driver/listlinier"
